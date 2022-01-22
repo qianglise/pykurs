@@ -15,13 +15,16 @@ Intro
    :widths: auto
    :delim: ;
 
-   20 min ; :doc:`filename`
+   20 min ; :doc:`stack`
+   20 min ; :doc:`numpy`
 
 
 .. toctree::
    :maxdepth: 1
    :caption: The lesson
 
+   stack
+   numpy
 
 .. toctree::
    :maxdepth: 1
