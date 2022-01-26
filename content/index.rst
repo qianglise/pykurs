@@ -23,8 +23,12 @@ Intro
    :maxdepth: 1
    :caption: The lesson
 
+   Intro
    stack
    numpy
+   profile
+   performance
+   gpu
 
 .. toctree::
    :maxdepth: 1
