@@ -25,9 +25,9 @@ Intro
 
    Intro
    stack
-   data format
-   data manipulation
-   visualization
+   data-formats
+   data-manipulation
+   data-visualization
    numpy
    profile
    performance
