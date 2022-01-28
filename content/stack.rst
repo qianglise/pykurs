@@ -27,6 +27,20 @@ So far we have covered a good number of techniques to do data manipulations with
     And more..
 
 
+https://jakevdp.github.io/blog/2014/05/09/why-python-is-slow/
+
+https://pangeo.io/packages.html#best-practices-for-pangeo-projects
+
+
+
+https://github.com/elegant-scipy/elegant-scipy/blob/master/markdown/ch1.markdown
+ it focuses on exploring the NumPy array, a data structure that underlies almost all numerical scientific computation in Python
+We will use the pandas library, which builds on NumPy
+pandas is a Python library for data manipulation and analysis, with particular emphasis on tabular and time series data.  Here, we will use it here to read in tabular data of mixed type
+ Although NumPy has some support for mixed data types (called "structured arrays"), it is not primarily designed for this use case, which makes subsequent operations harder than they need to be.
+
+
+
 https://www.tutorialspoint.com/numpy/numpy_advanced_indexing.htm
 It is possible to make a selection from ndarray that is a non-tuple sequence, ndarray object of integer or Boolean data type, or a tuple with at least one item being a sequence object. Advanced indexing always returns a copy of the data. As against this, the slicing only presents a view.
 
