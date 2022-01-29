@@ -72,6 +72,9 @@ Different types of data may have different metadata conventions.
 In Earth and Environmental science, we are fortunate to have widespread robust practices around metdata. For NetCDF files, metadata can be embedded directly into the data files. The most common metadata convention is Climate and Forecast (CF) Conventions, commonly used with NetCDF data
 
     
+.. csv-table::
+   :widths: auto
+   :delim: ;
 
 .. +---------------------------+-----------------------------------------------+
    |                           |                                               |
@@ -90,11 +93,7 @@ In Earth and Environmental science, we are fortunate to have widespread robust p
    |                           | entering the region, the initial value of the |
    |                           | variables on the device is not initialized    |
    +---------------------------+-----------------------------------------------+
-   |  ``map(alloc:list)``      | On entering the region, data is allocated and |
-   |                           | uninitialized on the device                   |
-   +---------------------------+-----------------------------------------------+
-   |  ``map(list)``            | equivalent to ``map(tofrom:list)``            |
-   +---------------------------+-----------------------------------------------+
+
 
 
 
