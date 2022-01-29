@@ -73,6 +73,31 @@ In Earth and Environmental science, we are fortunate to have widespread robust p
 
     
 
+.. +---------------------------+-----------------------------------------------+
+   |                           |                                               |
+   +===========================+===============================================+
+   |  CSV | map clause                                    |
+   +---------------------------+-----------------------------------------------+
+   |  Parquet     | the effect of both a map-to and a map-from    |
+   +---------------------------+-----------------------------------------------+
+   |  HDF5         | On entering the region, variables in the list |
+   |                           | are initialized on the device using the       |
+   |                           | original values from the host                 |
+   +---------------------------+-----------------------------------------------+
+   |  NetCDF4       | At the end of the target region, the values   |
+   |                           | from variables in the list are copied into    |
+   |                           | the original variables on the host. On        |
+   |                           | entering the region, the initial value of the |
+   |                           | variables on the device is not initialized    |
+   +---------------------------+-----------------------------------------------+
+   |  ``map(alloc:list)``      | On entering the region, data is allocated and |
+   |                           | uninitialized on the device                   |
+   +---------------------------+-----------------------------------------------+
+   |  ``map(list)``            | equivalent to ``map(tofrom:list)``            |
+   +---------------------------+-----------------------------------------------+
+
+
+
 CSV (comma-separated values)
 ****************************
 
@@ -206,37 +231,12 @@ HDF5 (Hierarchical Data Format version 5)
 HDF5 is a high performance storage format for storing large amounts of data in multiple datasets in a single file.
 It is especially popular in fields where you need to store big multidimensional arrays such as physical sciences.
 
-Pandas allows you to store tables as HDF5 with `PyTables <https://www.pytables.org/>`_, which uses HDF5 to write the files.
-You can create a HDF5 file with `to_hdf- and `read_parquet-functions <https://pandas.pydata.org/docs/user_guide/io.html#io-hdf5>`__::
 
-    dataset.to_hdf('dataset.h5', key='dataset', mode='w')
-    dataset_hdf5 = pd.read_hdf('dataset.h5')
 
-PyTables comes installed with the default Anaconda installation.
 
-For writing data that is not a table, you can use the excellent `h5py-package <https://docs.h5py.org/en/stable/>`__::
 
-    import h5py
-    
-    # Writing:
 
-    # Open HDF5 file
-    h5_file = h5py.File('data_array.h5', 'w')
-    # Write dataset
-    h5_file.create_dataset('data_array', data=data_array)
-    # Close file and write data to disk. Important!
-    h5_file.close()
-    
-    # Reading:
-    
-    # Open HDF5 file again
-    h5_file = h5py.File('data_array.h5', 'r')
-    # Read the full dataset
-    data_array_h5 = h5_file['data_array'][()]
-    # Close file
-    h5_file.close()
 
-h5py comes with Anaconda as well.
 
 
 NetCDF4 (Network Common Data Form version 4)
@@ -244,19 +244,10 @@ NetCDF4 (Network Common Data Form version 4)
 
 .. important::
 
-    Using NetCDF4 requires `netCDF4 <https://unidata.github.io/netcdf4-python>`__- or `h5netcdf <https://github.com/h5netcdf/h5netcdf>`__-package to be installed.
-    h5netcdf is often mentioned as being faster to the official netCDF4-package, so we'll be using it in the example.
     
     A great NetCDF4 interface is provided by a `xarray-package <https://xarray.pydata.org/en/stable/getting-started-guide/quick-overview.html#read-write-netcdf-files>`__.
     
-    You can try installing these packages with
-    
-    .. code-block:: bash
-    
-        !pip install h5netcdf xarray
-    
-    or you can take this as a demo.
-
+  
 .. admonition:: Key features
 
    - **Type**: Binary format
@@ -275,16 +266,6 @@ NetCDF4 is a data format that uses HDF5 as its file format, but it has standardi
 This makes it possible to be read from various different programs.
 
 NetCDF4 is by far the most common format for storing large data from big simulations in physical sciences.
-
-Using interface provided by ``xarray``::
-
-    # Write tidy data as NetCDF4
-    dataset.to_xarray().to_netcdf('dataset.nc', engine='h5netcdf')
-    # Read tidy data from NetCDF4
-    import xarray as xr
-    dataset_xarray = xr.open_dataset('dataset.nc', engine='h5netcdf')
-    dataset_netcdf4 = dataset_xarray.to_pandas()
-    dataset_xarray.close()
 
 Working with array data is easy as well::
 
