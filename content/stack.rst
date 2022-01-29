@@ -27,11 +27,23 @@ So far we have covered a good number of techniques to do data manipulations with
     And more..
 
 
+
+The irritatingly catchy tune has racked up so many views that Google has been forced to upgrade YouTube's infrastructure to cope. When YouTube was first developed, nobody ever imagined that a video would be watched more than 2 billion times, so the view count was stored using a signed 32-bit integer.
+
+The maximum value of this number type, 2,147,483,647, is well known to C programmers as INT_MAX. Once INT_MAX is reached, attempting to record another view will normally roll over to -2,147,483,648.
+
+YouTube isn't the only software that this number is a problem for. Unix systems record time values as the number of seconds since 00:00:00 UTC on January 1, 1970. 32-bit systems use a signed 32-bit integer for this, so they will wrap around 2,147,483,647 seconds after that date. Two billion seconds is about 68 years; on January 19, 2038, at 03:14:07 in the morning, 32-bit Unix clocks will roll over.
+
+While not a problem for desktops and servers, which have already made the switch to using 64-bit counts for the time, it's possible that embedded systems will continue to be 32-bit even 24 years from now.
+
+As for YouTube, upgrading to a 64-bit signed number means that Gangnam Style is safe until it reaches 9,223,372,036,854,775,807 views. That's not likely to occur for another 4 billion years or so.
+
+
 https://jakevdp.github.io/blog/2014/05/09/why-python-is-slow/
 
 https://pangeo.io/packages.html#best-practices-for-pangeo-projects
 
-
+https://pangeo.io/packages.html#why-xarray-and-dask
 
 https://github.com/elegant-scipy/elegant-scipy/blob/master/markdown/ch1.markdown
  it focuses on exploring the NumPy array, a data structure that underlies almost all numerical scientific computation in Python

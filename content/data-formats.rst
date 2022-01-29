@@ -13,13 +13,65 @@ Data formats with Pandas and Numpy
 
 What is a data format?
 ----------------------
-Data has to be stored somewhere before you can analyse it:
 
-1.harddisk
-2.internet
-3.cloud-based storage
+bit and byte
+************
 
-The most popular file formats in climate modelling community are: 
+The smallest building block of storage in the computer is a **bit**, 
+which stores either a 0 or 1.
+Normally a number of 8 bits are combined in a group to make a **byte**. 
+One byte (8 bits) can represent/hold at most 2**8 distint values.
+Organising bytes in different ways could further represent different types of information.
+
+Numerical Data
+**************
+
+Different numerial data types can be encoded as bytes. The more bytes we use for each value, the more range or precision we get, meanwhile the more memory it takes. For example, integers stored with 1 byte have a range from [-128, 127], while with 2 bytes, the ranges becomes  [-32768, 332767].
+
+Note:
+Many climate models or certain parts of the models have the option of using a reduced precision for real numbers in order to achieve better performance at a small cost to the accuracy.
+
+
+
+Text Data
+*********
+
+When it comes to text data, the simplest character encoding 
+is ASCII (American Standard Code for Information Interchange) and was the most 
+common character encodings until 2008 when UTF-8 took over.
+The orignal ASCII uses only 7 bits for representing each character/letter and therefore encodes only 128 specified characters. Later  it became common to use an 8-bit byte to store each character in memory, providing an extended ASCII. 
+As computer becomes more powerful and  there is need for including more characters from other languages like Chinese, Greek, Arabic, etc. UTF-8  becomes the most common encoding nowadays and it uses minimum one byte up to four bytes per character. 
+
+
+In real applications, the scientific data is more complex and usually contains both numerical and text data. 
+There is no single file format that is good for every case to store the dataset.
+Here we list a few of the data and file formats used in climate modelling community:
+
+Tabular Data
+************
+
+A very common type of data is the so-called "tabular data". The data is structured typically into rows and columns. Each column usually have a name and a specific data type while each row is a distinct sample which provides data according to each column including missing value.
+The simplest and most common way to save tablular data is via the so-called CSV (comma-separated values) file.
+
+Grided Data
+***********
+
+Grided data is another very common type, and usually the numerical data is saved in a multi-dimentional rectangular grid.
+Most probably it is saved in one of the following formats:
+
+Hierarchical Data Format (HDF5) - Container for many arrays
+Network Common Data Form (NetCDF) - Container for many arrays which conform to the NetCDF data model
+Zarr - New cloud-optimized format for array storage
+
+Metadata
+********
+
+Metadata consists of the information about the data. 
+Different types of data may have different metadata conventions. 
+
+In Earth and Environmental science, we are fortunate to have widespread robust practices around metdata. For NetCDF files, metadata can be embedded directly into the data files. The most common metadata convention is Climate and Forecast (CF) Conventions, commonly used with NetCDF data
+
+    
 
 CSV (comma-separated values)
 ****************************
@@ -55,7 +107,10 @@ Numpy has `routines <https://numpy.org/doc/stable/reference/routines.io.html#tex
 
 .. important::
 
-    When working with floating point numbers you should be careful to save the data with enough decimal places so that you won't lose precision.
+    When working with floating point numbers, you should be careful to save the data with enough decimal places so that you won't lose precision.
+
+1. you may lose data precision simply because you do not save the data with enough decimals(check english)
+2.
     
     For example, double-precision floating point numbers have `~16 decimal places of precision <https://en.wikipedia.org/wiki/Double-precision_floating-point_format>`__, but if you use normal Python to write these numbers, you can easily lose some of that precision.
     Let's consider the following example:
@@ -242,6 +297,18 @@ Working with array data is easy as well::
 
 The advantage of NetCDF4 compared to HDF5 is that one can easily add other metadata e.g. spatial dimensions (``x``, ``y``, ``z``) or timestamps (``t``) that tell where the grid-points are situated.
 As the format is standardized, many programs can use this metadata for visualization and further analysis.
+
+
+
+
+Data has to be stored somewhere before you can analyse it:
+
+1.harddisk
+2.internet
+3.cloud-based storage
+
+The most popular file formats in climate modelling community are: 
+
 
 
 
