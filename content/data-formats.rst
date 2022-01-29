@@ -76,15 +76,15 @@ In Earth and Environmental science, we are fortunate to have widespread robust p
 .. +---------------------------+-----------------------------------------------+
    |                           |                                               |
    +===========================+===============================================+
-   |  CSV | map clause                                    |
+   |  CSV                      | map clause                                    |
    +---------------------------+-----------------------------------------------+
-   |  Parquet     | the effect of both a map-to and a map-from    |
+   |  Parquet                  | the effect of both a map-to and a map-from    |
    +---------------------------+-----------------------------------------------+
-   |  HDF5         | On entering the region, variables in the list |
+   |  HDF5                     | On entering the region, variables in the list |
    |                           | are initialized on the device using the       |
    |                           | original values from the host                 |
    +---------------------------+-----------------------------------------------+
-   |  NetCDF4       | At the end of the target region, the values   |
+   |  NetCDF4                  | At the end of the target region, the values   |
    |                           | from variables in the list are copied into    |
    |                           | the original variables on the host. On        |
    |                           | entering the region, the initial value of the |
