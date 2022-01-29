@@ -76,10 +76,10 @@ In Earth and Environmental science, we are fortunate to have widespread robust p
    :widths: auto
    :delim: ;
 
-   CSV ; :doc: map clause
-   Parquet ; :doc:  the effect of both a map-to and a map-from
-   HDF5  ; :doc:  On entering the region, variables in the list
-   NetCDF4  ; :doc:  from variables in the list are copied into  
+   CSV ; :doc: `map clause `
+   Parquet ; :doc:  `the effect of both a map-to and a map-from `
+   HDF5  ; :doc:  `On entering the region, variables in the list `
+   NetCDF4  ; :doc:  `from variables in the list are copied into  ` 
 
 .. +---------------------------+-----------------------------------------------+
    |                           |                                               |
