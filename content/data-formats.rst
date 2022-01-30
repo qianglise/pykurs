@@ -53,6 +53,8 @@ Tabular Data
 A very common type of data is the so-called "tabular data". The data is structured typically into rows and columns. Each column usually have a name and a specific data type while each row is a distinct sample which provides data according to each column including missing value.
 The simplest and most common way to save tablular data is via the so-called CSV (comma-separated values) file.
 
+
+
 Grided Data
 ***********
 
@@ -123,17 +125,7 @@ CSV (comma-separated values)
 CSV is by far the most popular file format, as it is human-readable and easily shareable.
 However, it is not the best format to use when you're working with big data.
 
-Pandas has a very nice interface for writing and reading CSV files with `to_csv <https://pandas.pydata.org/docs/user_guide/io.html#io-store-in-csv>`__- and `read_csv <https://pandas.pydata.org/docs/user_guide/io.html#io-read-csv-table>`__-functions::
 
-    dataset.to_csv('dataset.csv', index=False)
-
-    dataset_csv = pd.read_csv('dataset.csv')
-
-Numpy has `routines <https://numpy.org/doc/stable/reference/routines.io.html#text-files>`__ for saving and loading CSV files as arrays as well ::
-
-    np.savetxt('data_array.csv', data_array)
-
-    data_array_csv = np.loadtxt('data_array.csv')
 
 .. important::
 
