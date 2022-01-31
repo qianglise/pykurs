@@ -46,16 +46,16 @@ The core of numpy is the numpy ndarray (n-dimensional array).
 Compared to a python list, the numpy array is simialr in terms of serving as a data container.
 Some differences between the two are: 
 
-numpy array can have multi dimensions
-numpy array can work fast only when all data elements are of the same type
-numpy array can be fast when vectorized
-numpy array is slower for certain operations, e.g. appending elements
+numpy array can have multi dimensions |br|
+numpy array can work fast only when all data elements are of the same type |br|
+numpy array can be fast when vectorized |br|
+numpy array is slower for certain operations, e.g. appending elements |br|
 
 Array Creation
 **************
 
-One way to create a numpy array is to convert from a python list, but make sure that the list is homogeneous (same data type)
- otherwise you will downgrade the performace of numpy array.
+One way to create a numpy array is to convert from a python list, but make sure that the list is homogeneous (same data type) 
+otherwise you will downgrade the performace of numpy array. 
 Since appending elements to an existing array is slow, it is a common practice to preallocate the necessary space with np.zeros or np.empty
 when converting from a python list is not possible.
 
@@ -64,7 +64,7 @@ when converting from a python list is not possible.
 a = np.array([1,2,3]) 
 
 
-.. code:: python
+.. code:: py
 b = np.array([1,2,3]) 
 
 
@@ -72,30 +72,8 @@ b = np.array([1,2,3])
 c = np.array([1,2,3]) 
 
 
-   .. tabs::
-
-      .. tab:: c = np.array([1,2,3]) 
-
-         .. literalinclude:: img/test1.png
 
 
-      .. tab:: Fortran
-
-	 .. literalinclude:: img/test2.png                  
-
-
-
-
-   .. tabs::
-
-      .. tab:: C
-	    d = np.array([1,2,3]) 
-         .. literalinclude:: img/test1.png
-
-
-      .. tab:: Fortran
-
-	 .. literalinclude:: img/test2.png                  
 
 
 
