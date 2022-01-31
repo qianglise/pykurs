@@ -53,11 +53,17 @@ numpy array is slower for certain operations, e.g. appending elements |br|
 
 
 `1. Integers`_ |br|
+
 `2. Floats`_ (including Fractions and Decimals) |br|
+
 `3. Bools`_ |br|
+
 `4. Strings`_  |br|
+
 `5. Datetimes`_ |br|
+
 `6. Combinations thereof`_ |br|
+
 `7. Type Checks`_
 
 
@@ -71,13 +77,14 @@ when converting from a python list is not possible.
 
 .. code:: python
 
-a = np.array([1,2,3]) 
+       a = np.array([1,2,3]) 
 
 
 .. code:: py
-b = np.array([1,2,3]) 
+       b = np.array([1,2,3]) 
 
 
+in ::
 
 c = np.array([1,2,3]) 
 
