@@ -98,6 +98,23 @@ in ::
         dtype('int32')                   # int32 on Windows, int64 on Linux and MacOS
 
 
+.. challenge:: Syntax
+
+   .. tabs::
+
+      .. tab:: C/C++
+
+             .. code-block:: html
+
+		  <div class="img-div-any-width" markdown="0">  <image src="img/test1.png"/>   <br /> </div>
+
+
+      .. tab:: Fortran
+
+             .. code-block:: html
+
+                  <div class="img-div-any-width" markdown="0">  <image src="img/test1.png"/>   <br /> </div>
+
 
 
 
