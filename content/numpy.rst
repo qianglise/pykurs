@@ -81,12 +81,13 @@ when converting from a python list is not possible.
 
 
 .. code:: py
+
        b = np.array([1,2,3]) 
 
 
 in ::
 
-c = np.array([1,2,3]) 
+   c = np.array([1,2,3]) 
 
 
 
