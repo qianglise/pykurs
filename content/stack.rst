@@ -62,6 +62,28 @@ https://www.tutorialspoint.com/numpy/numpy_broadcasting.htm
 The term broadcasting refers to the ability of NumPy to treat arrays of different shapes during arithmetic operations. Arithmetic operations on arrays are usually done on corresponding elements. If two arrays are of exactly the same shape, then these operations are smoothly performed.
 
 
+
+https://pangeo.io/faq.html
+maybe add this as a note
+What is Big Data?
+
+There is a lot of hype around the buzzword “Big Data” today. Some people may associate Big Data with specific software platforms (e.g. Hadoop, spark), while, for others, “big data” means specific machine learning techniques. A more useful and general definition can be found on wikipedia:
+
+    Big data is data sets that are so voluminous and complex that traditional data processing application software are inadequate to deal with them.
+
+By this definition, a great many datasets we regularly confront in Earth science are big data.
+
+A good threshold for when data becomes difficult to deal with is when the volume of data exceeds your computer’s RAM. Most modern laptops have between 2 and 16 GB of RAM. High-end workstations and servers can have 1 TB (1000 GB) or RAM or more. If the dataset you are trying to analyze can’t fit in you computer’s memory, some special care is required to carry out the analysis. Data that can’t fit in RAM but can fit on your hard drive is sometimes called “medium data.”
+
+The next threshold of difficulty is when the data can’t fit on your hard drive. Most modern laptops have between 100 GB and 4 TB of storage space on the hard drive. If you can’t fit your dataset on your internal hard drive, you can buy an external hard drive. However, at that point you might consider using a high-end server, HPC system, or cloud-based storage for your dataset. Once you have many TB of data to analyze, you are definitely in the realm of Big Data.
+
+Some widely used datasets in geoscience exceed a PB. These datasets present an extreme challenge, a challenge that the Pangeo project aims to solve.
+
+
+
+
+
+
 https://betterprogramming.pub/numpy-illustrated-the-visual-guide-to-numpy-3b1d4976de1d
 The central concept of NumPy is an n-dimensional array.
 

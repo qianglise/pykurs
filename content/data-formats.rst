@@ -11,8 +11,24 @@ Data formats with Pandas and Numpy
    - Learn the distinguishing characteristics of different data formats.
    - Learn how Pandas to read and write data in a variety of formats.
 
-What is a data format?
-----------------------
+
+
+Motivation and Scope
+--------------------
+
+HPC has become an indispensable tool for  climate science community, with the advance of mordern computing sytems (especially with accerlarators like GPUs), more and more data is produced even faster rate and legacy software tools for data analysis can not handle them efficiently. This even becomes a obstacle to scientific progress in some cases. This course focuses on high performace data analysis, a subset of computing in which the raw data from either climate model simulation or observation is to be transformed into understanding following the steps below:
+
+    1. read the raw data
+    2. perform some data analysis operations, from very simple (e.g. take the mean) to very complex (e.g. train a deep neural network)
+    3. visualize the results or write the output into a file
+
+This course is to teach the basic foundations of Earth and Environmental Data Science which are often overlooked. The material is designed to be accessible for Earth Science graduate students in any discipline, with no prerequisites.
+
+The bulk of the content is devoted to data analysis using the modern scientific Python ecosystem, including Numpy, Scipy, Pandas, Xarray and  performace enhancement using numba, dask, cuPy.
+
+
+What is a data?
+---------------
 
 bit and byte
 ************
@@ -26,10 +42,11 @@ Organising bytes in different ways could further represent different types of in
 Numerical Data
 **************
 
-Different numerial data types can be encoded as bytes. The more bytes we use for each value, the more range or precision we get, meanwhile the more memory it takes. For example, integers stored with 1 byte have a range from [-128, 127], while with 2 bytes, the ranges becomes  [-32768, 332767].
+Different numerial data types (integer and floating-point) can be encoded as bytes. The more bytes we use for each value, the more range or precision we get, however the more memory it takes. For example, integers stored with 1 byte (8 bits) have a range from [-128, 127], while with 2 bytes (16 bits), the ranges becomes  [-32768, 32767].
+Integers are whole numbers and can be represented precisely given enough bytes. However, for floating-point numbers the decimal fractions simply can not be represented exactly as binary (base 2) fractions in most cases which is known as the representation error. Arithmetic operations will further propagate this error. That is why in scienctific computing, numerical algorithms have to be carefully chosen and floating-point numbers are usally allocated with 8 bytes (sometimes 4 bytes) to make sure the inaccuracy is under control and does not lead to unsteady solutions.
 
 Note:
-Many climate models or certain parts of the models have the option of using a reduced precision for real numbers in order to achieve better performance at a small cost to the accuracy.
+Many climate models or certain parts of the models have the option of using single precision, i.e. 4 bytes or 32 bits, for floating-point numbers in order to achieve better performance at a small cost to the accuracy.
 
 
 
@@ -153,13 +170,9 @@ However, it is not the best format to use when you're working with big data.
         print(np.abs(test_number - test_number2))
 
     CSV writing routines in Pandas and numpy try to avoid problems such as these by writing the floating point numbers with enough precision, but even they are not infallible.
-    We can check whether our written data matches the generated data:
     
-    .. code-block:: python
-
-        dataset.compare(dataset_csv)
-
-        np.all(data_array == data_array_csv) 
+    
+  
 
     In our case some rows of ``dataset_csv`` loaded from CSV do not match the original ``dataset`` as the last decimal can sometimes be rounded due to `complex technical reasons <https://docs.python.org/3/tutorial/floatingpoint.html#representation-error>`__.
 

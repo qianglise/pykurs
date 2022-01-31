@@ -18,10 +18,60 @@ NumPy
    exercises at the end in that case.
 
 
+Intro
+-----
+
+Being one of the most fundemental part of python scientific computing ecosystem, NumPy offers comprehensive mathematical functions, random number generators, linear algebra routines, Fourier transforms, and more. Moreover, NumPy is based on well-optimized C code, which gives much better performace than Python.
+
+
+One has to import numpy to use it since it is not part of the Python standard library.
+
+import numpy as np
+# find out what are the new functions in numpy
+dir(np)
+# find out what version we have
+np.__version__
+
 
 So, we already know about python lists, and that we can put all kinds of things in there.
 But in scientific usage, lists are often not enough. They are slow and
 not very flexible.
+
+
+NDArray
+-------
+
+The core of numpy is the numpy ndarray (n-dimensional array).
+Compared to a python list, the numpy array is simialr in terms of serving as a data container.
+Some differences between the two are: 
+
+numpy array can have multi dimensions
+numpy array can work fast only when all data elements are of the same type
+numpy array can be fast when vectorized
+numpy array is slower for certain operations, e.g. appending elements
+
+Array Creation
+**************
+
+One way to create a numpy array is to convert from a python list, but make sure that the list is homogeneous (same data type)
+ otherwise you will downgrade the performace of numpy array.
+Since appending elements to an existing array is slow, it is a common practice to preallocate the necessary space with np.zeros or np.empty
+when converting from a python list is not possible.
+
+
+
+Array Indexing
+**************
+
+Basic indexing is similar to python lists.
+
+
+Array Operations and Manipulations
+**********************************
+
+All the familiar arithemtic operators are applied on an element-by-element basis.
+
+
 
 .. highlight:: python
 
