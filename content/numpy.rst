@@ -51,6 +51,16 @@ numpy array can work fast only when all data elements are of the same type |br|
 numpy array can be fast when vectorized |br|
 numpy array is slower for certain operations, e.g. appending elements |br|
 
+
+`1. Integers`_ |br|
+`2. Floats`_ (including Fractions and Decimals) |br|
+`3. Bools`_ |br|
+`4. Strings`_  |br|
+`5. Datetimes`_ |br|
+`6. Combinations thereof`_ |br|
+`7. Type Checks`_
+
+
 Array Creation
 **************
 
@@ -74,6 +84,10 @@ c = np.array([1,2,3])
 
 
 
+.. code:: python
+
+        >>> np.array([1, 2, 3]).dtype      
+        dtype('int32')                   # int32 on Windows, int64 on Linux and MacOS
 
 
 
