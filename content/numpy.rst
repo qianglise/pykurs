@@ -26,12 +26,13 @@ Being one of the most fundemental part of python scientific computing ecosystem,
 
 One has to import numpy to use it since it is not part of the Python standard library.
 
+```python
 import numpy as np
 # find out what are the new functions in numpy
 dir(np)
 # find out what version we have
 np.__version__
-
+```
 
 So, we already know about python lists, and that we can put all kinds of things in there.
 But in scientific usage, lists are often not enough. They are slow and
@@ -57,6 +58,46 @@ One way to create a numpy array is to convert from a python list, but make sure 
  otherwise you will downgrade the performace of numpy array.
 Since appending elements to an existing array is slow, it is a common practice to preallocate the necessary space with np.zeros or np.empty
 when converting from a python list is not possible.
+
+.. code:: python
+
+a = np.array([1,2,3]) 
+
+
+.. code:: python
+b = np.array([1,2,3]) 
+
+
+
+c = np.array([1,2,3]) 
+
+
+   .. tabs::
+
+      .. tab:: c = np.array([1,2,3]) 
+
+         .. literalinclude:: img/test1.png
+
+
+      .. tab:: Fortran
+
+	 .. literalinclude:: img/test2.png                  
+
+
+
+
+   .. tabs::
+
+      .. tab:: C
+	    d = np.array([1,2,3]) 
+         .. literalinclude:: img/test1.png
+
+
+      .. tab:: Fortran
+
+	 .. literalinclude:: img/test2.png                  
+
+
 
 
 
