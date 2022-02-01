@@ -24,15 +24,15 @@ Intro
 Being one of the most fundemental part of python scientific computing ecosystem, NumPy offers comprehensive mathematical functions, random number generators, linear algebra routines, Fourier transforms, and more. Moreover, NumPy is based on well-optimized C code, which gives much better performace than Python.
 
 
-One has to import numpy to use it since it is not part of the Python standard library.
+One has to import numpy to use it since it is not part of the Python standard library::
+.. code:: python
 
-```python
-import numpy as np
-# find out what are the new functions in numpy
-dir(np)
-# find out what version we have
-np.__version__
-```
+       import numpy as np
+       # find out what are the new functions in numpy
+       dir(np)
+       # find out what version we have
+       np.__version__
+
 
 So, we already know about python lists, and that we can put all kinds of things in there.
 But in scientific usage, lists are often not enough. They are slow and
@@ -46,26 +46,27 @@ The core of numpy is the numpy ndarray (n-dimensional array).
 Compared to a python list, the numpy array is simialr in terms of serving as a data container.
 Some differences between the two are: 
 
-numpy array can have multi dimensions |br|
-numpy array can work fast only when all data elements are of the same type |br|
-numpy array can be fast when vectorized |br|
-numpy array is slower for certain operations, e.g. appending elements |br|
+numpy array can have multi dimensions 
+numpy array can work fast only when all data elements are of the same type
+numpy array can be fast when vectorized
+numpy array is slower for certain operations, e.g. appending elements
 
+Array Data Type
+***************
 
-`1. Integers`_ |br|
+The most common used data types (dtype) for numerical data (integer and floating-point) are listed here, 
 
-`2. Floats`_ (including Fractions and Decimals) |br|
-
-`3. Bools`_ |br|
-
-`4. Strings`_  |br|
-
-`5. Datetimes`_ |br|
-
-`6. Combinations thereof`_ |br|
-
-`7. Type Checks`_
-
++-------------+----------------------------------+----------------+-----------------+
+| data type   | data range                       | Write time [ms]|  Read time [ms] |
++=============+==================================+================+=================+
+| int8        | -2:sup:`7` to  2:sup:`7` -1      | 0.647893       |    0.639863     |
++-------------+----------------------------------+----------------+-----------------+
+| int16       | -32768 to 32767                  | 0.009885       |    0.002539     |
++-------------+----------------------------------+----------------+-----------------+
+| int32       | -2147483648 to 2147483647        | 0.012877       |    0.002737     |
++-------------+----------------------------------+----------------+-----------------+
+| int64       |    fff                           | 0.018905       | 0.009876        |
++-------------+----------------------------------+----------------+-----------------+
 
 Array Creation
 **************
@@ -97,23 +98,6 @@ in ::
         >>> np.array([1, 2, 3]).dtype      
         dtype('int32')                   # int32 on Windows, int64 on Linux and MacOS
 
-
-.. challenge:: Syntax
-
-   .. tabs::
-
-      .. tab:: C/C++
-
-             .. code-block:: html
-
-		  <div class="img-div-any-width" markdown="0">  <image src="/img/test1.png"/>   <br /> </div>
-
-
-      .. tab:: Fortran
-
-             .. code-block:: html
-
-                  <div class="img-div-any-width" markdown="0">  <image src="/img/test1.png"/>   <br /> </div>
 
 
 
