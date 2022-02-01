@@ -29,6 +29,7 @@ Intro
    data-manipulation
    data-visualization
    numpy
+   pandas
    profile
    performance
    gpu
