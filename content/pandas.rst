@@ -14,22 +14,16 @@ Pandas
 
 
 Pandas is a Python package that provides high-performance and easy to use 
-data structures and data analysis tools.  
-This page provides a brief overview of pandas, but the open source community 
-developing the pandas package has also created excellent documentation and training 
-material, including: 
+data structures and data analysis tools. Build on numpy array, pandas is particularly well suited to analyze tabular and time series data. 
+Although numpy could deal with structured array (array with mixed data types), it is not efficient. 
 
-- a  `Getting started guide <https://pandas.pydata.org/getting_started.html>`__ 
-  (including tutorials and a 10 minute flash intro)
-- a `"10 minutes to pandas" <https://pandas.pydata.org/docs/user_guide/10min.html#min>`__
-  tutorial
-- thorough `Documentation <https://pandas.pydata.org/docs/>`__ containing a user guide, 
-  API reference and contribution guide
-- a `cheatsheet <https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf>`__ 
-- a `cookbook <https://pandas.pydata.org/docs/user_guide/cookbook.html#cookbook>`__.
+The core data structures of pandas are series and dataframe. A pandas series is a one-dimensional numpy array with an index which we could use to access the data, while dataframe consists of a table of values with lables for each row and column.  
+A dataframe can combine multiple data types, such as numbers and text, but the data in each column is of the same type.
 
-Let's get a flavor of what we can do with pandas. We will be working with an
-example dataset containing the passenger list from the Titanic, which is often used in Kaggle competitions and data science tutorials. First step is to load pandas::
+
+
+
+First step is to load pandas::
 
     import pandas as pd
 

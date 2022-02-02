@@ -82,6 +82,25 @@ Some widely used datasets in geoscience exceed a PB. These datasets present an e
 
 
 
+https://jalammar.github.io/gentle-visual-intro-to-data-analysis-python-pandas
+https://github.com/jalammar/pandas-intro
+https://raw.githubusercontent.com/jalammar/jalammar.github.io/master/_posts/2019-06-26-visual-numpy.md
+https://github.com/jalammar/jalammar.github.io/blob/master/_posts/2019-06-26-visual-numpy.md
+https://github.com/jalammar/jalammar.github.io/blob/master/_posts/2018-10-29-gentle-visual-intro-to-data-analysis-python-pandas.md
+https://github.com/jalammar/jalammar.github.io/blob/master/_posts/2018-04-30-visualizing-pandas-pivoting-and-reshaping.md
+https://github.com/jalammar/jalammar.github.io/tree/master/_posts
+
+https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html
+
+https://medium.com/writers-blokke/can-ai-really-improve-your-writing-9bc3e6440973
+
+https://axil.github.io/a-comprehensive-guide-to-numpy-data-types.html
+
+https://www.giters.com/axil/axil.github.io
+
+https://github.com/satwikkansal/wtfpython#section-slippery-slopes
+
+https://github.com/axil/beautiful-docs-reborn
 
 
 https://betterprogramming.pub/numpy-illustrated-the-visual-guide-to-numpy-3b1d4976de1d
@@ -224,3 +243,39 @@ scipy
 
 
 
+
+https://axil.github.io/a-comprehensive-guide-to-numpy-data-types.html
+Pandas has a separate data type for that, but NumPy's way of dealing with the missed values is through the so-called masked array: you mark the invalid values with a boolean mask and then all the operations are carried out as if the values are not there.
+
+>>> np.array([4,0,6]).mean()          # the value 0 means 'missing' here
+3.3333333333333335
+>>> import numpy.ma as ma
+>>> ma.array([4,0,6], mask=[0,1,0]).mean()
+5.0
+
+
+
+
+vectorization
+https://nbviewer.org/github/pydata/pydata-book/blob/2nd-edition/appa.ipynb
+Writing New ufuncs in Python
+
+def add_elements(x, y):
+    return x + y
+add_them = np.frompyfunc(add_elements, 2, 1)
+add_them(np.arange(8), np.arange(8))
+
+add_them = np.vectorize(add_elements, otypes=[np.float64])
+add_them(np.arange(8), np.arange(8))
+
+arr = np.random.randn(10000)
+%timeit add_them(arr, arr)
+%timeit np.add(arr, arr)
+
+
+
+
+
+https://git.ichec.ie/training/studentresources/hpc-python/march-2021/-/blob/master/01-NumPy/01-NumPy.ipynb
+By default, numexpr tries to use multiple threads.
+Number of threads can be queried and set with ne.set_num_threads(nthreads)

@@ -25,6 +25,7 @@ Being one of the most fundemental part of python scientific computing ecosystem,
 
 
 One has to import numpy to use it since it is not part of the Python standard library::
+
 .. code:: python
 
        import numpy as np
@@ -43,6 +44,9 @@ NDArray
 -------
 
 The core of numpy is the numpy ndarray (n-dimensional array).
+A 1-dimentional array is a vector
+A 2-dimentional array is a matrix 
+
 Compared to a python list, the numpy array is simialr in terms of serving as a data container.
 Some differences between the two are: 
 
@@ -51,11 +55,12 @@ numpy array can work fast only when all data elements are of the same type
 numpy array can be fast when vectorized
 numpy array is slower for certain operations, e.g. appending elements
 
-Array Data Type
+Numpy Data Type
 ***************
 
 The most common used data types (dtype) for numerical data (integer and floating-point) are listed here, 
 
+For integers:
 +-------------+----------------------------------+----------------+-----------------+
 | data type   | data range                       | Write time [ms]|  Read time [ms] |
 +=============+==================================+================+=================+
@@ -67,6 +72,43 @@ The most common used data types (dtype) for numerical data (integer and floating
 +-------------+----------------------------------+----------------+-----------------+
 | int64       |    fff                           | 0.018905       | 0.009876        |
 +-------------+----------------------------------+----------------+-----------------+
+
+For unsigned intergers:
++-------------+----------------------------------+----------------+-----------------+
+| data type   | data range                       | Write time [ms]|  Read time [ms] |
++=============+==================================+================+=================+
+| uint8       | -2:sup:`7` to  2:sup:`7` -1      | 0.647893       |    0.639863     |
++-------------+----------------------------------+----------------+-----------------+
+| uint16      | -32768 to 32767                  | 0.009885       |    0.002539     |
++-------------+----------------------------------+----------------+-----------------+
+| uint32      | -2147483648 to 2147483647        | 0.012877       |    0.002737     |
++-------------+----------------------------------+----------------+-----------------+
+| uint64      |    fff                           | 0.018905       | 0.009876        |
++-------------+----------------------------------+----------------+-----------------+
+
+
+Be careful, once the data value is beyond the lower or upper bound of a certain data type, 
+the value will be wrapped around and there is no warning::
+
+>>> np.array([255], np.uint8) + 1   # 2**8-1 is INT_MAX for uint8
+array([0], dtype=uint8)
+
+
+
+For floating-point numbers:
++-------------+----------------------------------+----------------+-----------------+
+| data type   | data range                       | Write time [ms]|  Read time [ms] |
++=============+==================================+================+=================+
+| float16     | -32768 to 32767                  | 0.009885       |    0.002539     |
++-------------+----------------------------------+----------------+-----------------+
+| float32     | -2147483648 to 2147483647        | 0.012877       |    0.002737     |
++-------------+----------------------------------+----------------+-----------------+
+| float64     |    fff                           | 0.018905       | 0.009876        |
++-------------+----------------------------------+----------------+-----------------+
+
+
+Note: float128 is Unix OS, but not on Windows OS.
+Like intergers, the floating-point numbers suffer from overflow errors as well.
 
 Array Creation
 **************

@@ -1,0 +1,296 @@
+Optimization
+============
+
+Once your code is working reliably, you can start thinking of optimizing it.
+Always measure the code before you start optimization. Don't base your optimization 
+on theoretical consideration, otherwise you'll have surprises. 
+
+
+Profilers 
+---------
+
+Timeit
+******
+
+If you use Jupyter-notebook, the best choice will be to use ``timeit`` (https://docs.python.org/library/timeit.html) to time a small piece of code:
+
+.. sourcecode:: ipython
+
+    In [1]: import numpy as np
+
+    In [2]: a = np.arange(1000)
+
+    In [3]: %timeit a ** 2
+    100000 loops, best of 3: 5.73 us per loop
+
+.. note::
+
+   For long running calls, using ``%time`` instead of ``%timeit``; it is
+   less precise but faster
+
+
+cProfile
+********
+
+For more complex code, one could use the built-in python profilers 
+<https://docs.python.org/3/library/profile.html>`_ ``cProfile``.
+
+    .. sourcecode:: console
+
+        $  python -m cProfile -o demo.prof demo.py
+
+    Using the ``-o`` switch will output the profiler results to the file
+    ``demo.prof`` to view with an external tool. This can be useful if
+    you wish to process the profiler output with a visualization tool.
+
+
+Line-profiler
+--------------
+
+The cprofile tells us which function takes most of the time, but not where it is called.
+
+For this information, we use the `line_profiler <http://packages.python.org/line_profiler/>`_: in the
+source file  by adding a decorator ``@profile`` in the functions of interests
+
+.. sourcecode:: python
+
+    @profile
+    def test():
+        data = np.random.random((5000, 100))
+        u, s, v = linalg.svd(data)
+        pca = np.dot(u[:, :10], data)
+        results = fastica(pca.T, whiten=False)
+
+Then we run the script using the `kernprof.py
+<http://packages.python.org/line_profiler>`_ program, with switches ``-l, --line-by-line`` and ``-v, --view`` to use the line-by-line profiler and view the results in addition to saving them:
+
+.. sourcecode:: console
+
+    $ kernprof.py -l -v demo.py
+
+    Wrote profile results to demo.py.lprof
+    Timer unit: 1e-06 s
+
+    File: demo.py
+    Function: test at line 5
+    Total time: 14.2793 s
+
+    Line #      Hits         Time  Per Hit   % Time  Line Contents
+    =========== ============ ===== ========= ======= ==== ========
+        5                                           @profile
+        6                                           def test():
+        7         1        19015  19015.0      0.1      data = np.random.random((5000, 100))
+        8         1     14242163 14242163.0   99.7      u, s, v = linalg.svd(data)
+        9         1        10282  10282.0      0.1      pca = np.dot(u[:10, :], data)
+       10         1         7799   7799.0      0.1      results = fastica(pca.T, whiten=False)
+
+**The SVD is taking all the time.** We need to optimise this line.
+
+
+
+performance enhancement 
+-----------------------
+
+Once we have identified the bottlenecks, we need to make the corresponding code go faster.
+
+Algorithmic optimization
+************************
+
+The first thing to look into is the underlying algorithm you chose: is it optimal?
+To answer this question,  a good understanding of the maths behind the algorithm helps. 
+However, it can be as simple as moving computation or memory allocation outside a loop, and this happens very often.
+
+SVD
+...................
+
+SVD `Singular Value Decomposition <https://en.wikipedia.org/wiki/Singular_value_decomposition>`_
+is quite often used in climate model data analysis.  The computational cost of this algorithm is 
+roughly :math:`n^3` in the size of the input matrix. 
+However, in both of these example, we are not using all the output of
+the SVD, but only the first few rows of its first return argument. If
+we use the ``svd`` implementation of scipy, we can ask for an incomplete
+version of the SVD. Note that implementations of linear algebra in
+scipy are richer then those in numpy and should be preferred.
+
+.. sourcecode:: ipython
+
+    In [3]: %timeit np.linalg.svd(data)
+    1 loops, best of 3: 14.5 s per loop
+
+    In [4]: from scipy import linalg
+
+    In [5]: %timeit linalg.svd(data)
+    1 loops, best of 3: 14.2 s per loop
+
+    In [6]: %timeit linalg.svd(data, full_matrices=False)
+    1 loops, best of 3: 295 ms per loop
+
+    In [7]: %timeit np.linalg.svd(data, full_matrices=False)
+    1 loops, best of 3: 293 ms per loop
+
+We can then use this insight to :download:`optimize the previous code <demo_opt.py>`:
+
+.. literalinclude:: demo_opt.py
+   :pyobject: test
+
+.. sourcecode:: ipython
+
+    In [1]: import demo
+
+    In [2]: %timeit demo.
+    demo.fastica   demo.np        demo.prof.pdf  demo.py        demo.pyc
+    demo.linalg    demo.prof      demo.prof.png  demo.py.lprof  demo.test
+
+    In [2]: %timeit demo.test()
+    ica.py:65: RuntimeWarning: invalid value encountered in sqrt
+      W = (u * np.diag(1.0/np.sqrt(s)) * u.T) * W  # W = (W * W.T) ^{-1/2} * W
+    1 loops, best of 3: 17.5 s per loop
+
+    In [3]: import demo_opt
+
+    In [4]: %timeit demo_opt.test()
+    1 loops, best of 3: 208 ms per loop
+
+Real incomplete SVDs, e.g. computing only the first 10 eigenvectors, can
+be computed with arpack, available in ``scipy.sparse.linalg.eigsh``.
+
+.. topic:: Computational linear algebra
+
+    For certain algorithms, many of the bottlenecks will be linear
+    algebra computations. In this case, using the right function to solve
+    the right problem is key. For instance, an eigenvalue problem with a
+    symmetric matrix is easier to solve than with a general matrix. Also,
+    most often, you can avoid inverting a matrix and use a less costly
+    (and more numerically stable) operation.
+
+add sparse matrix here 
+
+
+Vectorization
+*************
+
+The reason that numpy outperforms pytong list is that it uses vectorization.
+A lot of the data analysis involves a simple operation being applied to each element of a large dataset.
+In such cases, vectorization is key for better performance.
+
+
+
+A complete discussion on advanced use of numpy is found in chapter
+:ref:`advanced_numpy`, or in the article `The NumPy array: a structure
+for efficient numerical computation
+<https://hal.inria.fr/inria-00564007/en>`_
+by van der Walt et al. Here we
+discuss only some commonly encountered tricks to make code faster.
+
+* **Vectorizing for loops**
+
+  Find tricks to avoid for loops using numpy arrays. For this, masks and
+  indices arrays can be useful.
+
+* **Broadcasting**
+
+  Use :ref:`broadcasting <broadcasting>` to do operations on arrays as
+  small as possible before combining them.
+
+.. XXX: complement broadcasting in the numpy chapter with the example of
+   the 3D grid
+
+* **In place operations**
+
+  .. sourcecode:: ipython
+
+    In [1]: a = np.zeros(1e7)
+
+    In [2]: %timeit global a ; a = 0*a
+    10 loops, best of 3: 111 ms per loop
+
+    In [3]: %timeit global a ; a *= 0
+    10 loops, best of 3: 48.4 ms per loop
+
+  **note**: we need `global a` in the timeit so that it work, as it is
+  assigning to `a`, and thus considers it as a local variable.
+
+* **Be easy on the memory: use views, and not copies**
+
+  Copying big arrays is as costly as making simple numerical operations
+  on them:
+
+  .. sourcecode:: ipython
+
+    In [1]: a = np.zeros(1e7)
+
+    In [2]: %timeit a.copy()
+    10 loops, best of 3: 124 ms per loop
+
+    In [3]: %timeit a + 1
+    10 loops, best of 3: 112 ms per loop
+
+* **Beware of cache effects**
+
+  Memory access is cheaper when it is grouped: accessing a big array in a
+  continuous way is much faster than random access. This implies amongst
+  other things that **smaller strides are faster** (see
+  :ref:`cache_effects`):
+
+  .. sourcecode:: ipython
+
+    In [1]: c = np.zeros((1e4, 1e4), order='C')
+
+    In [2]: %timeit c.sum(axis=0)
+    1 loops, best of 3: 3.89 s per loop
+
+    In [3]: %timeit c.sum(axis=1)
+    1 loops, best of 3: 188 ms per loop
+
+    In [4]: c.strides
+    Out[4]: (80000, 8)
+
+  This is the reason why Fortran ordering or C ordering may make a big
+  difference on operations:
+
+  .. sourcecode:: ipython
+
+    In [5]: a = np.random.rand(20, 2**18)
+
+    In [6]: b = np.random.rand(20, 2**18)
+
+    In [7]: %timeit np.dot(b, a.T)
+    1 loops, best of 3: 194 ms per loop
+
+    In [8]: c = np.ascontiguousarray(a.T)
+
+    In [9]: %timeit np.dot(b, c)
+    10 loops, best of 3: 84.2 ms per loop
+
+  Note that copying the data to work around this effect may not be worth it:
+
+  .. sourcecode:: ipython
+
+    In [10]: %timeit c = np.ascontiguousarray(a.T)
+    10 loops, best of 3: 106 ms per loop
+
+  Using `numexpr <http://code.google.com/p/numexpr/>`_ can be useful to
+  automatically optimize code for such effects.
+
+* **Use compiled code**
+
+  The last resort, once you are sure that all the high-level
+  optimizations have been explored, is to transfer the hot spots, i.e.
+  the few lines or functions in which most of the time is spent, to
+  compiled code. For compiled code, the preferred option is to use
+  `Cython <http://www.cython.org>`_: it is easy to transform exiting
+  Python code in compiled code, and with a good use of the
+  `numpy support <http://docs.cython.org/src/tutorial/numpy.html>`_
+  yields efficient code on numpy arrays, for instance by unrolling loops.
+
+.. warning::
+
+   For all the above: profile and time your choices. Don't base your
+   optimization on theoretical considerations.
+
+Additional Links
+----------------
+
+* If you need to profile memory usage, you could try the `memory_profiler
+  <https://pypi.python.org/pypi/memory_profiler>`_
+

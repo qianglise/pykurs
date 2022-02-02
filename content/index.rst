@@ -30,6 +30,7 @@ Intro
    data-visualization
    numpy
    pandas
+   scipy
    profile
    performance
    gpu
