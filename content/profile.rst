@@ -165,29 +165,48 @@ be computed with arpack, available in ``scipy.sparse.linalg.eigsh``.
 
 add sparse matrix here 
 
+CPU usage optimization
+************************
 
 Vectorization
-*************
+-------------
 
 The reason that numpy outperforms pytong list is that it uses vectorization.
 A lot of the data analysis involves a simple operation being applied to each element of a large dataset.
 In such cases, vectorization is key for better performance.
 
+.. challenge:: scalar vector multiplication 
+
+   .. tabs::
+
+      .. tab:: python
+
+             .. code-block:: python
+
+			a = [1, 3, 5]
+			b = 10 *a 
+
+      .. tab:: numpy
+
+             .. code-block:: python
+
+			import numpy as np
+                        a = np.array([1, 3, 5])
+                        b = 10 *a 
 
 
-A complete discussion on advanced use of numpy is found in chapter
-:ref:`advanced_numpy`, or in the article `The NumPy array: a structure
-for efficient numerical computation
-<https://hal.inria.fr/inria-00564007/en>`_
-by van der Walt et al. Here we
-discuss only some commonly encountered tricks to make code faster.
 
-* **Vectorizing for loops**
 
-  Find tricks to avoid for loops using numpy arrays. For this, masks and
-  indices arrays can be useful.
+Cash
+----
 
-* **Broadcasting**
+
+
+Memory usage optimization
+*************************
+
+Broadcasting
+------------
 
   Use :ref:`broadcasting <broadcasting>` to do operations on arrays as
   small as possible before combining them.
