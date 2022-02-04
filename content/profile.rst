@@ -374,21 +374,59 @@ In place operations
   Using `numexpr <http://code.google.com/p/numexpr/>`_ can be useful to
   automatically optimize code for such effects.
 
-* **Use compiled code**
+compiled code
+*************************
 
-  The last resort, once you are sure that all the high-level
-  optimizations have been explored, is to transfer the hot spots, i.e.
-  the few lines or functions in which most of the time is spent, to
-  compiled code. For compiled code, the preferred option is to use
-  `Cython <http://www.cython.org>`_: it is easy to transform exiting
-  Python code in compiled code, and with a good use of the
-  `numpy support <http://docs.cython.org/src/tutorial/numpy.html>`_
-  yields efficient code on numpy arrays, for instance by unrolling loops.
+For many use cases using NumPy or Pandas is sufficient. Howevewr, in some computationally heavy applications, 
+it is possible to improve the performance by using compiled code.
+Normally Cython and Numba are among the popular choices and both of them have good support for numpy arrays. 
 
 
-Additional Links
-----------------
+cython
+------
 
-* If you need to profile memory usage, you could try the `memory_profiler
-  <https://pypi.python.org/pypi/memory_profiler>`_
+The source code gets translated into optimized C/C++ code and compiled as Python extension modules. 
 
+
+numba
+-----
+
+An alternative to statically compiling Cython code is to use a dynamic just-in-time (JIT) compiler with `Numba <https://numba.pydata.org/>`__.
+
+Numba allows you to write a pure Python function which can be JIT compiled to native machine instructions, similar in performance to C, C++ and Fortran, by decorating your function with ``@jit``.
+
+Numba works by generating optimized machine code using the LLVM compiler infrastructure at import time, runtime, or statically (using the included pycc tool).
+Numba supports compilation of Python to run on either CPU or GPU hardware and is designed to integrate with the Python scientific software stack.
+
+.. note::
+
+    The ``@jit`` compilation will add overhead to the runtime of the function, so performance benefits may not be realized especially when using small data sets.
+    Consider `caching <https://numba.readthedocs.io/en/stable/developer/caching.html>`__ your function to avoid compilation overhead each time your function is run.
+
+Numba can be used in 2 ways with pandas:
+
+#. Specify the ``engine="numba"`` keyword in select pandas methods
+#. Define your own Python function decorated with ``@jit`` and pass the underlying NumPy array of :class:`Series` or :class:`DataFrame` (using ``to_numpy()``) into the function
+
+If Numba is installed, one can specify ``engine="numba"`` in select pandas methods to execute the method using Numba.
+Methods that support ``engine="numba"`` will also have an ``engine_kwargs`` keyword that accepts a dictionary that allows one to specify
+``"nogil"``, ``"nopython"`` and ``"parallel"`` keys with boolean values to pass into the ``@jit`` decorator.
+If ``engine_kwargs`` is not specified, it defaults to ``{"nogil": False, "nopython": True, "parallel": False}`` unless otherwise specified.
+
+In terms of performance, **the first time a function is run using the Numba engine will be slow**
+as Numba will have some function compilation overhead. However, the JIT compiled functions are cached,
+and subsequent calls will be fast. In general, the Numba engine is performant with
+a larger amount of data points (e.g. 1+ million).
+
+
+
+
+
+Consider the following pure Python code:
+
+.. literalinclude:: ../../examples/quickstart/cythonize/integrate.py
+    :caption: integrate.py
+
+Simply compiling this in Cython merely gives a 35% speedup.  This is
+better than nothing, but adding some static types can make a much larger
+difference.
