@@ -275,18 +275,6 @@ In the latter case, the dimension of the output array is expanded to the larger 
 the broadcasted arrays are never physically constructed
 
 
-.. tabs:: v1
-
-    .. group-tab:: Pure Python
-
-        .. figure:: img/broadcasting_3.png
-
-    .. group-tab:: Cython
-
-        .. figure:: img/broadcasting_4.png
-
-
-
    .. tabs:: broadcasting
 
       .. tab:: 1D
