@@ -2,6 +2,10 @@ Optimization
 ============
 
 Once your code is working reliably, you can start thinking of optimizing it.
+
+
+.. warning::
+
 Always measure the code before you start optimization. Don't base your optimization 
 on theoretical consideration, otherwise you'll have surprises. 
 
@@ -45,7 +49,7 @@ For more complex code, one could use the built-in python profilers
 
 
 Line-profiler
---------------
+*************
 
 The cprofile tells us which function takes most of the time, but not where it is called.
 
@@ -169,9 +173,9 @@ CPU usage optimization
 ************************
 
 Vectorization
--------------
+..................
 
-The reason that numpy outperforms pytong list is that it uses vectorization.
+Arithmetic is one place where numpy performance outperforms python list and the reason is that it uses vectorization.
 A lot of the data analysis involves a simple operation being applied to each element of a large dataset.
 In such cases, vectorization is key for better performance.
 
@@ -197,8 +201,7 @@ In such cases, vectorization is key for better performance.
 
 
 
-Cash
-----
+
 
 
 
@@ -206,15 +209,82 @@ Memory usage optimization
 *************************
 
 Broadcasting
-------------
+............
 
-  Use :ref:`broadcasting <broadcasting>` to do operations on arrays as
-  small as possible before combining them.
+Basic operations of numpy are elementwise, and the shape of the arrays should be compatible.
+However, in practice under certain conditions, it is possible to do operations on arrays of different shapes.
+NumPy expands the arrays such that the operation becomes viable.
 
-.. XXX: complement broadcasting in the numpy chapter with the example of
-   the 3D grid
+.. note::
 
-* **In place operations**
+Broadcasting Rules
+Dimensions match when they are equal, or when either is 1 or None. 
+In the latter case, the dimension of the output array is expanded to the larger of the two.
+
+   .. tabs:: broadcasting
+
+      .. tab:: 1D
+
+             .. code-block:: python
+
+			     a = np.array([[1, 2, 3],
+	                	   [4, 5, 6]])
+			     b = np.array([10, 10, 10])
+			     a + b                       # array([[11, 12, 13],
+                                			 #        [14, 15, 16]]) 
+
+
+      .. tab:: 2D
+
+             .. code-block:: 2D
+
+			import numpy as np
+                        a = np.array([1, 3, 5])
+                        b = 10 *a 
+
+
+
+
+.. figure:: https://numpy.org/doc/stable/_images/broadcasting_1.png
+
+   Source: `numpy.org <https://numpy.org/doc/stable/_images/broadcasting_1.png>`__.
+
+.. figure:: https://numpy.org/doc/stable/_images/broadcasting_2.png
+
+   Source: `numpy.org <https://numpy.org/doc/stable/_images/broadcasting_2.png>`__.
+
+.. figure:: https://numpy.org/doc/stable/_images/broadcasting_3.png
+
+   Source: `numpy.org <https://numpy.org/doc/stable/_images/broadcasting_3.png>`__.
+
+
+
+.. figure:: https://numpy.org/doc/stable/_images/broadcasting_4.png
+
+   Source: `numpy.org <https://numpy.org/doc/stable/_images/broadcasting_4.png>`__.
+
+
+.. figure:: https://scipy-lectures.org/_images/numpy_broadcasting.png
+
+   Source: `scipy-lectures.org <https://scipy-lectures.org/_images/numpy_broadcasting.png>`__.
+
+
+
+.. note::
+
+the broadcasted arrays are never physically constructed
+
+
+
+
+Cash
+............
+
+
+
+In place operations
+............
+
 
   .. sourcecode:: ipython
 
@@ -302,10 +372,6 @@ Broadcasting
   `numpy support <http://docs.cython.org/src/tutorial/numpy.html>`_
   yields efficient code on numpy arrays, for instance by unrolling loops.
 
-.. warning::
-
-   For all the above: profile and time your choices. Don't base your
-   optimization on theoretical considerations.
 
 Additional Links
 ----------------
