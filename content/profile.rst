@@ -200,7 +200,8 @@ In such cases, vectorization is key for better performance.
 
 
 
-
+so consider vec, numpy already did it, add linear algebra packages, that is why we recomend to use in the previous chapter.
+you write your own function, you can use numba e.g.
 
 
 
@@ -221,7 +222,9 @@ Broadcasting Rules
 Dimensions match when they are equal, or when either is 1 or None. 
 In the latter case, the dimension of the output array is expanded to the larger of the two.
 
-   .. tabs:: broadcasting
+.. challenge:: broadcasting
+
+   .. tabs:: 
 
       .. tab:: 1D
 
@@ -274,8 +277,10 @@ In the latter case, the dimension of the output array is expanded to the larger 
 
 the broadcasted arrays are never physically constructed
 
+.. challenge:: broadcasting
 
-   .. tabs:: broadcasting
+
+   .. tabs:: 
 
       .. tab:: 1D
 
