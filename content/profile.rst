@@ -284,10 +284,24 @@ the broadcasted arrays are never physically constructed
 
       .. tab:: 1D
 
+             .. code-block:: 2D
+
+			import numpy as np
+                        a = np.array([1, 3, 5])
+                        b = 10 *a 
+
              .. figure:: img/broadcasting_1.png 
 
 
       .. tab:: 2D
+
+             .. code-block:: python
+
+			     a = np.array([[1, 2, 3],
+	                	   [4, 5, 6]])
+			     b = np.array([10, 10, 10])
+			     a + b                       # array([[11, 12, 13],
+                                			 #        [14, 15, 16]]) 
 
              .. figure:: img/broadcasting_2.png 
 
