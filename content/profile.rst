@@ -383,13 +383,14 @@ Normally Cython and Numba are among the popular choices and both of them have go
 
 
 cython
-------
+.......
 
 The source code gets translated into optimized C/C++ code and compiled as Python extension modules. 
 
 
 numba
------
+.......
+
 
 An alternative to statically compiling Cython code is to use a dynamic just-in-time (JIT) compiler with `Numba <https://numba.pydata.org/>`__.
 
@@ -424,9 +425,27 @@ a larger amount of data points (e.g. 1+ million).
 
 Consider the following pure Python code:
 
-.. literalinclude:: ../../examples/quickstart/cythonize/integrate.py
-    :caption: integrate.py
+.. literalinclude:: example/integrate.py
 
 Simply compiling this in Cython merely gives a 35% speedup.  This is
 better than nothing, but adding some static types can make a much larger
 difference.
+
+
+   .. tabs:: 
+
+      .. tab:: python
+
+             .. literalinclude:: example/integrate.py 
+
+      .. tab:: numpy
+
+              .. literalinclude:: example/integrate.numpy.py 
+
+      .. tab:: cython
+
+              .. literalinclude:: example/integrate.cython.py 
+
+      .. tab:: numba
+
+              .. literalinclude:: example/integrate.numba.py 
