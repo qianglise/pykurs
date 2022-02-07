@@ -279,3 +279,18 @@ arr = np.random.randn(10000)
 https://git.ichec.ie/training/studentresources/hpc-python/march-2021/-/blob/master/01-NumPy/01-NumPy.ipynb
 By default, numexpr tries to use multiple threads.
 Number of threads can be queried and set with ne.set_num_threads(nthreads)
+
+
+
+svd with dask
+https://examples.dask.org/machine-learning/svd.html
+
+https://examples.dask.org/applications/stencils-with-numba.html
+Comparing Stencil Computations on the CPU and GPU
+https://gist.github.com/mrocklin/9272bf84a8faffdbbe2cd44b4bc4ce3c
+
+
+
+
+
+https://aaltoscicomp.github.io/data-analysis-workflows-course/chapter-4-scaling/#parallelization-strategies

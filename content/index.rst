@@ -33,6 +33,7 @@ Intro
    scipy
    profile
    performance
+   scale
    gpu
 
 .. toctree::
