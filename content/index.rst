@@ -31,6 +31,7 @@ Intro
    numpy
    pandas
    scipy
+   xarray
    profile
    performance
    scale

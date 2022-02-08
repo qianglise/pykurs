@@ -4,14 +4,173 @@
 Scaling to large datasets
 *************************
 
-pandas provides data structures for in-memory analytics, which makes using pandas
-to analyze datasets that are larger than memory datasets somewhat tricky. Even datasets
-that are a sizable fraction of memory become unwieldy, as some pandas operations need
-to make intermediate copies.
+Modern data analysis becomes more and more expensive computationally as the data volumn grows.
+So far, we consider situations where all the data used for the analysis fits in the memory. 
+Sooner or later we will work with large datesets that do not fit in the memory, and we have to perform data analysis in parallel. 
 
-This document provides a few recommendations for scaling your analysis to larger datasets.
-It's a complement to :ref:`enhancingperf`, which focuses on speeding up analysis
-for datasets that fit in memory.
+.. note: 
+
+Even datasets that are a sizable fraction of memory become unwieldy, as some pandas operations need to make intermediate copies.
+
+Data parallelism
+================
+
+
+Huge number of data analysis workflows can be parallelized with data
+parallelism (also known as embarassingly parallel). In embarassingly
+parallel pipelines the data and/or model hyperparameters are divided into
+separate identical pipelines. Each pipeline then does the analysis for its
+piece of the data. 
+
+This is especially effective if you have access to HPC/cloud resources that can
+be used to run the pipelines. Lots of big data analysis works in 
+split-apply-combine-type pipelines where computing tasks are spread across
+multiple nodes with their own part of the data and results are combined after
+the calculations are finished.
+
+Task-based parallelism
+======================
+
+* **Shared memory parallelism:** Parallel threads need to communicate and do so via
+  the same memory (variables, state, etc). (OpenMP)
+
+OpenMP was designed to replace low-level and tedious solutions like POSIX threads, or pthreads.
+OpenMP was originally targeted towards controlling capable and completely independent processors, with
+shared memory. The most common such configurations today are the many multi-cored chips we all use. You
+might have dozens of threads, each of which takes some time to start or complete.
+In return for the flexibility to use those processors to their fullest extent, OpenMP assumes that you know
+what you are doing. You prescribe what how you want the threads to behave and the compiler faithfully
+carries it out.
+
+
+* **Message passing:** Different processes manage their own memory segments. They share data
+  by communicating (passing messages) as needed. (Message Passing Interface (MPI)).
+
+Programming shared memory or message passing is beyond the scope of
+this course, but the simpler strategies are most often used anyway.
+
+.. warning::
+
+   Parallel programming is not magic, but many things can go wrong and
+   you can get unexpected results or difficult to debug problems.
+   Parallel programming is a fascinating world to get involved in, but
+   make sure you invest enough time to do it well.
+
+
+
+
+
+Using internal parallelization provided by libraries
+====================================================
+
+R and numpy, scipy etc. are built against libraries such as BLAS, FFTW
+and LAPACK that provide optimized routines for linear algebra, Fourier
+transforms etc.. These libraries are usually in turn built to support
+multihreading during the execution of their subroutines.
+
+If your data code does a lot of matrix operations or frequency analysis it
+might be a good idea to check that your code uses multiple threads during
+its calculations.
+
+
+
+Below is an example that does a simple matrix inversion for a symmetrical
+matrix of size 4000 by 4000 with 1 and 4 threads.
+
+    This example uses
+    `mkl <https://docs.anaconda.com/mkl-service/>`_-module provided by Anaconda
+    to change the number of threads during runtime. In normal use it is better
+    to set the ``OMP_NUM_THREADS``-environment variable as that works with
+    various different libraries.
+
+    .. code-block:: python
+
+        import time
+        import mkl
+
+        A = np.random.random((4000,4000))
+
+        A = A*A.T
+
+        mkl.set_num_threads(1)
+
+        time_1thread_1 = time.time()
+        np.linalg.inv(A)
+        time_1thread_2 = time.time()
+
+        time_1thread = time_1thread_2 - time_1thread_1
+
+        mkl.set_num_threads(4)
+
+        time_4thread_1 = time.time()
+        np.linalg.inv(A)
+        time_4thread_2 = time.time()
+
+        time_4thread = time_4thread_2 - time_4thread_1
+
+        print("""
+        Time taken:
+
+        1 thread: %.2f
+        4 threads: %.2f
+
+        Speedup: %.2f
+        """ % (time_1thread, time_4thread, time_1thread/time_4thread))
+        
+        
+        Time taken:
+
+        1 thread: 4.01
+        4 threads: 1.55
+
+        Speedup: 2.59
+
+
+
+Multiprocessing
+===============
+
+In multiprocessing one starts multiple processes (hence multiprocessing) and
+gives each process an individual task to work through.
+
+
+Is multiprocessing worth it?
+****************************
+
+Normal serial code can't just be run in parallel without modifications. In
+order to get the code to run in parallel, one needs to understand what
+parallalization implementation your code has, if any. A program doesn't
+magically get faster when you have access to more processors if it's not
+designed to use them.
+
+When deciding whether using parallel programming is worth the effort, one
+should be mindful of
+`Amdahl's law <https://en.wikipedia.org/wiki/Amdahl%27s_law>`_ and
+`Gustafson's law <https://en.wikipedia.org/wiki/Gustafson%27s_law>`_.
+All programs have some parts that can only be executed in serial and
+thus the theoretical speedup that one can get from using parallel
+programming depends on two factors:
+
+1. How much of programs' execution could be done in parallel?
+2. What would be the speedup for that parallel part?
+
+Thus if your program runs mainly in serial but has a small parallel
+part, running it in parallel might not be worth it. Sometimes, doing
+data parallelism is much more fruitful approach.
+
+Another important note regarding parallelism is that all the applications
+scale good up to some upper limit which depends on application implementation,
+size and type of problem you solve and some other factors. The best practice
+is to benchmark your code on different number of CPU cores before
+you start actual production runs.
+
+
+
+
+pandas provides data structures for in-memory analytics, which makes using pandas
+to analyze datasets that are larger than memory datasets somewhat tricky. 
+
+
 
 But first, it's worth considering *not using pandas*. pandas isn't the right
 tool for all situations. If you're working with very large datasets and a tool
@@ -225,10 +384,81 @@ require too sophisticated of operations. Some operations, like :meth:`pandas.Dat
 much harder to do chunkwise. In these cases, you may be better switching to a
 different library that implements these out-of-core algorithms for you.
 
+
+Using internal parallelization provided by libraries
+====================================================
+
+R and numpy, scipy etc. are built against libraries such as BLAS, FFTW
+and LAPACK that provide optimized routines for linear algebra, Fourier
+transforms etc.. These libraries are usually in turn built to support
+multihreading during the execution of their subroutines.
+
+If your data code does a lot of matrix operations or frequency analysis it
+might be a good idea to check that your code uses multiple threads during
+its calculations.
+
+Below is an example that does a simple matrix inversion for a symmetrical
+matrix of size 4000 by 4000 with 1 and 4 threads.
+
+
+
+    This example uses
+    `mkl <https://docs.anaconda.com/mkl-service/>`_-module provided by Anaconda
+    to change the number of threads during runtime. In normal use it is better
+    to set the ``OMP_NUM_THREADS``-environment variable as that works with
+    various different libraries.
+
+    .. code-block:: python
+
+        import time
+        import mkl
+
+        A = np.random.random((4000,4000))
+
+        A = A*A.T
+
+        mkl.set_num_threads(1)
+
+        time_1thread_1 = time.time()
+        np.linalg.inv(A)
+        time_1thread_2 = time.time()
+
+        time_1thread = time_1thread_2 - time_1thread_1
+
+        mkl.set_num_threads(4)
+
+        time_4thread_1 = time.time()
+        np.linalg.inv(A)
+        time_4thread_2 = time.time()
+
+        time_4thread = time_4thread_2 - time_4thread_1
+
+        print("""
+        Time taken:
+
+        1 thread: %.2f
+        4 threads: %.2f
+
+        Speedup: %.2f
+        """ % (time_1thread, time_4thread, time_1thread/time_4thread))
+        
+        
+        Time taken:
+
+        1 thread: 4.01
+        4 threads: 1.55
+
+        Speedup: 2.59
+
+
+
 .. _scale.other_libraries:
 
 Use other libraries
 -------------------
+
+Dask is a tool that helps us easily extend our familiar python data analysis tools to medium and big data, i.e. dataset that can’t fit in our computer’s RAM. In many cases, dask also allows us to speed up our analysis by using mutiple CPU cores. Dask can help us work more efficiently on our laptop, and it can also help us scale up our analysis on HPC and cloud platforms. Most importantly, dask is almost invisible to the user, meaning that you can focus on your science, rather than the details of parallel computing.
+
 
 pandas is just one library offering a DataFrame API. Because of its popularity,
 pandas' API has become something of a standard that other libraries implement.
