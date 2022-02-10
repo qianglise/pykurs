@@ -248,6 +248,14 @@ In the latter case, the dimension of the output array is expanded to the larger 
 
 
 
+
+
+
+
+
+
+
+
 .. figure:: https://numpy.org/doc/stable/_images/broadcasting_1.png
 
    Source: `numpy.org <https://numpy.org/doc/stable/_images/broadcasting_1.png>`__.
@@ -306,6 +314,40 @@ the broadcasted arrays are never physically constructed
              .. figure:: img/broadcasting_2.png 
 
 		
+
+
+
+
+.. challenge:: broadcasting
+
+
+   .. tabs:: 
+
+      .. tab:: 1D
+
+             .. code-block:: 2D
+
+			import numpy as np
+                        a = np.array([1, 3, 5])
+                        b = 10 *a 
+
+             .. figure:: img/1.svg 
+
+
+      .. tab:: 2D
+
+             .. code-block:: python
+
+			     a = np.array([[1, 2, 3],
+	                	   [4, 5, 6]])
+			     b = np.array([10, 10, 10])
+			     a + b                       # array([[11, 12, 13],
+                                			 #        [14, 15, 16]]) 
+
+             .. figure:: img/2.svg 
+
+		
+
 
 
 
