@@ -325,7 +325,7 @@ the broadcasted arrays are never physically constructed
 
       .. tab:: 1D
 
-             .. code-block:: 2D
+             .. code-block:: py
 
 			import numpy as np
                         a = np.array([1, 3, 5])
@@ -347,11 +347,13 @@ the broadcasted arrays are never physically constructed
              .. figure:: img/2.svg 
 
 
-       .. tab:: 3D
+
+      .. tab:: 3D
 
              .. code-block:: python
 
 			     a = np.array([1, 2, 3])
+
 
              .. code-block:: python
 
@@ -359,9 +361,11 @@ the broadcasted arrays are never physically constructed
 
              .. figure:: img/1.svg 
 
+
              .. code-block:: python
 
 			     a / 4
+
 
              .. figure:: img/2.svg 
 
