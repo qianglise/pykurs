@@ -346,7 +346,28 @@ the broadcasted arrays are never physically constructed
 
              .. figure:: img/2.svg 
 
-		
+
+       .. tab:: 3D
+
+             .. code-block:: python
+
+			     a = np.array([1, 2, 3])
+
+             .. code-block:: python
+
+			     a + 4
+
+             .. figure:: img/1.svg 
+
+             .. code-block:: python
+
+			     a / 4
+
+             .. figure:: img/2.svg 
+
+
+
+
 
 
 
