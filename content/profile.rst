@@ -331,7 +331,7 @@ the broadcasted arrays are never physically constructed
                         a = np.array([1, 3, 5])
                         b = 10 *a 
 
-             .. figure:: img/1.svg 
+             .. figure:: img/np_add_1d1.svg 
 
 
       .. tab:: 2D
@@ -344,7 +344,7 @@ the broadcasted arrays are never physically constructed
 			     a + b                       # array([[11, 12, 13],
                                 			 #        [14, 15, 16]]) 
 
-             .. figure:: img/2.svg 
+             .. figure:: img/np_div_1d.svg 
 
 
 
@@ -359,7 +359,7 @@ the broadcasted arrays are never physically constructed
 
 			     a + 4
 
-             .. figure:: img/1.svg 
+             .. figure:: img/np_add_1d_new.svg 
 
 
              .. code-block:: python
@@ -367,7 +367,7 @@ the broadcasted arrays are never physically constructed
 			     a / 4
 
 
-             .. figure:: img/2.svg 
+             .. figure:: img/np_div_1d.svg 
 
 
 
