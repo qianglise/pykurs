@@ -159,7 +159,7 @@ Array Operations and Manipulations
 All the familiar arithemtic operators are applied on an element-by-element basis.
 
 
-.. challenge:: basic
+.. challenge:: Arithmetic
 
 
    .. tabs:: 
@@ -172,18 +172,19 @@ All the familiar arithemtic operators are applied on an element-by-element basis
                         a = np.array([1, 3, 5])
                         b = np.array([1, 3, 5])
 
-             .. figure:: img/np_ind_1d_new.svg 
-             .. figure:: img/np_ind_1d_new.svg 
+             .. figure:: img/np_add_1d_new.svg 
+             .. figure:: img/np_div_1d_new.svg 
 
 
       .. tab:: 2D
 
              .. code-block:: python
 
-			     a = np.array([[1, 2, 3],
-	                	   [4, 5, 6]])
-			     b = np.array([10, 10, 10])
-			     a + b                       # array([[11, 12, 13],
+			import numpy as np
+		        a = np.array([[1, 2, 3],
+	               	   [4, 5, 6]])
+		        b = np.array([10, 10, 10])
+			a + b                       # array([[11, 12, 13],
                                 			 #        [14, 15, 16]]) 
 
              .. figure:: img/np_div_1d.svg 
@@ -233,8 +234,24 @@ All the familiar arithemtic operators are applied on an element-by-element basis
                                 			 #        [14, 15, 16]]) 
 
              .. figure:: img/np_ind2d_data.svg 
+
+             .. code-block:: python
+
+			     integer 
+
              .. figure:: img/np_ind2d_integer.svg 
+
+             .. code-block:: python
+
+			     fancy indexing 
+
              .. figure:: img/np_ind2d_fancy.svg 
+
+             .. code-block:: python
+
+			     # boolean indexing 
+
+
              .. figure:: img/np_ind2d_boolean.svg 
 
 
