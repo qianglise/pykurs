@@ -218,8 +218,23 @@ All the familiar arithemtic operators are applied on an element-by-element basis
                         b = np.array([1, 3, 5])
 
              .. figure:: img/np_ind_0.svg 
+
+             .. code-block:: py
+
+			     # integer indexing 
+
              .. figure:: img/np_ind_integer.svg 
+
+             .. code-block:: py
+
+			     # fancy indexing 
+
              .. figure:: img/np_ind_fancy.svg 
+
+             .. code-block:: python
+
+			     # boolean indexing 
+
              .. figure:: img/np_ind_boolean.svg 
 
 
@@ -237,13 +252,13 @@ All the familiar arithemtic operators are applied on an element-by-element basis
 
              .. code-block:: python
 
-			     integer 
+			     # integer indexing
 
              .. figure:: img/np_ind2d_integer.svg 
 
              .. code-block:: python
 
-			     fancy indexing 
+			     # fancy indexing 
 
              .. figure:: img/np_ind2d_fancy.svg 
 
