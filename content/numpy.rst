@@ -61,6 +61,7 @@ Numpy Data Type
 The most common used data types (dtype) for numerical data (integer and floating-point) are listed here, 
 
 For integers:
+
 +-------------+----------------------------------+----------------+-----------------+
 | data type   | data range                       | Write time [ms]|  Read time [ms] |
 +=============+==================================+================+=================+
@@ -74,6 +75,7 @@ For integers:
 +-------------+----------------------------------+----------------+-----------------+
 
 For unsigned intergers:
+
 +-------------+----------------------------------+----------------+-----------------+
 | data type   | data range                       | Write time [ms]|  Read time [ms] |
 +=============+==================================+================+=================+
@@ -96,6 +98,7 @@ array([0], dtype=uint8)
 
 
 For floating-point numbers:
+
 +-------------+----------------------------------+----------------+-----------------+
 | data type   | data range                       | Write time [ms]|  Read time [ms] |
 +=============+==================================+================+=================+
@@ -154,6 +157,85 @@ Array Operations and Manipulations
 **********************************
 
 All the familiar arithemtic operators are applied on an element-by-element basis.
+
+
+.. challenge:: basic
+
+
+   .. tabs:: 
+
+      .. tab:: 1D
+
+             .. code-block:: py
+
+			import numpy as np
+                        a = np.array([1, 3, 5])
+                        b = np.array([1, 3, 5])
+
+             .. figure:: img/np_ind_1d_new.svg 
+             .. figure:: img/np_ind_1d_new.svg 
+
+
+      .. tab:: 2D
+
+             .. code-block:: python
+
+			     a = np.array([[1, 2, 3],
+	                	   [4, 5, 6]])
+			     b = np.array([10, 10, 10])
+			     a + b                       # array([[11, 12, 13],
+                                			 #        [14, 15, 16]]) 
+
+             .. figure:: img/np_div_1d.svg 
+
+
+
+
+.. challenge:: index
+
+
+   .. tabs:: 
+
+      .. tab:: 1D
+
+             .. code-block:: py
+
+			import numpy as np
+                        a = np.array([1, 3, 5])
+                        b = np.array([1, 3, 5])
+
+             .. figure:: img/np_ind_0.svg 
+             .. figure:: img/np_ind.svg 
+
+
+      .. tab:: 1DD
+
+             .. code-block:: py
+
+			import numpy as np
+                        a = np.array([1, 3, 5])
+                        b = np.array([1, 3, 5])
+
+             .. figure:: img/np_ind_0.svg 
+             .. figure:: img/np_ind_integer.svg 
+             .. figure:: img/np_ind_fancy.svg 
+             .. figure:: img/np_ind_boolean.svg 
+
+
+      .. tab:: 2D
+
+             .. code-block:: python
+
+			     a = np.array([[1, 2, 3],
+	                	   [4, 5, 6]])
+			     b = np.array([10, 10, 10])
+			     a + b                       # array([[11, 12, 13],
+                                			 #        [14, 15, 16]]) 
+
+             .. figure:: img/np_ind2d_data.svg 
+             .. figure:: img/np_ind2d_integer.svg 
+             .. figure:: img/np_ind2d_fancy.svg 
+             .. figure:: img/np_ind2d_boolean.svg 
 
 
 
