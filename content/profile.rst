@@ -1,3 +1,5 @@
+.. include:: .special.rst
+
 Optimization
 ============
 
