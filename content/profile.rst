@@ -331,7 +331,7 @@ the broadcasted arrays are never physically constructed
                         a = np.array([1, 3, 5])
                         b = 10 *a 
 
-             .. figure:: img/np_add_1d1.svg 
+             .. figure:: img/np_add_1d.svg 
 
 
       .. tab:: 2D
@@ -373,7 +373,7 @@ the broadcasted arrays are never physically constructed
 
 
 
-
+This is :red:`red !` And :blue:`this part is blue`.
 
 
 Cash
