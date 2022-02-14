@@ -292,14 +292,14 @@ All the familiar arithemtic operators are applied on an element-by-element basis
 
 			     # max 
 
-             .. figure:: img/np_max2d.svg 
+             .. figure:: img/np_max_2d.svg 
 
 
              .. code-block:: py
 
 			     # sum 
 
-             .. figure:: img/np_sum2d.svg 
+             .. figure:: img/np_sum_2d.svg 
 
  
 One can also aggregate across the rows or columns by using the axis parameter:
@@ -307,8 +307,8 @@ One can also aggregate across the rows or columns by using the axis parameter:
              .. code-block:: py
 			     # axis 
 
-             .. figure:: img/np_min2d_axis0.svg 
-             .. figure:: img/np_min2d_axis1.svg 
+             .. figure:: img/np_min_2d_axis0.svg 
+             .. figure:: img/np_min_2d_axis1.svg 
 
 
       .. tab:: 2D
