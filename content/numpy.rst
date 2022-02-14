@@ -306,8 +306,8 @@ Apart from aggregate all values, one can also aggregate across the rows or colum
              .. code-block:: py
 			     # axis 
 
-             .. figure:: img/np_min_2d_axis0.svg 
-             .. figure:: img/np_min_2d_axis1.svg 
+             .. figure:: img/np_min_2d_ax0.svg 
+             .. figure:: img/np_min_2d_ax1.svg 
 
 
       .. tab:: 2D
@@ -343,6 +343,30 @@ Apart from aggregate all values, one can also aggregate across the rows or colum
 
 
 
+.. challenge:: reshape
+
+Sometimes, you need to change the dimension of an array. One of the most common need is to trasnposing the matrix during the dot product.
+Switching the dimensions of a numpy array is also quite common in more advanced cases.
+
+             .. code-block:: py
+
+			import numpy as np
+                        a = np.array([1, 3, 5])
+                        b = np.array([1, 3, 5])
+
+
+             .. code-block:: py
+
+			     # max 
+
+             .. figure:: img/np_reshape0.svg 
+             .. figure:: img/np_reshape43.svg 
+             .. figure:: img/np_reshape34.svg 
+
+
+
+
+add example, T of 1d array is not working
 
 
 .. highlight:: python
