@@ -275,6 +275,7 @@ All the familiar arithemtic operators are applied on an element-by-element basis
 
 .. challenge:: aggregation
 
+Apart from aggregate all values, one can also aggregate across the rows or columns by using the axis parameter:
 
    .. tabs:: 
 
@@ -302,8 +303,6 @@ All the familiar arithemtic operators are applied on an element-by-element basis
              .. figure:: img/np_sum_2d.svg 
 
  
-One can also aggregate across the rows or columns by using the axis parameter:
-
              .. code-block:: py
 			     # axis 
 
