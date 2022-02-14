@@ -271,6 +271,81 @@ All the familiar arithemtic operators are applied on an element-by-element basis
 
 
 
+
+
+.. challenge:: aggregation
+
+
+   .. tabs:: 
+
+
+      .. tab:: 1D
+
+             .. code-block:: py
+
+			import numpy as np
+                        a = np.array([1, 3, 5])
+                        b = np.array([1, 3, 5])
+
+
+             .. code-block:: py
+
+			     # max 
+
+             .. figure:: img/np_max2d.svg 
+
+
+             .. code-block:: py
+
+			     # sum 
+
+             .. figure:: img/np_sum2d.svg 
+
+ 
+One can also aggregate across the rows or columns by using the axis parameter:
+
+             .. code-block:: py
+			     # axis 
+
+             .. figure:: img/np_min2d_axis0.svg 
+             .. figure:: img/np_min2d_axis1.svg 
+
+
+      .. tab:: 2D
+
+             .. code-block:: python
+
+			     a = np.array([[1, 2, 3],
+	                	   [4, 5, 6]])
+			     b = np.array([10, 10, 10])
+			     a + b                       # array([[11, 12, 13],
+                                			 #        [14, 15, 16]]) 
+
+             .. figure:: img/np_ind2d_data.svg 
+
+             .. code-block:: python
+
+			     # integer indexing
+
+             .. figure:: img/np_ind2d_integer.svg 
+
+             .. code-block:: python
+
+			     # fancy indexing 
+
+             .. figure:: img/np_ind2d_fancy.svg 
+
+             .. code-block:: python
+
+			     # boolean indexing 
+
+
+             .. figure:: img/np_ind2d_boolean.svg 
+
+
+
+
+
 .. highlight:: python
 
 What is an array?
