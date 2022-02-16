@@ -1,4 +1,4 @@
-Data formats with Pandas and Numpy
+Intro
 ==================================
 
 .. questions::

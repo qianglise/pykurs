@@ -19,12 +19,10 @@ Motivation and Scope
 HPC has become an indispensable tool for  climate science community, with the advance of mordern computing sytems (especially with accerlarators like GPUs), more and more data is produced even faster rate and legacy software tools for data analysis can not handle them efficiently. This even becomes a obstacle to scientific progress in some cases. This course focuses on high performace data analysis, a subset of computing in which the raw data from either climate model simulation or observation is to be transformed into understanding following the steps below:
 
     1. read the raw data
-    2. perform some data analysis operations, from very simple (e.g. take the mean) to very complex (e.g. train a deep neural network)
+    2. perform some operations on the data, from very simple (e.g. take the mean) to very complex (e.g. train a deep neural network)
     3. visualize the results or write the output into a file
 
-This course is to teach the basic foundations of Earth and Environmental Data Science which are often overlooked. The material is designed to be accessible for Earth Science graduate students in any discipline, with no prerequisites.
-
-The bulk of the content is devoted to data analysis using the modern scientific Python ecosystem, including Numpy, Scipy, Pandas, Xarray and  performace enhancement using numba, dask, cuPy.
+The bulk of the content is devoted to the very basics of earth science data analysis using the modern scientific Python ecosystem, including Numpy, Scipy, Pandas, Xarray and  performace enhancement using numba, dask, cuPy.
 
 
 What is a data?
@@ -37,7 +35,7 @@ The smallest building block of storage in the computer is a **bit**,
 which stores either a 0 or 1.
 Normally a number of 8 bits are combined in a group to make a **byte**. 
 One byte (8 bits) can represent/hold at most 2**8 distint values.
-Organising bytes in different ways could further represent different types of information.
+Organising bytes in different ways could further represent different types of information, i.e. data.
 
 Numerical Data
 **************
