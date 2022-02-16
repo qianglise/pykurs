@@ -289,97 +289,6 @@ As the format is standardized, many programs can use this metadata for visualiza
 
 
 
-
-Data has to be stored somewhere before you can analyse it:
-
-1.harddisk
-2.internet
-3.cloud-based storage
-
-The most popular file formats in climate modelling community are: 
-
-
-
-
-
-What is a data format?
-----------------------
-
-Whenever you have data (e.g. measurement data, simulation results, analysis results), you'll need a way to store it.
-This applies both when
-
-1. you're storing the data in memory while you're working on it;
-2. you're storing it to a disk for later work.
-
-Let's consider this randomly generated dataset with various columns::
-
-    import pandas as pd
-    import numpy as np
-    
-    n_rows = 100000
-
-    dataset = pd.DataFrame(
-        data={
-            'string': np.random.choice(('apple', 'banana', 'carrot'), size=n_rows),
-            'timestamp': pd.date_range("20130101", periods=n_rows, freq="s"),
-            'integer': np.random.choice(range(0,10), size=n_rows),
-            'float': np.random.uniform(size=n_rows),
-        },
-    )
-
-    dataset.info()
-
-This DataFrame already has a data format: it is in the tidy data format!
-In tidy data format we have multiple columns of data that are collected in a Pandas DataFrame.
-
-..  image:: img/pandas/tidy_data.png
-
-Let's consider another example::
-
-    n = 1000
-
-    data_array = np.random.uniform(size=(n,n))
-    data_array
-
-
-Here we have a different data format: we have a two-dimentional array of numbers!
-This is different to Pandas DataFrame as data is stored as one contiguous block instead of individual columns.
-This also means that the whole array must have one data type.
-
-
-..  figure:: https://github.com/elegant-scipy/elegant-scipy/raw/master/figures/NumPy_ndarrays_v2.png
-
-    Source: `Elegant Scipy <https://github.com/elegant-scipy/elegant-scipy>`__
-
-Now the question is: can we store these datasets in a file in a way that **keeps our data format intact**?
-
-For this we need a **file format** that supports our chosen **data format**.
-
-Pandas has support for `many file formats <https://pandas.pydata.org/docs/user_guide/io.html>`__ for tidy data and Numpy has support for `some file formats <https://numpy.org/doc/stable/reference/routines.io.html>`__ for array data.
-However, there are many other file formats that can be used through other libraries.
-
-What to look for in a file format?
-----------------------------------
-
-When deciding which file format you should use for your program, you should remember the following:
-
-**There is no file format that is good for every use case.**
-
-Instead, there are various standard file formats for various use cases: 
-
-.. figure:: https://imgs.xkcd.com/comics/standards.png
-
-   Source: `xkcd #927 <https://xkcd.com/927/>`__.
-
-Usually, you'll want to consider the following things when choosing a file format:
-
-1. Is everybody else / leading authorities in my field using a certain format?
-   Maybe they have good reasons for using it.
-2. Is the file format good for my data format (is it fast/space efficient/easy to use)?
-3. Do I need a human-readable format or is it enought to work on it using programming languages?
-4. Do I want to archive / share the data or do I just want to store it while I'm working?
-
-
 Using some of the most popular file formats
 -------------------------------------------
 
@@ -419,77 +328,12 @@ Numpy has `routines <https://numpy.org/doc/stable/reference/routines.io.html#tex
 
     When working with floating point numbers you should be careful to save the data with enough decimal places so that you won't lose precision.
     
-    For example, double-precision floating point numbers have `~16 decimal places of precision <https://en.wikipedia.org/wiki/Double-precision_floating-point_format>`__, but if you use normal Python to write these numbers, you can easily lose some of that precision.
-    Let's consider the following example:
-    
-    .. code-block:: python
-
-        import numpy as np
-        test_number = np.sqrt(2)
-        # Write the number in a file
-        test_file = open('sqrt2.csv', 'w')
-        test_file.write('%f' % test_number)
-        test_file.close()
-        # Read the number from a file
-        test_file = open('sqrt2.csv', 'r')
-        test_number2 = np.float64(test_file.readline())
-        test_file.close()
-        # Calculate the distance between these numbers
-        print(np.abs(test_number - test_number2))
-
     CSV writing routines in Pandas and numpy try to avoid problems such as these by writing the floating point numbers with enough precision, but even they are not infallible.
-    We can check whether our written data matches the generated data:
-    
-    .. code-block:: python
 
-        dataset.compare(dataset_csv)
-
-        np.all(data_array == data_array_csv) 
-
-    In our case some rows of ``dataset_csv`` loaded from CSV do not match the original ``dataset`` as the last decimal can sometimes be rounded due to `complex technical reasons <https://docs.python.org/3/tutorial/floatingpoint.html#representation-error>`__.
 
     Storage of these high-precision CSV files is usually very inefficient storage-wise.
 
     Binary files, where floating point numbers are represented in their native binary format, do not suffer from such problems.
-
-Feather
-*******
-
-.. important::
-
-    Using Feather requires `pyarrow-package <https://arrow.apache.org/docs/python>`__ to be installed.
-    
-    You can try installing pyarrow with
-    
-    .. code-block:: bash
-    
-        !pip install pyarrow
-    
-    or you can take this as a demo.
-
-.. admonition:: Key features
-
-   - **Type:** Binary format
-   - **Packages needed:** pandas, pyarrow
-   - **Space efficiency:** Good
-   - **Good for sharing/archival:** No
-   - Tidy data:
-       - Speed: Great
-       - Ease of use: Good
-   - Array data:
-       - Speed: -
-       - Ease of use: -
-   - **Best use cases:** Temporary storage of tidy data. 
-
-`Feather <https://arrow.apache.org/docs/python/feather.html>`__ is a file format for storing data frames quickly.
-There are libraries for Python, R and Julia.
-
-We can work with Feather files with `to_feather- and read_feather-functions <https://pandas.pydata.org/docs/user_guide/io.html#io-feather>`__::
-
-    dataset.to_feather('dataset.feather')
-    dataset_feather = pd.read_feather('dataset.feather')
-
-Feather is not a good format for storing array data, so we won't present an example of that here.
 
 
 Parquet
@@ -552,37 +396,6 @@ HDF5 (Hierarchical Data Format version 5)
 HDF5 is a high performance storage format for storing large amounts of data in multiple datasets in a single file.
 It is especially popular in fields where you need to store big multidimensional arrays such as physical sciences.
 
-Pandas allows you to store tables as HDF5 with `PyTables <https://www.pytables.org/>`_, which uses HDF5 to write the files.
-You can create a HDF5 file with `to_hdf- and `read_parquet-functions <https://pandas.pydata.org/docs/user_guide/io.html#io-hdf5>`__::
-
-    dataset.to_hdf('dataset.h5', key='dataset', mode='w')
-    dataset_hdf5 = pd.read_hdf('dataset.h5')
-
-PyTables comes installed with the default Anaconda installation.
-
-For writing data that is not a table, you can use the excellent `h5py-package <https://docs.h5py.org/en/stable/>`__::
-
-    import h5py
-    
-    # Writing:
-
-    # Open HDF5 file
-    h5_file = h5py.File('data_array.h5', 'w')
-    # Write dataset
-    h5_file.create_dataset('data_array', data=data_array)
-    # Close file and write data to disk. Important!
-    h5_file.close()
-    
-    # Reading:
-    
-    # Open HDF5 file again
-    h5_file = h5py.File('data_array.h5', 'r')
-    # Read the full dataset
-    data_array_h5 = h5_file['data_array'][()]
-    # Close file
-    h5_file.close()
-
-h5py comes with Anaconda as well.
 
 
 NetCDF4 (Network Common Data Form version 4)
@@ -622,24 +435,6 @@ This makes it possible to be read from various different programs.
 
 NetCDF4 is by far the most common format for storing large data from big simulations in physical sciences.
 
-Using interface provided by ``xarray``::
-
-    # Write tidy data as NetCDF4
-    dataset.to_xarray().to_netcdf('dataset.nc', engine='h5netcdf')
-    # Read tidy data from NetCDF4
-    import xarray as xr
-    dataset_xarray = xr.open_dataset('dataset.nc', engine='h5netcdf')
-    dataset_netcdf4 = dataset_xarray.to_pandas()
-    dataset_xarray.close()
-
-Working with array data is easy as well::
-
-    # Write array data as NetCDF4
-    xr.DataArray(data_array).to_netcdf('data_array.nc', engine='h5netcdf')
-    # Read array data from NetCDF4
-    data_array_xarray = xr.open_dataarray('data_array.nc', engine='h5netcdf')
-    data_array_netcdf4 = data_array_xarray.to_numpy()
-    data_array_xarray.close()
 
 The advantage of NetCDF4 compared to HDF5 is that one can easily add other metadata e.g. spatial dimensions (``x``, ``y``, ``z``) or timestamps (``t``) that tell where the grid-points are situated.
 As the format is standardized, many programs can use this metadata for visualization and further analysis.
@@ -674,75 +469,10 @@ There also exists `numpy.savez <https://numpy.org/doc/stable/reference/generated
 
 For big arrays it's good idea to check other binary formats such as HDF5 or NetCDF4.
 
-Exercise 1
-----------
 
-.. challenge::
 
-    - Create the example dataframe ``dataset`` with:
-    
-      .. code-block:: python
-      
-          import pandas as pd
-          import numpy as np
 
-          n_rows = 100000
 
-          dataset = pd.DataFrame(
-              data={
-                  'string': np.random.choice(('apple', 'banana', 'carrot'), size=n_rows),
-                  'timestamp': pd.date_range("20130101", periods=n_rows, freq="s"),
-                  'integer': np.random.choice(range(0,10), size=n_rows),
-                  'float': np.random.uniform(size=n_rows),
-              },
-          )
-    - Use the ``%timeit``-magic to calculate how long it takes to save / load the dataset as a CSV-file.
-
-.. solution::
-
-    .. code-block:: python
-    
-        %timeit dataset.to_csv('dataset.csv', index=False)
-    
-        %timeit dataset_csv = pd.read_csv('dataset.csv')
-
-Exercise 2
-----------
-
-.. challenge::
-      
-    - Save the dataset ``dataset`` using a binary format of your choice.
-    - Use the ``%timeit``-magic to calculate how long it takes to save / load the dataset.
-    - Did you notice any difference in speed?
-
-.. solution::
-
-    .. code-block:: python
-    
-
-        %timeit dataset.to_hdf('dataset.h5', key='dataset', mode='w')
-
-        %timeit dataset_hdf5 = pd.read_hdf('dataset.h5')
-
-Exercise 3
-----------
-
-.. challenge::
-
-    - Create a numpy array. Store it as a npy.
-    - Read the dataframe back in and compare it to the original one. Does the data match?
-
-.. solution::
-
-   .. code-block:: python
-
-      import numpy as np
-
-      my_array = np.array(10)
-
-      np.save('my_array.npy', my_array)
-      my_array_npy = np.load('my_array.npy')
-      np.all(my_array == my_array_npy)
 
 Benefits of binary file formats
 -------------------------------
@@ -812,97 +542,6 @@ Things to remember
 6. Once you've finished, you should store the data in a format that can be easily shared to other people.
 
 
-Other file formats
-------------------
-
-Pickle
-******
-
-.. admonition:: Key features
-
-   - **Type**: Binary format
-   - **Packages needed:** None (`pickle <https://docs.python.org/3/library/pickle.html>`__-module is included with Python).
-   - **Space efficiency:** Ok.
-   - **Good for sharing/archival:** No! See warning below.
-   - Tidy data:
-       - Speed: Ok
-       - Ease of use: Ok
-   - Array data:
-       - Speed: Ok
-       - Ease of use: Ok
-   - **Best use cases:** Saving Python objects for debugging.
-
-.. warning::
-
-    Loading pickles that have been provided from untrusted sources is
-    risky as they can contain arbitrary executable code.
-
-`Pickle <https://docs.python.org/3/library/pickle.html>`__ is Python's own serialization library.
-It allows you to store Python objects into a binary file, but it is not a format you will want to use for long term storage or data sharing.
-It is best suited for debugging your code by saving the Python variables for later inspection::
-
-    import pickle
-
-    with open('data_array.pickle', 'wb') as f:
-        pickle.dump(data_array, f)
-
-    with open('data_array.pickle', 'rb') as f:
-        data_array_pickle = pickle.load(f)
-
-
-JSON (JavaScript Object Notation)
-*********************************
-
-.. admonition:: Key features
-
-   - **Type**: Text format
-   - **Packages needed:** None (`json <https://docs.python.org/3/library/json.html#module-json>`__-module is included with Python).
-   - **Space efficiency:** Ok.
-   - **Good for sharing/archival:** No! See warning below.
-   - Tidy data:
-       - Speed: Ok
-       - Ease of use: Ok
-   - Array data:
-       - Speed: Ok
-       - Ease of use: Ok
-   - **Best use cases:** Saving Python objects for debugging.
-
-JSON is another popular human-readable data format.
-It is especially common when dealing with web applications (REST-APIs etc.).
-However, when you're working with big data, you rarely want to keep your data in this format.
-
-Similarly to other popular files, Pandas can write and read json files with `to_json- <https://pandas.pydata.org/docs/user_guide/io.html#io-json-writer>`_ and `read_json <https://pandas.pydata.org/docs/user_guide/io.html#io-json-reader>`_-functions::
-
-    dataset.to_json('dataset.json')
-    dataset_json = pd.read_csv('dataset.json')
-
-However, JSON is often used to represent hierarchical data with multiple layers or multiple connections. 
-For such data you might need to do a lot more processing.
-
-
-Excel (binary)
-**************
-
-.. admonition:: Key features
-
-   - **Type**: Text format
-   - **Packages needed:** `openpyxl <https://openpyxl.readthedocs.io/en/stable/>`__ 
-   - **Space efficiency:** Bad.
-   - **Good for sharing/archival:** Maybe.
-   - Tidy data:
-       - Speed: Bad
-       - Ease of use: Good
-   - Array data:
-       - Speed: Bad
-       - Ease of use: Ok
-   - **Best use cases:** Sharing data in many fields. Quick data analysis.
-
-Excel is very popular in social sciences and economics.
-However, it is `not a good format <https://www.bbc.com/news/technology-54423988>`__ for data science.
-
-See Pandas' documentation on `working with Excel files <https://pandas.pydata.org/docs/user_guide/io.html#excel-files>`_.
-
-Using Excel files with Pandas requires `openpyxl <https://openpyxl.readthedocs.io/en/stable/>`__-package to be installed.
 
 
 See also
