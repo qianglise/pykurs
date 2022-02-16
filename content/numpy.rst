@@ -304,6 +304,7 @@ Apart from aggregate all values, one can also aggregate across the rows or colum
 
  
              .. code-block:: py
+
 			     # axis 
 
              .. figure:: img/np_min_2d_ax0.svg 
@@ -351,22 +352,33 @@ Switching the dimensions of a numpy array is also quite common in more advanced 
              .. code-block:: py
 
 			import numpy as np
-                        a = np.array([1, 3, 5])
+                        data = np.array([1,2,3,4,6])
                         b = np.array([1, 3, 5])
 
 
-             .. code-block:: py
-
-			     # max 
 
              .. figure:: img/np_reshape0.svg 
+
+             .. code-block:: py
+
+			    data.reshape(4,3)
+
              .. figure:: img/np_reshape43.svg 
+
+             .. code-block:: py
+
+			     data.reshape(3,4)
+ 
              .. figure:: img/np_reshape34.svg 
 
 
 
 
 add example, T of 1d array is not working
+
+
+Use flatten as an alternative to ravel. What is the difference? (Hint: check which one returns a view and which a copy)
+
 
 
 .. highlight:: python

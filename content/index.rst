@@ -23,7 +23,7 @@ Intro
    :maxdepth: 1
    :caption: The lesson
 
-   Intro
+   intro
    stack
    data-formats
    data-manipulation
