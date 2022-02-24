@@ -20,6 +20,30 @@ Although numpy could deal with structured array (array with mixed data types), i
 The core data structures of pandas are series and dataframe. A pandas series is a one-dimensional numpy array with an index which we could use to access the data, while dataframe consists of a table of values with lables for each row and column.  
 A dataframe can combine multiple data types, such as numbers and text, but the data in each column is of the same type.
 
+.. image:: img/01_table_dataframe.svg
+
+Each column of a dataframe is a series object - a dataframe is thus a collection of series.
+Each column of a dataframe is a `series object <https://pandas.pydata.org/docs/user_guide/dsintro.html#series>`__ - a dataframe is thus a collection of series.
+
+
+In real applications, some data pre-processing have to be performed before one can perform useful analysis.
+There is no fixed list of what these pre-processings are, but in general the following steps are involved:
+data cleaning
+data reshaping
+data 
+
+
+https://pandas.pydata.org/docs/user_guide/advanced.html#integer-indexing
+https://pandas.pydata.org/docs/user_guide/advanced.html#endpoints-are-inclusive
+https://pandas.pydata.org/docs/user_guide/cookbook.html#splitting
+Use loc for label-oriented slicing and iloc positional slicing GH2904
+There are 2 explicit slicing methods, with a third general case
+
+    Positional-oriented (Python slicing style : exclusive of end)
+
+    Label-oriented (Non-Python slicing style : inclusive of end)
+
+    General (Either slicing style : depends on if the slice contains labels or positions)
 
 
 
@@ -27,34 +51,59 @@ First step is to load pandas::
 
     import pandas as pd
 
-We can download the data from `this GitHub repository <https://raw.githubusercontent.com/pandas-dev/pandas/master/doc/data/titanic.csv>`__
-by visiting the page and saving it to disk, or by directly reading into 
-a **dataframe**::
+data cleaning
+--------------
 
-    url = "https://raw.githubusercontent.com/pandas-dev/pandas/master/doc/data/titanic.csv"
-    titanic = pd.read_csv(url, index_col='Name')
+A couple of essentail  data cleaning processes include but not limited to the following:
+data renaming
+data reordering
+data type converting
+handling of duplicating data, missing data, invalid data
 
-We can now view the dataframe to get an idea of what it contains and
-print some summary statistics of its numerical data::
 
-    # print the first 5 lines of the dataframe
-    titanic.head()  
-    
-    # print summary statistics for each column
-    titanic.describe()  
 
-Ok, so we have information on passenger names, survival (0 or 1), age, 
-ticket fare, number of siblings/spouses, etc. With the summary statistics we see that the average age is 29.7 years, maximum ticket price is 512 USD, 38\% of passengers survived, etc.
+data Reshaping
+---------------------------------------
 
-Let's say we're interested in the survival probability of different age groups. With two one-liners, we can find the average age of those who survived or didn't survive, and plot corresponding histograms of the age distribution::
+Once data cleaning is done, we will reach the data reshaping phase. By reorganising the data, one could make the subsequent data operations easier.
+Most tabular data is either in a tidy format or a untidy format (some people refer them as the long format or the wide format). 
 
-    print(titanic.groupby("Survived")["Age"].mean())
+Here is one example:
+add pic
 
-::
+In short, 
+in an untidy format, each row represents an observation consisting of multiple variables and each variable has its own column. 
+This is very intuitive and easy for us (human beings) to understand and  make comparisons across different variables, calculate statistics, etc.  
+In a tidy format (column-oriented format), each row represents only one variable of the observation, and can be considered "computer readable".
 
-    titanic.hist(column='Age', by='Survived', bins=25, figsize=(8,10), 
-                 layout=(2,1), zorder=2, sharex=True, rwidth=0.9);
-    
+
+Both formats have their own merits and you need to know which one suits your analysis.
+For example, if you are dealing with matrices, you would not want to store them as rows and columns, 
+but as a two-dimensional array using untidy format. On the other hand, if you need to add new data  or remove old data frequently from the table in a relational database, the tidy format may be the choice. Another case is that there are certain visualizations which do require the data to be in the tidy format, e,g, ggplot.
+
+When it comes to data analysis using pandas, the tidy format is recommended: 
+each column can be stored as a vector and this not only saves memory but also allows for vectorized calculations which are much faster
+it's easier to filter, group, join and aggregate the data
+
+
+
+Note:: 
+
+The name "tidy data" comes from Wickham’s paper (2014) which describes the ideas in great detail.
+
+
+
+pivoting
+........
+
+
+stacking and unstacking
+.........................
+Closely related to the pivot() method are the related stack() and unstack() methods available on Series and DataFrame. 
+These methods are designed to work together with MultiIndex objects.
+
+
+
 
 Clearly, pandas dataframes allows us to do advanced analysis with very few commands, but it takes a while to get used to how dataframes work so let's get back to basics.
 
@@ -79,72 +128,10 @@ Clearly, pandas dataframes allows us to do advanced analysis with very few comma
 What's in a dataframe?
 ----------------------
 
-As we saw above, pandas dataframes are a powerful tool for working with tabular data. 
-A pandas 
-`DataFrame object <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame>`__ 
-is composed of rows and columns:
-
-.. image:: img/pandas/01_table_dataframe.svg
-
-Each column of a dataframe is a 
-`series object <https://pandas.pydata.org/docs/user_guide/dsintro.html#series>`__ 
-- a dataframe is thus a collection of series::
-
-    # print some information about the columns
-    titanic.info()
-
-Unlike a NumPy array, a dataframe can combine multiple data types, such as
-numbers and text, but the data in each column is of the same type. So we say a
-column is of type ``int64`` or of type ``object``.
-
-Let's inspect one column of the Titanic passanger list data (first downloading
-and reading the titanic.csv datafile into a dataframe if needed, see above)::
-
-    titanic["Age"]
-    titanic.Age          # same as above
-    type(titanic["Age"])
-
-The columns have names. Here's how to get them::
-
-    titanic.columns
 
 However, the rows also have names! This is what Pandas calls the **index**::
 
     titanic.index
-
-We saw above how to select a single column, but there are many ways of
-selecting (and setting) single or multiple rows, columns and values. We can
-refer to columns and rows either by number or by their name::
-
-    titanic.loc['Lam, Mr. Ali',"Age"]          # select single value by row and column
-    titanic.loc[:'Lam, Mr. Ali',"Name":"Age"]  # slice the dataframe by row and column *names*
-    titanic.iloc[0:2,3:6]                      # same slice as above by row and column *numbers*
-
-    titanic.at['Lam, Mr. Ali',"Age"] = 42      # set single value by row and column *name* (fast)
-    titanic.at['Lam, Mr. Ali',"Age"]           # select single value by row and column *name* (fast)
-    titanic.at['Lam, Mr. Ali',"Age"] = 42      # set single value by row and column *name* (fast)
-    titanic.iat[0,5]                           # select same value by row and column *number* (fast)
-
-    titanic["foo"] = "bar"                     # set a whole column
-
-Dataframes also support boolean indexing, just like we saw for ``numpy`` 
-arrays::
-
-    titanic[titanic["Age"] > 70]
-    # ".str" creates a string object from a column
-    titanic[titanic["Name"].str.contains("Margaret")]
-
-What if your dataset has missing data? Pandas uses the value ``np.nan`` 
-to represent missing data, and by default does not include it in any computations.
-We can find missing values, drop them from our dataframe, replace them
-with any value we like or do forward or backward filling::
-
-    titanic.isna()                    # returns boolean mask of NaN values
-    titanic.dropna()                  # drop missing values
-    titanic.dropna(how="any")         # or how="all"
-    titanic.dropna(subset=["Cabin"])  # only drop NaNs from one column
-    titanic.fillna(0)                 # replace NaNs with zero
-    titanic.fillna(method='ffill')    # forward-fill NaNs
 
 
 

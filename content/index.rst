@@ -24,10 +24,6 @@ Intro
    :caption: The lesson
 
    intro
-   stack
-   data-formats
-   data-manipulation
-   data-visualization
    numpy
    pandas
    scipy

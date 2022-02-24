@@ -149,30 +149,10 @@ However, it is not the best format to use when you're working with big data.
 1. you may lose data precision simply because you do not save the data with enough decimals(check english)
 2.
     
-    For example, double-precision floating point numbers have `~16 decimal places of precision <https://en.wikipedia.org/wiki/Double-precision_floating-point_format>`__, but if you use normal Python to write these numbers, you can easily lose some of that precision.
-    Let's consider the following example:
-    
-    .. code-block:: python
-
-        import numpy as np
-        test_number = np.sqrt(2)
-        # Write the number in a file
-        test_file = open('sqrt2.csv', 'w')
-        test_file.write('%f' % test_number)
-        test_file.close()
-        # Read the number from a file
-        test_file = open('sqrt2.csv', 'r')
-        test_number2 = np.float64(test_file.readline())
-        test_file.close()
-        # Calculate the distance between these numbers
-        print(np.abs(test_number - test_number2))
-
-    CSV writing routines in Pandas and numpy try to avoid problems such as these by writing the floating point numbers with enough precision, but even they are not infallible.
+      CSV writing routines in Pandas and numpy try to avoid problems such as these by writing the floating point numbers with enough precision, but even they are not infallible.
     
     
   
-
-    In our case some rows of ``dataset_csv`` loaded from CSV do not match the original ``dataset`` as the last decimal can sometimes be rounded due to `complex technical reasons <https://docs.python.org/3/tutorial/floatingpoint.html#representation-error>`__.
 
     Storage of these high-precision CSV files is usually very inefficient storage-wise.
 
@@ -275,14 +255,7 @@ This makes it possible to be read from various different programs.
 
 NetCDF4 is by far the most common format for storing large data from big simulations in physical sciences.
 
-Working with array data is easy as well::
 
-    # Write array data as NetCDF4
-    xr.DataArray(data_array).to_netcdf('data_array.nc', engine='h5netcdf')
-    # Read array data from NetCDF4
-    data_array_xarray = xr.open_dataarray('data_array.nc', engine='h5netcdf')
-    data_array_netcdf4 = data_array_xarray.to_numpy()
-    data_array_xarray.close()
 
 The advantage of NetCDF4 compared to HDF5 is that one can easily add other metadata e.g. spatial dimensions (``x``, ``y``, ``z``) or timestamps (``t``) that tell where the grid-points are situated.
 As the format is standardized, many programs can use this metadata for visualization and further analysis.
