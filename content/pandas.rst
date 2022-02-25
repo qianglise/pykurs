@@ -27,10 +27,11 @@ Each column of a dataframe is a `series object <https://pandas.pydata.org/docs/u
 
 
 In real applications, some data pre-processing have to be performed before one can perform useful analysis.
-There is no fixed list of what these pre-processings are, but in general the following steps are involved:
-data cleaning
-data reshaping
-data 
+There is no fixed list of what these pre-processings are, but in general the following steps are involved::
+
+- data cleaning
+- data reshaping
+- data 
 
 
 https://pandas.pydata.org/docs/user_guide/advanced.html#integer-indexing
@@ -54,12 +55,18 @@ First step is to load pandas::
 data cleaning
 --------------
 
-A couple of essentail  data cleaning processes include but not limited to the following:
-data renaming
-data reordering
-data type converting
-handling of duplicating data, missing data, invalid data
+A couple of essentail  data cleaning processes include but not limited to the following::
 
+- data renaming
+- data reordering
+- data type converting
+- handling of duplicating data, missing data, invalid data
+
+
+For example, numeric containers will always use NaN regardless of the missing value type chosen:
+Likewise, datetime containers will always use NaT.
+For object containers, pandas will use the value given:
+https://pandas.pydata.org/docs/user_guide/missing_data.html
 
 
 data Reshaping
@@ -96,13 +103,138 @@ The name "tidy data" comes from Wickham’s paper (2014) which describes the ide
 pivoting
 ........
 
+Create a data frame first
+
+.. ipython:: python
+
+df = pd.DataFrame(
+    {
+        "foo": ["one", "one", "one", "two", "two", "two"] ,
+        "bar": ["A", "B", "C"] * 2,
+        "baz": np.linspace(1,6,6).astype(int),
+        "zoo": ["x","y","z","q","w","t"]
+    }
+)
+
+
+To select out everything for variable ``A`` we could do:
+
+.. ipython:: python
+
+   filtered = df[df["bar"] == "A"]
+   filtered
+
+But suppose we wish to do time series operations with the variables. A better
+representation would be where the ``columns`` are the unique variables and an
+``index`` of dates identifies individual observations. To reshape the data into
+this form, we use the :meth:`DataFrame.pivot` method (also implemented as a
+top level function :func:`~pandas.pivot`):
+
+.. ipython:: python
+
+   pivoted = df.pivot(index="foo", columns="bar", values="baz")
+   pivoted
+
+
+
+.. image:: img/reshaping_pivot.png
+
+
+
+
+
+
+If the ``values`` argument is omitted, and the input :class:`DataFrame` has more than
+one column of values which are not used as column or index inputs to :meth:`~DataFrame.pivot`,
+then the resulting "pivoted" :class:`DataFrame` will have :ref:`hierarchical columns
+<advanced.hierarchical>` whose topmost level indicates the respective value
+column:
+
+.. ipython:: python
+
+   df["value2"] = df["value"] * 2
+   pivoted = df.pivot(index="date", columns="variable")
+   pivoted
+
+You can then select subsets from the pivoted :class:`DataFrame`:
+
+.. ipython:: python
+
+   pivoted["value2"]
+
+Note that this returns a view on the underlying data in the case where the data
+are homogeneously-typed.
+
+.. note::
+   :func:`~pandas.pivot` will error with a ``ValueError: Index contains duplicate
+   entries, cannot reshape`` if the index/column pair is not unique. In this
+   case, consider using :func:`~pandas.pivot_table` which is a generalization
+   of pivot that can handle duplicate values for one index/column pair.
+
+
 
 stacking and unstacking
 .........................
+
 Closely related to the pivot() method are the related stack() and unstack() methods available on Series and DataFrame. 
 These methods are designed to work together with MultiIndex objects.
 
+The stack() function "compresses" a level in the DataFrame columns to produce either:
+    A Series, in the case of a simple column Index.
+    A DataFrame, in the case of a MultiIndex in the columns.
 
+If the columns have a MultiIndex, you can choose which level to stack. The stacked level becomes the new lowest level in a MultiIndex on the columns:
+
+
+tuples = list(
+    zip(
+        *[
+            ["bar", "bar", "baz", "baz", "foo", "foo", "qux", "qux"],
+            ["one", "two", "one", "two", "one", "two", "one", "two"],
+        ]
+    )
+)
+
+columns = pd.MultiIndex.from_tuples(
+    [
+        ("bar", "one"),
+        ("bar", "two"),
+        ("baz", "one"),
+        ("baz", "two"),
+        ("foo", "one"),
+        ("foo", "two"),
+        ("qux", "one"),
+        ("qux", "two"),
+    ],
+    names=["first", "second"]
+)
+
+
+index = pd.MultiIndex.from_tuples(tuples, names=["first", "second"])
+
+
+Note: there are other ways to generate MultiIndex, e.g. 
+index = pd.MultiIndex.from_product(
+    [("bar", "baz", "foo", "qux"), ("one", "two")], names=["first", "second"]
+)
+
+
+df = pd.DataFrame(np.linspace(1,16,16).astype(int).reshape(8,2), index=index, columns=["A", "B"])
+df
+df2 = df[:4]
+df2
+
+stacked=df2.stack()
+
+
+The unstack() method performs the inverse operation of stack(), and by default unstacks the last level.
+If the indexes have names, you can use the level names instead of specifying the level numbers.
+
+stacked.unstack()
+
+stacked.unstack(0)
+
+stacked.unstack("second")
 
 
 Clearly, pandas dataframes allows us to do advanced analysis with very few commands, but it takes a while to get used to how dataframes work so let's get back to basics.
