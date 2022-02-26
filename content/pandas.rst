@@ -86,7 +86,7 @@ In a tidy format (column-oriented format), each row represents only one variable
 
 Both formats have their own merits and you need to know which one suits your analysis.
 For example, if you are dealing with matrices, you would not want to store them as rows and columns, 
-but as a two-dimensional array using untidy format. On the other hand, if you need to add new data  or remove old data frequently from the table in a relational database, the tidy format may be the choice. Another case is that there are certain visualizations which do require the data to be in the tidy format, e,g, ggplot.
+but as a two-dimensional array using untidy format. On the other hand, if you need to add new data  or remove old data frequently from the table in a relational database, the tidy format may be the choice. Another case is that there are certain visualization tools which take data in the tidy format, e,g, ggplot, seaborn.
 
 When it comes to data analysis using pandas, the tidy format is recommended: 
 each column can be stored as a vector and this not only saves memory but also allows for vectorized calculations which are much faster
@@ -226,15 +226,39 @@ df2
 
 stacked=df2.stack()
 
+.. image:: img/reshaping_stack.png 
+
 
 The unstack() method performs the inverse operation of stack(), and by default unstacks the last level.
 If the indexes have names, you can use the level names instead of specifying the level numbers.
 
+
+
 stacked.unstack()
 
-stacked.unstack(0)
+.. image:: img/reshaping_unstack.png 
+
+
+stacked.unstack(1)
+
+.. image:: img/reshaping_unstack_1.png 
 
 stacked.unstack("second")
+
+.. image:: img/reshaping_unstack_0.png 
+
+
+groupby
+........................
+
+The groupby() method is an amazingly powerful function in pandas. But it is also complicated to use and understand.
+Together with pivot() / stack() / unstack() and the basic Series and DataFrame statistical functions, groupby can produce some very expressive and fast data manipulations.
+The workflow with groubpy can be divided into three general steps:
+
+    1.Splitting: Partition the data into different groups based on some criterion.
+    2.Applying: Do some caclulation within each group. Different kinds of calulations might be aggregation, transformation, filtering
+    3.Combining: Put the results back together into a single object.
+
 
 
 Clearly, pandas dataframes allows us to do advanced analysis with very few commands, but it takes a while to get used to how dataframes work so let's get back to basics.
