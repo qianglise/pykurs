@@ -240,24 +240,143 @@ stacked.unstack()
 
 
 stacked.unstack(1)
+or 
+stacked.unstack("second")
 
 .. image:: img/reshaping_unstack_1.png 
 
-stacked.unstack("second")
+
 
 .. image:: img/reshaping_unstack_0.png 
 
 
+
+
+data aggregation
+---------------------------------------
+As we know, when it is about  mathematical oprations on arrays of numerical data, Numpy does best.
+Pandas works very well with numpy when aggregating dataframes.
+
+add this somewhere
+Always check whether NumPy already has a function before implementing one yourself.
+most of what we would want to write ourselves has already been built
+
+
+Before we dive into any calculations, let's make sure that our data won't be displayed
+in scientific notation. We will modify how floats are formatted for displaying. The
+format we will apply is .2f , which will provide the float with two digits after the
+decimal point:
+>> pd.set_option('display.float_format', lambda x: '%.2f' % x)
+
+
+Pandas has a strong built-in understanding of time. With datasets indexed by a pandas DateTimeIndex, we can easily group and resample the data using common time units.
+
 groupby
 ........................
 
+
 The groupby() method is an amazingly powerful function in pandas. But it is also complicated to use and understand.
 Together with pivot() / stack() / unstack() and the basic Series and DataFrame statistical functions, groupby can produce some very expressive and fast data manipulations.
-The workflow with groubpy can be divided into three general steps:
+
+.. image:: img/groupby.png 
+
+The workflow of groubpy method can be divided into three general steps:
 
     1.Splitting: Partition the data into different groups based on some criterion.
-    2.Applying: Do some caclulation within each group. Different kinds of calulations might be aggregation, transformation, filtering
+    2.Applying: Do some caclulation within each group. Different kinds of calulations might be aggregation, transformation, filtration
     3.Combining: Put the results back together into a single object.
+
+import urllib.request
+import pandas as pd
+
+header_url = 'ftp://ftp.ncdc.noaa.gov/pub/data/uscrn/products/daily01/HEADERS.txt'
+with urllib.request.urlopen(header_url) as response:
+    data = response.read().decode('utf-8')
+lines = data.split('\n')
+headers = lines[1].split(' ')
+
+ftp_base = 'ftp://ftp.ncdc.noaa.gov/pub/data/uscrn/products/daily01/'
+dframes = []
+for year in range(2016, 2019):
+    data_url = f'{year}/CRND0103-{year}-NY_Millbrook_3_W.txt'               
+    df = pd.read_csv(ftp_base + data_url, parse_dates=[1],
+                     names=headers,header=None, sep='\s+',
+                     na_values=[-9999.0, -99.0])
+    dframes.append(df)
+
+df = pd.concat(dframes)
+df = df.set_index('LST_DATE')
+
+
+df.head()
+
+
+df['T_DAILY_MEAN'] # or df.T_DAILY_MEAN
+
+df['T_DAILY_MEAN'].aggregate([np.max,np.min,np.mean])
+
+
+
+df.index
+df.index is a pandas DateTimeIndex object.
+
+An obvious one is aggregation via the aggregate() or equivalently agg() method:
+
+
+gbyear=df.groupby(df.index.year)
+gbyear.T_DAILY_MEAN.head()
+gbyear.T_DAILY_MEAN.max()
+gbyear.T_DAILY_MEAN.aggregate(np.max)
+gbyear.T_DAILY_MEAN.aggregate([np.min, np.max, np.mean, np.std])
+
+now let us calculate the monthly mean values
+gb=df.groupby(df.index.month)
+
+
+df.groupby('T_DAILY_MEAN')  or df.groupby(df.T_DAILY_MEAN)
+
+monthly_climatology = df.groupby(df.index.month).mean()
+monthly_climatology
+Each row in this new dataframe respresents the average values for the months (1=January, 2=February, etc.)
+
+monthly_T_climatology = df.groupby(df.index.month).aggregate({'T_DAILY_MEAN': 'mean',
+                                                              'T_DAILY_MAX': 'max',
+                                                              'T_DAILY_MIN': 'min'})
+monthly_T_climatology.head()
+
+daily_T_climatology = df.groupby(df.index.dayofyear).aggregate({'T_DAILY_MEAN': 'mean',
+                                                            'T_DAILY_MAX': 'max',
+                                                            'T_DAILY_MIN': 'min'})
+
+
+
+
+
+def standardize(x):
+    return (x - x.mean())/x.std()
+
+anomaly = df.groupby(df.index.month).transform(standardize)
+
+data transfromation
+---------------------------------------
+
+
+The key difference between aggregation and transformation is that aggregation returns a smaller object than the original, indexed by the group keys, while transformation returns an object with the same index (and same size) as the original object. 
+
+In this example, we standardize the temperature so that the distribution has zero mean and unit variance. We do this by first defining a function called standardize and then passing it to the transform method.
+
+
+transformed = df.groupby(lambda x: x.year).transform(
+    lambda x: (x - x.mean()) / x.std()
+)
+
+grouped = df.groupby(lambda x: x.year)
+
+grouped_trans = transformed.groupby(lambda x: x.year)
+
+
+
+
 
 
 
