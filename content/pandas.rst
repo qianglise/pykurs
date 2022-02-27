@@ -251,9 +251,13 @@ stacked.unstack("second")
 
 
 
+groupby
+---------------------------------------
+
 
 data aggregation
----------------------------------------
+........................
+
 As we know, when it is about  mathematical oprations on arrays of numerical data, Numpy does best.
 Pandas works very well with numpy when aggregating dataframes.
 
@@ -271,8 +275,7 @@ decimal point:
 
 Pandas has a strong built-in understanding of time. With datasets indexed by a pandas DateTimeIndex, we can easily group and resample the data using common time units.
 
-groupby
-........................
+
 
 
 The groupby() method is an amazingly powerful function in pandas. But it is also complicated to use and understand.
@@ -357,8 +360,10 @@ def standardize(x):
 
 anomaly = df.groupby(df.index.month).transform(standardize)
 
+
 data transfromation
----------------------------------------
+........................
+
 
 
 The key difference between aggregation and transformation is that aggregation returns a smaller object than the original, indexed by the group keys, while transformation returns an object with the same index (and same size) as the original object. 
