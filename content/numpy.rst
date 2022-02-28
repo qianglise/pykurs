@@ -21,12 +21,12 @@ NumPy
 Intro
 -----
 
-Being one of the most fundemental part of python scientific computing ecosystem, NumPy offers comprehensive mathematical functions, random number generators, linear algebra routines, Fourier transforms, and more. Moreover, NumPy is based on well-optimized C code, which gives much better performace than Python.
+Being one of the most fundemental part of python scientific computing ecosystem, NumPy offers comprehensive mathematical functions, random number generators, linear algebra routines, Fourier transforms, and more. Moreover, NumPy is based on well-optimized C code, which gives much better performace than Python. (XXXX add vectorization, for this reason)
 
 
 One has to import numpy to use it since it is not part of the Python standard library::
 
-.. code:: python
+.. code:: py
 
        import numpy as np
        # find out what are the new functions in numpy

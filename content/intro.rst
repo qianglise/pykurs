@@ -41,7 +41,7 @@ Numerical Data
 **************
 
 Different numerial data types (integer and floating-point) can be encoded as bytes. The more bytes we use for each value, the more range or precision we get, however the more memory it takes. For example, integers stored with 1 byte (8 bits) have a range from [-128, 127], while with 2 bytes (16 bits), the ranges becomes  [-32768, 32767].
-Integers are whole numbers and can be represented precisely given enough bytes. However, for floating-point numbers the decimal fractions simply can not be represented exactly as binary (base 2) fractions in most cases which is known as the representation error. Arithmetic operations will further propagate this error. That is why in scienctific computing, numerical algorithms have to be carefully chosen and floating-point numbers are usally allocated with 8 bytes (sometimes 4 bytes) to make sure the inaccuracy is under control and does not lead to unsteady solutions.
+Integers are whole numbers and can be represented precisely given enough bytes. However, for floating-point numbers the decimal fractions simply can not be represented exactly as binary (base 2) fractions in most cases which is known as the representation error. Arithmetic operations will further propagate this error. That is why in scienctific computing, numerical algorithms have to be carefully chosen and floating-point numbers are usally allocated with 8 bytes (XXXX add range here) to make sure the inaccuracy is under control and does not lead to unsteady solutions.
 
 Note:
 Many climate models or certain parts of the models have the option of using single precision, i.e. 4 bytes or 32 bits, for floating-point numbers in order to achieve better performance at a small cost to the accuracy.
@@ -60,7 +60,7 @@ As computer becomes more powerful and  there is need for including more characte
 
 In real applications, the scientific data is more complex and usually contains both numerical and text data. 
 There is no single file format that is good for every case to store the dataset.
-Here we list a few of the data and file formats used in climate modelling community:
+Here we list a few of the data and file formats commonly used in climate modelling community:
 
 Tabular Data
 ************
