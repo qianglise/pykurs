@@ -27,7 +27,7 @@ Each column of a dataframe is a `series object <https://pandas.pydata.org/docs/u
 
 
 In real applications, some data pre-processing have to be performed before one can perform useful analysis.
-There is no fixed list of what these pre-processings are, but in general the following steps are involved::
+There is no fixed list of what these pre-processings are, but in general the following steps are involved:
 
 - data cleaning
 - data reshaping
@@ -55,7 +55,7 @@ First step is to load pandas::
 data cleaning
 --------------
 
-A couple of essentail  data cleaning processes include but not limited to the following::
+A couple of essential  data cleaning processes include but not limited to the following:
 
 - data renaming
 - data reordering
@@ -73,6 +73,71 @@ data Reshaping
 ---------------------------------------
 
 Once data cleaning is done, we will reach the data reshaping phase. By reorganising the data, one could make the subsequent data operations easier.
+
+Let's first look at the following two tables:
+
+.. challenge:: 1500m Running event
+
+
+   .. tabs:: 
+
+      .. tab:: 1D
+
+             .. code-block:: py
+
+			      Runner  400  800  1200  1500
+			0  Runner 1   64  128   192   240
+			1  Runner 2   80  160   240   300
+			2  Runner 3   96  192   288   360
+
+      .. tab:: 2D
+
+             .. code-block:: python
+
+			#pd.melt(runners, id_vars="Runner",value_vars=[400, 800, 1200, 1500],var_name="distance",value_name="time")
+
+			      Runner distance  time
+			0   Runner 1      400    64
+			1   Runner 2      400    80
+			2   Runner 3      400    96
+			3   Runner 1      800   128
+			4   Runner 2      800   160
+			5   Runner 3      800   192
+			6   Runner 1     1200   192
+			7   Runner 2     1200   240
+			8   Runner 3     1200   288
+			9   Runner 1     1500   240
+			10  Runner 2     1500   300
+			11  Runner 3     1500   360
+
+
+             pd.melt(runners, id_vars="Runner",value_vars=[400, 800, 1200, 1500],var_name="distance",value_name="time")
+runners_aaa= pd.melt(runners, id_vars="Runner",value_vars=[400, 800, 1200, 1500],var_name="distance",value_name="time")
+
+
+
+The tables contains statistics from a 1500 m running event:
+
+    runners = pd.DataFrame([
+                  {'Runner': 'Runner 1', 400: 64, 800: 128, 1200: 192, 1500: 240},
+                  {'Runner': 'Runner 2', 400: 80, 800: 160, 1200: 240, 1500: 300},
+                  {'Runner': 'Runner 3', 400: 96, 800: 192, 1200: 288, 1500: 360},
+              ])
+
+What makes this data untidy is that the column names `400, 800, 1200, 1500`
+indicate the distance ran. In a tidy dataset, this distance would be a variable
+on its own, making each runner-distance pair a separate observation and hence a
+separate row.
+
+To make untidy data tidy, a common operation is to "melt" it, 
+which is to convert it from wide form to a long form::
+
+    runners = pd.melt(df, id_vars="Runner", 
+                  value_vars=[400, 800, 1200, 1500], 
+                  var_name="distance", 
+                  value_name="time"
+              )
+
 Most tabular data is either in a tidy format or a untidy format (some people refer them as the long format or the wide format). 
 
 Here is one example:

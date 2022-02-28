@@ -24,7 +24,7 @@ Intro
 Being one of the most fundemental part of python scientific computing ecosystem, NumPy offers comprehensive mathematical functions, random number generators, linear algebra routines, Fourier transforms, and more. Moreover, NumPy is based on well-optimized C code, which gives much better performace than Python. (XXXX add vectorization, for this reason)
 
 
-One has to import numpy to use it since it is not part of the Python standard library::
+One has to import numpy to use it since it is not part of the Python standard library.
 
 .. code:: python
 
@@ -91,8 +91,10 @@ For unsigned intergers:
 Be careful, once the data value is beyond the lower or upper bound of a certain data type, 
 the value will be wrapped around and there is no warning::
 
->>> np.array([255], np.uint8) + 1   # 2**8-1 is INT_MAX for uint8  
-array([0], dtype=uint8)
+.. code:: python
+
+	>>> np.array([255], np.uint8) + 1   # 2**8-1 is INT_MAX for uint8  
+	array([0], dtype=uint8)
 
 
 
@@ -146,11 +148,6 @@ in ::
 
 
 
-Array Indexing
-**************
-
-Basic indexing is similar to python lists.
-
 
 Array Operations and Manipulations
 **********************************
@@ -189,7 +186,10 @@ All the familiar arithemtic operators are applied on an element-by-element basis
              .. figure:: img/np_div_1d.svg 
 
 
+Array Indexing
+**************
 
+Basic indexing is similar to python lists.
 
 .. challenge:: index
 
