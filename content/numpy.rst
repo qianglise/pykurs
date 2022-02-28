@@ -36,8 +36,7 @@ One has to import numpy to use it since it is not part of the Python standard li
 
 
 So, we already know about python lists, and that we can put all kinds of things in there.
-But in scientific usage, lists are often not enough. They are slow and
-not very flexible.
+But in scientific usage, lists are often not enough. They are slow and not very flexible.
 
 
 NDArray
@@ -51,9 +50,9 @@ Compared to a python list, the numpy array is simialr in terms of serving as a d
 Some differences between the two are: 
 
 numpy array can have multi dimensions 
-numpy array can work fast only when all data elements are of the same type
-numpy array can be fast when vectorized
-numpy array is slower for certain operations, e.g. appending elements
+numpy array can work fast only when all data elements are of the same type  
+numpy array can be fast when vectorized  
+numpy array is slower for certain operations, e.g. appending elements 
 
 Numpy Data Type
 ***************
@@ -92,8 +91,8 @@ For unsigned intergers:
 Be careful, once the data value is beyond the lower or upper bound of a certain data type, 
 the value will be wrapped around and there is no warning::
 
->>> np.array([255], np.uint8) + 1   # 2**8-1 is INT_MAX for uint8
-array([0], dtype=uint8)
+>>> np.array([255], np.uint8) + 1   # 2**8-1 is INT_MAX for uint8  
+>>> array([0], dtype=uint8)
 
 
 
