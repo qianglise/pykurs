@@ -26,7 +26,7 @@ Being one of the most fundemental part of python scientific computing ecosystem,
 
 One has to import numpy to use it since it is not part of the Python standard library::
 
-.. code:: py
+.. code:: python
 
        import numpy as np
        # find out what are the new functions in numpy
@@ -92,7 +92,7 @@ Be careful, once the data value is beyond the lower or upper bound of a certain 
 the value will be wrapped around and there is no warning::
 
 >>> np.array([255], np.uint8) + 1   # 2**8-1 is INT_MAX for uint8  
->>> array([0], dtype=uint8)
+array([0], dtype=uint8)
 
 
 
