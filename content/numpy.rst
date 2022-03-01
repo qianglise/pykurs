@@ -86,7 +86,7 @@ For unsigned intergers:
 
 
 Be careful, once the data value is beyond the lower or upper bound of a certain data type, 
-the value will be wrapped around and there is no warning::
+the value will be wrapped around and there is no warning:
 
 .. code:: python
 
@@ -152,7 +152,6 @@ All the familiar arithemtic operators are applied on an element-by-element basis
 			import numpy as np
                         a = np.array([1, 3, 5])
                         b = np.array([4, 5, 6])
-			a + b
 
 
              .. code-block:: py
