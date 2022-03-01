@@ -3,28 +3,35 @@ Pandas
 
 .. questions::
 
-   - How do I learn a new Python package?
-   - How can I use pandas dataframes in my research? 
+   - 1
+   - 2
 
 .. objectives::
 
-   - Learn simple and some more advanced usage of pandas dataframes
-   - Get a feeling for when pandas is useful and know where to find more information
-   - Understand enough of pandas to be able to read its documentation.
+   - 1
+   - 2
+   - 3
 
 
 Pandas is a Python package that provides high-performance and easy to use 
-data structures and data analysis tools. Build on numpy array, pandas is particularly well suited to analyze tabular and time series data. 
+data structures and data analysis tools. Build on numpy array, pandas is 
+particularly well suited to analyze tabular and time series data. 
 Although numpy could deal with structured array (array with mixed data types), it is not efficient. 
 
-The core data structures of pandas are series and dataframe. A pandas series is a one-dimensional numpy array with an index which we could use to access the data, while dataframe consists of a table of values with lables for each row and column.  
-A dataframe can combine multiple data types, such as numbers and text, but the data in each column is of the same type.
+The core data structures of pandas are series and dataframe. 
+A pandas series is a one-dimensional numpy array with an index 
+which we could use to access the data, 
+while dataframe consists of a table of values with lables for each row and column.  
+A dataframe can combine multiple data types, such as numbers and text, 
+but the data in each column is of the same type.
 
 .. image:: img/01_table_dataframe.svg
 
-Each column of a dataframe is a series object - a dataframe is thus a collection of series.
 Each column of a dataframe is a `series object <https://pandas.pydata.org/docs/user_guide/dsintro.html#series>`__ - a dataframe is thus a collection of series.
 
+
+pre-processing
+--------------
 
 In real applications, some data pre-processing have to be performed before one can perform useful analysis.
 There is no fixed list of what these pre-processings are, but in general the following steps are involved:
@@ -34,26 +41,12 @@ There is no fixed list of what these pre-processings are, but in general the fol
 - data 
 
 
-https://pandas.pydata.org/docs/user_guide/advanced.html#integer-indexing
-https://pandas.pydata.org/docs/user_guide/advanced.html#endpoints-are-inclusive
-https://pandas.pydata.org/docs/user_guide/cookbook.html#splitting
-Use loc for label-oriented slicing and iloc positional slicing GH2904
-There are 2 explicit slicing methods, with a third general case
-
-    Positional-oriented (Python slicing style : exclusive of end)
-
-    Label-oriented (Non-Python slicing style : inclusive of end)
-
-    General (Either slicing style : depends on if the slice contains labels or positions)
-
-
-
 First step is to load pandas::
 
     import pandas as pd
 
 data cleaning
---------------
+-------------
 
 A couple of essential  data cleaning processes include but not limited to the following:
 
@@ -63,14 +56,12 @@ A couple of essential  data cleaning processes include but not limited to the fo
 - handling of duplicating data, missing data, invalid data
 
 
-For example, numeric containers will always use NaN regardless of the missing value type chosen:
-Likewise, datetime containers will always use NaT.
-For object containers, pandas will use the value given:
+add examples 
 https://pandas.pydata.org/docs/user_guide/missing_data.html
 
 
 data Reshaping
----------------------------------------
+--------------
 
 Once data cleaning is done, we will reach the data reshaping phase. By reorganising the data, one could make the subsequent data operations easier.
 
@@ -116,22 +107,28 @@ Let's first look at the following two tables:
 Most tabular data is either in a tidy format or a untidy format (some people refer them as the long format or the wide format). 
 
 In short, 
-in an untidy (wide) format, each row represents an observation consisting of multiple variables and each variable has its own column. 
-This is very intuitive and easy for us (human beings) to understand and  make comparisons across different variables, calculate statistics, etc.  
-In a tidy (long) format , i.e. column-oriented format, each row represents only one variable of the observation, and can be considered "computer readable".
+in an untidy (wide) format, each row represents an observation 
+consisting of multiple variables and each variable has its own column. 
+This is very intuitive and easy for us (human beings) to understand 
+and  make comparisons across different variables, calculate statistics, etc.  
+In a tidy (long) format , i.e. column-oriented format, each row represents 
+only one variable of the observation, and can be considered "computer readable".
 
 
 Both formats have their own merits and you need to know which one suits your analysis.
 For example, if you are dealing with matrices, you would not want to store them as rows and columns, 
-but as a two-dimensional array using untidy format. On the other hand, if you need to add new data  or remove old data frequently from the table in a relational database, the tidy format may be the choice. Another case is that there are certain visualization tools which take data in the tidy format, e,g, ggplot, seaborn.
+but as a two-dimensional array using untidy format. On the other hand, if you need to add new data  
+or remove old data frequently from the table in a relational database, the tidy format may be the choice. 
+Another case is that there are certain visualization tools which take data in the tidy format, e,g, ggplot, seaborn.
 
 When it comes to data analysis using pandas, the tidy format is recommended: 
-each column can be stored as a vector and this not only saves memory but also allows for vectorized calculations which are much faster.
-it's easier to filter, group, join and aggregate the data
+- each column can be stored as a vector and this not only saves memory 
+but also allows for vectorized calculations which are much faster.
+- it's easier to filter, group, join and aggregate the data
 
 
 
-.. Note:: 
+.. note:: 
 
 The name "tidy data" comes from Wickham’s paper (2014) which describes the ideas in great detail.
 
@@ -142,7 +139,7 @@ pivoting
 
 Create a data frame first
 
-.. ipython:: python
+.. code:: python
 
 df = pd.DataFrame(
     {
@@ -156,7 +153,7 @@ df = pd.DataFrame(
 
 To select out everything for variable ``A`` we could do:
 
-.. ipython:: python
+.. code:: python
 
    filtered = df[df["bar"] == "A"]
    filtered
@@ -166,7 +163,7 @@ the ``columns`` are the unique variables from 'bar' and the ``index`` from 'foo'
 To reshape the data into this form, we use the :meth:`DataFrame.pivot` method (also implemented as a
 top level function :func:`~pandas.pivot`):
 
-.. ipython:: python
+.. code:: python
 
    pivoted = df.pivot(index="foo", columns="bar", values="baz")
    pivoted
@@ -186,7 +183,7 @@ then the resulting "pivoted" :class:`DataFrame` will have :ref:`hierarchical col
 <advanced.hierarchical>` whose topmost level indicates the respective value
 column:
 
-.. ipython:: python
+.. code:: python
 
    df["value2"] = df["value"] * 2
    pivoted = df.pivot(index="date", columns="variable")
@@ -194,7 +191,7 @@ column:
 
 You can then select subsets from the pivoted :class:`DataFrame`:
 
-.. ipython:: python
+.. code:: python
 
    pivoted["value2"]
 
@@ -210,7 +207,7 @@ are homogeneously-typed.
 
 
 stacking and unstacking
-.........................
+.......................
 
 Closely related to the pivot() method are the related stack() and unstack() methods available on Series and DataFrame. 
 These methods are designed to work together with MultiIndex objects.
@@ -221,6 +218,7 @@ The stack() function "compresses" a level in the DataFrame columns to produce ei
 
 If the columns have a MultiIndex, you can choose which level to stack. The stacked level becomes the new lowest level in a MultiIndex on the columns:
 
+.. code:: python
 
 tuples = list(
     zip(
@@ -250,10 +248,12 @@ index = pd.MultiIndex.from_tuples(tuples, names=["first", "second"])
 
 
 Note: there are other ways to generate MultiIndex, e.g. 
+
+.. code:: python
+
 index = pd.MultiIndex.from_product(
     [("bar", "baz", "foo", "qux"), ("one", "two")], names=["first", "second"]
 )
-
 
 df = pd.DataFrame(np.linspace(1,16,16).astype(int).reshape(8,2), index=index, columns=["A", "B"])
 df
@@ -288,11 +288,11 @@ stacked.unstack("second")
 
 
 groupby
----------------------------------------
+-------
 
 
 data aggregation
-........................
+................
 
 As we know, when it is about  mathematical oprations on arrays of numerical data, Numpy does best.
 Pandas works very well with numpy when aggregating dataframes.

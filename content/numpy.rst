@@ -75,11 +75,11 @@ For unsigned intergers:
 +-------------+----------------------------------+
 | data type   | data range                       |
 +=============+==================================+
-| uint8       | -2**7 to  2**7 -1                |
+| uint8       | ffff                             |
 +-------------+----------------------------------+
-| uint16      | -32768 to 32767                  |
+| uint16      | ffff                             |
 +-------------+----------------------------------+
-| uint32      | -2147483648 to 2147483647        |
+| uint32      | ffff                             |
 +-------------+----------------------------------+
 | uint64      |    fff                           |
 +-------------+----------------------------------+
@@ -251,7 +251,8 @@ Basic indexing is similar to python lists.
 
 
 
-
+Array Aggregation
+*****************
 
 .. challenge:: aggregation
 
@@ -285,6 +286,8 @@ Apart from aggregate all values, one can also aggregate across the rows or colum
 
 
 
+Array Reshaping
+***************
 
 .. challenge:: reshape
 
