@@ -3,19 +3,16 @@ NumPy
 
 .. questions::
 
-   - What is vectorization?
-   - Why using NumPy instead of pure python?
-   - How to use basic NumPy?
+   - 1
+   - 2
+   - 3
 
 .. objectives::
 
-   - Understand the Numpy array object
-   - Be able to use basic NumPy functionality
-   - Understand enough of NumPy to seach for answers to the rest of your questions ;)
+   - 1
+   - 2
+   - 3
 
-   We expect most people to be able to do all the basic exercises
-   here.  It is probably quite easy for many people; we have advanced
-   exercises at the end in that case.
 
 
 Intro
@@ -43,16 +40,16 @@ NDArray
 -------
 
 The core of numpy is the numpy ndarray (n-dimensional array).
-A 1-dimentional array is a vector
+A 1-dimentional array is a vector  
 A 2-dimentional array is a matrix 
 
 Compared to a python list, the numpy array is simialr in terms of serving as a data container.
 Some differences between the two are: 
 
-numpy array can have multi dimensions 
-numpy array can work fast only when all data elements are of the same type  
-numpy array can be fast when vectorized  
-numpy array is slower for certain operations, e.g. appending elements 
+- numpy array can have multi dimensions 
+- numpy array can work fast only when all data elements are of the same type  
+- numpy array can be fast when vectorized  
+- numpy array is slower for certain operations, e.g. appending elements 
 
 Numpy Data Type
 ***************
@@ -61,31 +58,31 @@ The most common used data types (dtype) for numerical data (integer and floating
 
 For integers:
 
-+-------------+----------------------------------+----------------+-----------------+
-| data type   | data range                       | Write time [ms]|  Read time [ms] |
-+=============+==================================+================+=================+
-| int8        | -2**7 to  2**7 -1                | 0.647893       |    0.639863     |
-+-------------+----------------------------------+----------------+-----------------+
-| int16       | -32768 to 32767                  | 0.009885       |    0.002539     |
-+-------------+----------------------------------+----------------+-----------------+
-| int32       | -2147483648 to 2147483647        | 0.012877       |    0.002737     |
-+-------------+----------------------------------+----------------+-----------------+
-| int64       |    fff                           | 0.018905       | 0.009876        |
-+-------------+----------------------------------+----------------+-----------------+
++-------------+----------------------------------+
+| data type   | data range                       |
++=============+==================================+
+| int8        | -2**7 to  2**7 -1                |
++-------------+----------------------------------+
+| int16       | -32768 to 32767                  |
++-------------+----------------------------------+
+| int32       | -2147483648 to 2147483647        |
++-------------+----------------------------------+
+| int64       |    fff                           |
++-------------+----------------------------------+
 
 For unsigned intergers:
 
-+-------------+----------------------------------+----------------+-----------------+
-| data type   | data range                       | Write time [ms]|  Read time [ms] |
-+=============+==================================+================+=================+
-| uint8       | -2**7 to  2**7 -1                | 0.647893       |    0.639863     |
-+-------------+----------------------------------+----------------+-----------------+
-| uint16      | -32768 to 32767                  | 0.009885       |    0.002539     |
-+-------------+----------------------------------+----------------+-----------------+
-| uint32      | -2147483648 to 2147483647        | 0.012877       |    0.002737     |
-+-------------+----------------------------------+----------------+-----------------+
-| uint64      |    fff                           | 0.018905       | 0.009876        |
-+-------------+----------------------------------+----------------+-----------------+
++-------------+----------------------------------+
+| data type   | data range                       |
++=============+==================================+
+| uint8       | -2**7 to  2**7 -1                |
++-------------+----------------------------------+
+| uint16      | -32768 to 32767                  |
++-------------+----------------------------------+
+| uint32      | -2147483648 to 2147483647        |
++-------------+----------------------------------+
+| uint64      |    fff                           |
++-------------+----------------------------------+
 
 
 Be careful, once the data value is beyond the lower or upper bound of a certain data type, 
@@ -100,15 +97,15 @@ the value will be wrapped around and there is no warning::
 
 For floating-point numbers:
 
-+-------------+----------------------------------+----------------+-----------------+
-| data type   | data range                       | Write time [ms]|  Read time [ms] |
-+=============+==================================+================+=================+
-| float16     | -32768 to 32767                  | 0.009885       |    0.002539     |
-+-------------+----------------------------------+----------------+-----------------+
-| float32     | -2147483648 to 2147483647        | 0.012877       |    0.002737     |
-+-------------+----------------------------------+----------------+-----------------+
-| float64     |    fff                           | 0.018905       | 0.009876        |
-+-------------+----------------------------------+----------------+-----------------+
++-------------+----------------------------------+
+| data type   | data range                       |
++=============+==================================+
+| float16     | fff	                         |
++-------------+----------------------------------+
+| float32     | fff     			 |
++-------------+----------------------------------+
+| float64     |    fff                           |
++-------------+----------------------------------+
 
 
 Note: float128 is Unix OS, but not on Windows OS.
@@ -125,18 +122,6 @@ when converting from a python list is not possible.
 .. code:: python
 
        a = np.array([1,2,3]) 
-
-
-.. code:: py
-
-       b = np.array([1,2,3]) 
-
-
-in ::
-
-   c = np.array([1,2,3]) 
-
-
 
 
 .. code:: python
@@ -166,9 +151,12 @@ All the familiar arithemtic operators are applied on an element-by-element basis
 
 			import numpy as np
                         a = np.array([1, 3, 5])
-                        b = np.array([1, 3, 5])
+                        b = np.array([4, 5, 6])
+			a + b
 
              .. figure:: img/np_add_1d_new.svg 
+
+			a/b
              .. figure:: img/np_div_1d_new.svg 
 
 
