@@ -135,8 +135,6 @@ data Reshaping
 Once data cleaning is done, we will reach the data reshaping phase. By reorganising the data, one could make the subsequent data operations easier.
 
 
-
-
 pivoting
 ........
 
@@ -144,14 +142,14 @@ Create a data frame first
 
 .. code:: python
 
-df = pd.DataFrame(
-    {
-        "foo": ["one", "one", "one", "two", "two", "two"] ,
-        "bar": ["A", "B", "C"] * 2,
-        "baz": np.linspace(1,6,6).astype(int),
-        "zoo": ["x","y","z","q","w","t"]
-    }
-)
+	df = pd.DataFrame(
+    	{
+       	 "foo": ["one", "one", "one", "two", "two", "two"] ,
+       	 "bar": ["A", "B", "C"] * 2,
+       	 "baz": np.linspace(1,6,6).astype(int),
+       	 "zoo": ["x","y","z","q","w","t"]
+    	}
+	)
 
 
 To select out everything for variable ``A`` we could do:
@@ -216,54 +214,52 @@ Closely related to the pivot() method are the related stack() and unstack() meth
 These methods are designed to work together with MultiIndex objects.
 
 The stack() function "compresses" a level in the DataFrame columns to produce either:
-    A Series, in the case of a simple column Index.
-    A DataFrame, in the case of a MultiIndex in the columns.
+- A Series, in the case of a simple column Index.
+- A DataFrame, in the case of a MultiIndex in the columns.
 
 If the columns have a MultiIndex, you can choose which level to stack. The stacked level becomes the new lowest level in a MultiIndex on the columns:
 
 .. code:: python
 
-tuples = list(
-    zip(
-        *[
-            ["bar", "bar", "baz", "baz", "foo", "foo", "qux", "qux"],
-            ["one", "two", "one", "two", "one", "two", "one", "two"],
-        ]
-    )
-)
+	tuples = list(
+    	zip(
+        	*[
+            	["bar", "bar", "baz", "baz", "foo", "foo", "qux", "qux"],
+            	["one", "two", "one", "two", "one", "two", "one", "two"],
+        	]
+    	)
+	)
 
-columns = pd.MultiIndex.from_tuples(
-    [
-        ("bar", "one"),
-        ("bar", "two"),
-        ("baz", "one"),
-        ("baz", "two"),
-        ("foo", "one"),
-        ("foo", "two"),
-        ("qux", "one"),
-        ("qux", "two"),
-    ],
-    names=["first", "second"]
-)
+	columns = pd.MultiIndex.from_tuples(
+    	[
+        	("bar", "one"),
+	        ("bar", "two"),
+        	("baz", "one"),
+	        ("baz", "two"),
+        	("foo", "one"),
+	        ("foo", "two"),
+	        ("qux", "one"),
+        	("qux", "two"),
+	    ],
+	    names=["first", "second"]
+	)
 
-
-index = pd.MultiIndex.from_tuples(tuples, names=["first", "second"])
+	index = pd.MultiIndex.from_tuples(tuples, names=["first", "second"])
 
 
 Note: there are other ways to generate MultiIndex, e.g. 
 
 .. code:: python
 
-index = pd.MultiIndex.from_product(
-    [("bar", "baz", "foo", "qux"), ("one", "two")], names=["first", "second"]
-)
+	index = pd.MultiIndex.from_product(
+    	[("bar", "baz", "foo", "qux"), ("one", "two")], names=["first", "second"]
+	)
 
-df = pd.DataFrame(np.linspace(1,16,16).astype(int).reshape(8,2), index=index, columns=["A", "B"])
-df
-df2 = df[:4]
-df2
-
-stacked=df2.stack()
+	df = pd.DataFrame(np.linspace(1,16,16).astype(int).reshape(8,2), index=index, columns=["A", "B"])
+	df
+	df2 = df[:4]
+	df2
+	stacked=df2.stack()
 
 .. image:: img/reshaping_stack.png 
 
