@@ -12,6 +12,8 @@ Pandas
    - 2
    - 3
 
+Intro
+-----
 
 Pandas is a Python package that provides high-performance and easy to use 
 data structures and data analysis tools. Build on numpy array, pandas is 
@@ -29,41 +31,9 @@ but the data in each column is of the same type.
 
 Each column of a dataframe is a `series object <https://pandas.pydata.org/docs/user_guide/dsintro.html#series>`__ - a dataframe is thus a collection of series.
 
-
-pre-processing
---------------
-
-In real applications, some data pre-processing have to be performed before one can perform useful analysis.
-There is no fixed list of what these pre-processings are, but in general the following steps are involved:
-
-- data cleaning
-- data reshaping
-- data 
-
-
-First step is to load pandas::
+To load pandas::
 
     import pandas as pd
-
-data cleaning
--------------
-
-A couple of essential  data cleaning processes include but not limited to the following:
-
-- data renaming
-- data reordering
-- data type converting
-- handling of duplicating data, missing data, invalid data
-
-
-add examples 
-https://pandas.pydata.org/docs/user_guide/missing_data.html
-
-
-data Reshaping
---------------
-
-Once data cleaning is done, we will reach the data reshaping phase. By reorganising the data, one could make the subsequent data operations easier.
 
 
 tidy data format
@@ -106,8 +76,7 @@ Let's first look at the following two tables:
 
 Most tabular data is either in a tidy format or a untidy format (some people refer them as the long format or the wide format). 
 
-In short, 
-in an untidy (wide) format, each row represents an observation 
+In short, in an untidy (wide) format, each row represents an observation 
 consisting of multiple variables and each variable has its own column. 
 This is very intuitive and easy for us (human beings) to understand 
 and  make comparisons across different variables, calculate statistics, etc.  
@@ -131,6 +100,40 @@ but also allows for vectorized calculations which are much faster.
 .. note:: 
 
 The name "tidy data" comes from Wickham’s paper (2014) which describes the ideas in great detail.
+
+
+
+data pre-processing
+-------------------
+
+In real applications, some data pre-processing have to be performed before one can perform useful analysis.
+There is no fixed list of what these pre-processings are, but in general the following steps are involved:
+
+- data cleaning
+- data reshaping
+- data 
+
+
+data cleaning
+*************
+
+A couple of essential  data cleaning processes include but not limited to the following:
+
+- data renaming
+- data reordering
+- data type converting
+- handling of duplicating data, missing data, invalid data
+
+
+add examples 
+https://pandas.pydata.org/docs/user_guide/missing_data.html
+
+
+data Reshaping
+**************
+
+Once data cleaning is done, we will reach the data reshaping phase. By reorganising the data, one could make the subsequent data operations easier.
+
 
 
 
