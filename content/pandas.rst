@@ -74,6 +74,10 @@ data Reshaping
 
 Once data cleaning is done, we will reach the data reshaping phase. By reorganising the data, one could make the subsequent data operations easier.
 
+
+tidy data format
+................
+
 Let's first look at the following two tables:
 
 .. challenge:: 1500m Running event
@@ -81,20 +85,18 @@ Let's first look at the following two tables:
 
    .. tabs:: 
 
-      .. tab:: 1D
+      .. tab:: untidy data format
 
              .. code-block:: py
 
-			      Runner  400  800  1200  1500
+			     Runner  400  800  1200  1500
 			0  Runner 1   64  128   192   240
 			1  Runner 2   80  160   240   300
 			2  Runner 3   96  192   288   360
 
-      .. tab:: 2D
+      .. tab:: tidy data format
 
              .. code-block:: python
-
-			#pd.melt(runners, id_vars="Runner",value_vars=[400, 800, 1200, 1500],var_name="distance",value_name="time")
 
 			      Runner distance  time
 			0   Runner 1      400    64
@@ -111,42 +113,12 @@ Let's first look at the following two tables:
 			11  Runner 3     1500   360
 
 
-             pd.melt(runners, id_vars="Runner",value_vars=[400, 800, 1200, 1500],var_name="distance",value_name="time")
-runners_aaa= pd.melt(runners, id_vars="Runner",value_vars=[400, 800, 1200, 1500],var_name="distance",value_name="time")
-
-
-
-The tables contains statistics from a 1500 m running event:
-
-    runners = pd.DataFrame([
-                  {'Runner': 'Runner 1', 400: 64, 800: 128, 1200: 192, 1500: 240},
-                  {'Runner': 'Runner 2', 400: 80, 800: 160, 1200: 240, 1500: 300},
-                  {'Runner': 'Runner 3', 400: 96, 800: 192, 1200: 288, 1500: 360},
-              ])
-
-What makes this data untidy is that the column names `400, 800, 1200, 1500`
-indicate the distance ran. In a tidy dataset, this distance would be a variable
-on its own, making each runner-distance pair a separate observation and hence a
-separate row.
-
-To make untidy data tidy, a common operation is to "melt" it, 
-which is to convert it from wide form to a long form::
-
-    runners = pd.melt(df, id_vars="Runner", 
-                  value_vars=[400, 800, 1200, 1500], 
-                  var_name="distance", 
-                  value_name="time"
-              )
-
 Most tabular data is either in a tidy format or a untidy format (some people refer them as the long format or the wide format). 
 
-Here is one example:
-add pic
-
 In short, 
-in an untidy format, each row represents an observation consisting of multiple variables and each variable has its own column. 
+in an untidy (wide) format, each row represents an observation consisting of multiple variables and each variable has its own column. 
 This is very intuitive and easy for us (human beings) to understand and  make comparisons across different variables, calculate statistics, etc.  
-In a tidy format (column-oriented format), each row represents only one variable of the observation, and can be considered "computer readable".
+In a tidy (long) format , i.e. column-oriented format, each row represents only one variable of the observation, and can be considered "computer readable".
 
 
 Both formats have their own merits and you need to know which one suits your analysis.
@@ -154,12 +126,12 @@ For example, if you are dealing with matrices, you would not want to store them 
 but as a two-dimensional array using untidy format. On the other hand, if you need to add new data  or remove old data frequently from the table in a relational database, the tidy format may be the choice. Another case is that there are certain visualization tools which take data in the tidy format, e,g, ggplot, seaborn.
 
 When it comes to data analysis using pandas, the tidy format is recommended: 
-each column can be stored as a vector and this not only saves memory but also allows for vectorized calculations which are much faster
+each column can be stored as a vector and this not only saves memory but also allows for vectorized calculations which are much faster.
 it's easier to filter, group, join and aggregate the data
 
 
 
-Note:: 
+.. Note:: 
 
 The name "tidy data" comes from Wickham’s paper (2014) which describes the ideas in great detail.
 
@@ -189,10 +161,9 @@ To select out everything for variable ``A`` we could do:
    filtered = df[df["bar"] == "A"]
    filtered
 
-But suppose we wish to do time series operations with the variables. A better
-representation would be where the ``columns`` are the unique variables and an
-``index`` of dates identifies individual observations. To reshape the data into
-this form, we use the :meth:`DataFrame.pivot` method (also implemented as a
+But suppose we would like to represent the table in such a way that
+the ``columns`` are the unique variables from 'bar' and the ``index`` from 'foo'. 
+To reshape the data into this form, we use the :meth:`DataFrame.pivot` method (also implemented as a
 top level function :func:`~pandas.pivot`):
 
 .. ipython:: python

@@ -31,7 +31,8 @@ Intro
    profile
    performance
    scale
-   gpu
+   gpuintro
+   miniapp
 
 .. toctree::
    :maxdepth: 1
