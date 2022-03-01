@@ -154,9 +154,17 @@ All the familiar arithemtic operators are applied on an element-by-element basis
                         b = np.array([4, 5, 6])
 			a + b
 
+
+             .. code-block:: py
+
+			a + b
+
              .. figure:: img/np_add_1d_new.svg 
 
+             .. code-block:: py
+
 			a/b
+
              .. figure:: img/np_div_1d_new.svg 
 
 
@@ -167,11 +175,13 @@ All the familiar arithemtic operators are applied on an element-by-element basis
 			import numpy as np
 		        a = np.array([[1, 2, 3],
 	               	   [4, 5, 6]])
-		        b = np.array([10, 10, 10])
+		        b = np.array([10, 10, 10],
+	               	   [10, 10, 10]])
+
 			a + b                       # array([[11, 12, 13],
                                 			 #        [14, 15, 16]]) 
 
-             .. figure:: img/np_div_1d.svg 
+             .. figure:: img/np_add_2d.svg 
 
 
 Array Indexing
@@ -189,20 +199,7 @@ Basic indexing is similar to python lists.
              .. code-block:: py
 
 			import numpy as np
-                        a = np.array([1, 3, 5])
-                        b = np.array([1, 3, 5])
-
-             .. figure:: img/np_ind_0.svg 
-             .. figure:: img/np_ind.svg 
-
-
-      .. tab:: 1DD
-
-             .. code-block:: py
-
-			import numpy as np
-                        a = np.array([1, 3, 5])
-                        b = np.array([1, 3, 5])
+                        data = np.array([1,2,3,4,5,6,7,8])
 
              .. figure:: img/np_ind_0.svg 
 
@@ -229,11 +226,7 @@ Basic indexing is similar to python lists.
 
              .. code-block:: python
 
-			     a = np.array([[1, 2, 3],
-	                	   [4, 5, 6]])
-			     b = np.array([10, 10, 10])
-			     a + b                       # array([[11, 12, 13],
-                                			 #        [14, 15, 16]]) 
+			     data = np.array([[1, 2, 3, 4],[5, 6, 7, 8],[9, 10, 11, 12]])
 
              .. figure:: img/np_ind2d_data.svg 
 
@@ -267,14 +260,7 @@ Apart from aggregate all values, one can also aggregate across the rows or colum
    .. tabs:: 
 
 
-      .. tab:: 1D
-
-             .. code-block:: py
-
-			import numpy as np
-                        a = np.array([1, 3, 5])
-                        b = np.array([1, 3, 5])
-
+      .. tab:: 2D
 
              .. code-block:: py
 
@@ -297,37 +283,6 @@ Apart from aggregate all values, one can also aggregate across the rows or colum
              .. figure:: img/np_min_2d_ax0.svg 
              .. figure:: img/np_min_2d_ax1.svg 
 
-
-      .. tab:: 2D
-
-             .. code-block:: python
-
-			     a = np.array([[1, 2, 3],
-	                	   [4, 5, 6]])
-			     b = np.array([10, 10, 10])
-			     a + b                       # array([[11, 12, 13],
-                                			 #        [14, 15, 16]]) 
-
-             .. figure:: img/np_ind2d_data.svg 
-
-             .. code-block:: python
-
-			     # integer indexing
-
-             .. figure:: img/np_ind2d_integer.svg 
-
-             .. code-block:: python
-
-			     # fancy indexing 
-
-             .. figure:: img/np_ind2d_fancy.svg 
-
-             .. code-block:: python
-
-			     # boolean indexing 
-
-
-             .. figure:: img/np_ind2d_boolean.svg 
 
 
 
