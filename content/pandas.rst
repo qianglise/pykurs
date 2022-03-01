@@ -115,7 +115,7 @@ There is no fixed list of what these pre-processings are, but in general the fol
 
 
 data cleaning
-*************
+.............
 
 A couple of essential  data cleaning processes include but not limited to the following:
 
@@ -130,13 +130,13 @@ https://pandas.pydata.org/docs/user_guide/missing_data.html
 
 
 data Reshaping
-**************
+..............
 
 Once data cleaning is done, we will reach the data reshaping phase. By reorganising the data, one could make the subsequent data operations easier.
 
 
 pivoting
-........
+********
 
 Create a data frame first
 
@@ -208,7 +208,7 @@ are homogeneously-typed.
 
 
 stacking and unstacking
-.......................
+***********************
 
 Closely related to the pivot() method are the related stack() and unstack() methods available on Series and DataFrame. 
 These methods are designed to work together with MultiIndex objects.
