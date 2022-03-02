@@ -46,8 +46,7 @@ For more complex code, one could use the built-in python profilers
         $  python -m cProfile -o demo.prof demo.py
 
     Using the ``-o`` switch will output the profiler results to the file
-    ``demo.prof`` to view with an external tool. This can be useful if
-    you wish to process the profiler output with a visualization tool.
+    ``demo.prof`` to view with an external tool. 
 
 
 Line-profiler
@@ -90,31 +89,38 @@ Then we run the script using the `kernprof.py
         9         1        10282  10282.0      0.1      pca = np.dot(u[:10, :], data)
        10         1         7799   7799.0      0.1      results = fastica(pca.T, whiten=False)
 
-**The SVD is taking all the time.** We need to optimise this line.
+It is clear from the profiling results: 
+the SVD is taking all the time, we need to optimise it if possible.
 
 
 
-performance enhancement 
------------------------
+performance optimization 
+------------------------
 
 Once we have identified the bottlenecks, we need to make the corresponding code go faster.
 
-Algorithmic optimization
-************************
+Algorithm optimization
+**********************
 
 The first thing to look into is the underlying algorithm you chose: is it optimal?
 To answer this question,  a good understanding of the maths behind the algorithm helps. 
-However, it can be as simple as moving computation or memory allocation outside a loop, and this happens very often.
+For certain algorithms, many of the bottlenecks will be linear 
+algebra computations. In these cases, using the right function to solve 
+the right problem is key. For instance, an eigenvalue problem with a 
+symmetric matrix is much easier to solve than with a general matrix. Moreover, 
+most often, you can avoid inverting a matrix and use a less costly 
+(and more numerically stable) operation. However, it can be as simple as 
+moving computation or memory allocation outside a loop, and this happens very often as well.
 
-SVD
-...................
+Singular Value Decomposition
+............................
 
-SVD `Singular Value Decomposition <https://en.wikipedia.org/wiki/Singular_value_decomposition>`_
+`Singular Value Decomposition <https://en.wikipedia.org/wiki/Singular_value_decomposition>`_ (SVD)
 is quite often used in climate model data analysis.  The computational cost of this algorithm is 
-roughly :math:`n^3` in the size of the input matrix. 
-However, in both of these example, we are not using all the output of
-the SVD, but only the first few rows of its first return argument. If
-we use the ``svd`` implementation of scipy, we can ask for an incomplete
+roughly :math:`n^3` where  :math:`n` is the size of the input matrix. 
+However, in most cases, we are not using all the output of the SVD, 
+but only the first few rows of its first returned argument. If
+we use the ``svd`` implementation from scipy, we can ask for an incomplete
 version of the SVD. Note that implementations of linear algebra in
 scipy are richer then those in numpy and should be preferred.
 
@@ -134,54 +140,34 @@ scipy are richer then those in numpy and should be preferred.
     In [7]: %timeit np.linalg.svd(data, full_matrices=False)
     1 loops, best of 3: 293 ms per loop
 
-We can then use this insight to :download:`optimize the previous code <demo_opt.py>`:
+We can try this using the example above: (XXXX fixing the example)
 
-.. literalinclude:: demo_opt.py
-   :pyobject: test
+.. sourcecode:: console
 
-.. sourcecode:: ipython
+    $ kernprof.py -l -v demo_opt.py
 
-    In [1]: import demo
+    Wrote profile results to demo_opt.py.lprof
+    Timer unit: 1e-06 s
 
-    In [2]: %timeit demo.
-    demo.fastica   demo.np        demo.prof.pdf  demo.py        demo.pyc
-    demo.linalg    demo.prof      demo.prof.png  demo.py.lprof  demo.test
+    File: demo_opt.py
+    Function: test at line 5
+    Total time: 14.2793 s
 
-    In [2]: %timeit demo.test()
-    ica.py:65: RuntimeWarning: invalid value encountered in sqrt
-      W = (u * np.diag(1.0/np.sqrt(s)) * u.T) * W  # W = (W * W.T) ^{-1/2} * W
-    1 loops, best of 3: 17.5 s per loop
 
-    In [3]: import demo_opt
 
-    In [4]: %timeit demo_opt.test()
-    1 loops, best of 3: 208 ms per loop
-
-Real incomplete SVDs, e.g. computing only the first 10 eigenvectors, can
-be computed with arpack, available in ``scipy.sparse.linalg.eigsh``.
-
-.. topic:: Computational linear algebra
-
-    For certain algorithms, many of the bottlenecks will be linear
-    algebra computations. In this case, using the right function to solve
-    the right problem is key. For instance, an eigenvalue problem with a
-    symmetric matrix is easier to solve than with a general matrix. Also,
-    most often, you can avoid inverting a matrix and use a less costly
-    (and more numerically stable) operation.
-
-add sparse matrix here 
+XXXX add sparse matrix here 
 
 CPU usage optimization
-************************
+**********************
 
 Vectorization
-..................
+.............
 
 Arithmetic is one place where numpy performance outperforms python list and the reason is that it uses vectorization.
 A lot of the data analysis involves a simple operation being applied to each element of a large dataset.
 In such cases, vectorization is key for better performance.
 
-.. challenge:: scalar vector multiplication 
+.. challenge::  vectorized operation vs for loop 
 
    .. tabs::
 
@@ -189,21 +175,27 @@ In such cases, vectorization is key for better performance.
 
              .. code-block:: python
 
-			a = [1, 3, 5]
-			b = 10 *a 
+			import numpy as np
+			a = np.arange(1000)
+			a_dif = np.zeros(999, int)
+			for i in range(1, len(a)):
+			    a_dif[i-1] = a[i] - a[i-1]
 
       .. tab:: numpy
 
              .. code-block:: python
 
 			import numpy as np
-                        a = np.array([1, 3, 5])
-                        b = 10 *a 
+                        a = np.arange(1000)
+			a_dif = a[1:] - a[:-1]
 
 
 
-so consider vec, numpy already did it, add linear algebra packages, that is why we recomend to use in the previous chapter.
-you write your own function, you can use numba e.g.
+
+So one should consider use "vectorized" operations whenever possible.
+
+For user-defined functions, one can use e.g. numba. 
+XXXX add example
 
 
 
@@ -218,49 +210,15 @@ Basic operations of numpy are elementwise, and the shape of the arrays should be
 However, in practice under certain conditions, it is possible to do operations on arrays of different shapes.
 NumPy expands the arrays such that the operation becomes viable.
 
-.. note::
+.. note:: Broadcasting Rules
 
-Broadcasting Rules
 Dimensions match when they are equal, or when either is 1 or None. 
 In the latter case, the dimension of the output array is expanded to the larger of the two.
 
-.. challenge:: broadcasting
-
-   .. tabs:: 
-
-      .. tab:: 1D
-
-             .. code-block:: python
-
-			     a = np.array([[1, 2, 3],
-	                	   [4, 5, 6]])
-			     b = np.array([10, 10, 10])
-			     a + b                       # array([[11, 12, 13],
-                                			 #        [14, 15, 16]]) 
-
-
-      .. tab:: 2D
-
-             .. code-block:: 2D
-
-			import numpy as np
-                        a = np.array([1, 3, 5])
-                        b = 10 *a 
 
 
 
 
-
-
-
-
-
-
-
-
-.. figure:: https://numpy.org/doc/stable/_images/broadcasting_1.png
-
-   Source: `numpy.org <https://numpy.org/doc/stable/_images/broadcasting_1.png>`__.
 
 .. figure:: https://numpy.org/doc/stable/_images/broadcasting_2.png
 
@@ -287,36 +245,6 @@ In the latter case, the dimension of the output array is expanded to the larger 
 
 the broadcasted arrays are never physically constructed
 
-.. challenge:: broadcasting
-
-
-   .. tabs:: 
-
-      .. tab:: 1D
-
-             .. code-block:: 2D
-
-			import numpy as np
-                        a = np.array([1, 3, 5])
-                        b = 10 *a 
-
-             .. figure:: img/broadcasting_1.png 
-
-
-      .. tab:: 2D
-
-             .. code-block:: python
-
-			     a = np.array([[1, 2, 3],
-	                	   [4, 5, 6]])
-			     b = np.array([10, 10, 10])
-			     a + b                       # array([[11, 12, 13],
-                                			 #        [14, 15, 16]]) 
-
-             .. figure:: img/broadcasting_2.png 
-
-		
-
 
 
 
@@ -330,10 +258,22 @@ the broadcasted arrays are never physically constructed
              .. code-block:: py
 
 			import numpy as np
-                        a = np.array([1, 3, 5])
-                        b = 10 *a 
+                        a = np.array([1, 2, 3])
+                        b = 4 
+                        a + b
 
-             .. figure:: img/np_add_1d.svg 
+             .. figure:: img/bc_1d.svg 
+
+
+      .. tab:: 2D
+
+             .. code-block:: python
+
+			     a = np.array([[0, 0, 0],[10, 10, 10],[20, 20, 20],[30, 30, 30]])
+			     b = np.array([1, 2, 3])
+			     a + b                      
+
+             .. figure:: img/bc_2d_1.svg 
 
 
       .. tab:: 2D
@@ -346,30 +286,7 @@ the broadcasted arrays are never physically constructed
 			     a + b                       # array([[11, 12, 13],
                                 			 #        [14, 15, 16]]) 
 
-             .. figure:: img/np_div_1d.svg 
-
-
-
-      .. tab:: 3D
-
-             .. code-block:: python
-
-			     a = np.array([1, 2, 3])
-
-
-             .. code-block:: python
-
-			     a + 4
-
-             .. figure:: img/np_add_1d_new.svg 
-
-
-             .. code-block:: python
-
-			     a / 4
-
-
-             .. figure:: img/np_div_1d.svg 
+             .. figure:: img/bc_2d_2.svg 
 
 
 
