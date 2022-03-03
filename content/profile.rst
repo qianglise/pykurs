@@ -155,7 +155,7 @@ We can try this using the example above: (XXXX fixing the example)
 
 
 
-XXXX add sparse matrix here 
+XXXX add sparse matrix example here 
 
 CPU usage optimization
 **********************
@@ -195,7 +195,7 @@ In such cases, vectorization is key for better performance.
 So one should consider use "vectorized" operations whenever possible.
 
 For user-defined functions, one can use e.g. numba. 
-XXXX add example
+XXXX add one example
 
 
 
@@ -210,9 +210,8 @@ Basic operations of numpy are elementwise, and the shape of the arrays should be
 However, in practice under certain conditions, it is possible to do operations on arrays of different shapes.
 NumPy expands the arrays such that the operation becomes viable.
 
-.. note:: Broadcasting Rules
-
-Dimensions match when they are equal, or when either is 1 or None. 
+.. note:: Broadcasting Rules  
+Dimensions match when they are equal, or when either is 1 or None.   
 In the latter case, the dimension of the output array is expanded to the larger of the two.
 
 
@@ -220,30 +219,7 @@ In the latter case, the dimension of the output array is expanded to the larger 
 
 
 
-.. figure:: https://numpy.org/doc/stable/_images/broadcasting_2.png
-
-   Source: `numpy.org <https://numpy.org/doc/stable/_images/broadcasting_2.png>`__.
-
-.. figure:: https://numpy.org/doc/stable/_images/broadcasting_3.png
-
-   Source: `numpy.org <https://numpy.org/doc/stable/_images/broadcasting_3.png>`__.
-
-
-
-.. figure:: https://numpy.org/doc/stable/_images/broadcasting_4.png
-
-   Source: `numpy.org <https://numpy.org/doc/stable/_images/broadcasting_4.png>`__.
-
-
-.. figure:: https://scipy-lectures.org/_images/numpy_broadcasting.png
-
-   Source: `scipy-lectures.org <https://scipy-lectures.org/_images/numpy_broadcasting.png>`__.
-
-
-
-.. note::
-
-the broadcasted arrays are never physically constructed
+.. note:: the broadcasted arrays are never physically constructed
 
 
 
@@ -269,6 +245,7 @@ the broadcasted arrays are never physically constructed
 
              .. code-block:: python
 
+			     import numpy as np
 			     a = np.array([[0, 0, 0],[10, 10, 10],[20, 20, 20],[30, 30, 30]])
 			     b = np.array([1, 2, 3])
 			     a + b                      
@@ -276,23 +253,18 @@ the broadcasted arrays are never physically constructed
              .. figure:: img/bc_2d_1.svg 
 
 
-      .. tab:: 2D
-
              .. code-block:: python
 
-			     a = np.array([[1, 2, 3],
-	                	   [4, 5, 6]])
-			     b = np.array([10, 10, 10])
+			     import numpy as np
+			     a = np.array([0, 10, 20,30])
+			     b = np.array([1, 2, 3]) 
 			     a + b                       # array([[11, 12, 13],
                                 			 #        [14, 15, 16]]) 
+				XXXXX fixing 
 
              .. figure:: img/bc_2d_2.svg 
 
 
-
-
-
-This is :red:`red !` And :blue:`this part is blue`.
 
 
 Cash
