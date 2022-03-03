@@ -221,7 +221,6 @@ NumPy expands the arrays such that the operation becomes viable.
 
 .. challenge:: broadcasting
 
-
    .. tabs:: 
 
       .. tab:: 1D
@@ -410,13 +409,73 @@ Methods that support ``engine="numba"`` will also have an ``engine_kwargs`` keyw
 If ``engine_kwargs`` is not specified, it defaults to ``{"nogil": False, "nopython": True, "parallel": False}`` unless otherwise specified.
 
 
+.. code-block:: python
+
+  time_1 = time.time()
+  df.apply(lambda x: integrate_f(x["a"], x["b"], x["N"]), axis=1) 
+  time_2 = time.time()
+  print("""it took: %.2f""" %(time_2 - time_1))
 
 
-
+examples
+********
 
 Consider the following pure Python code:
 
 .. literalinclude:: example/integrate.py
+
+.. code-block:: python
+
+  df = pd.DataFrame(
+  	  {
+        	"a": np.random.randn(1000),
+	        "b": np.random.randn(1000),
+	        "N": np.random.randint(100, 1000, (1000)),
+	        "x": "x",
+	    }
+	)
+
+.. challenge:: integration
+
+   .. tabs:: 
+
+      .. tab:: python
+
+             .. code-block:: py
+
+		def f(x):
+		    return x * (x - 1)
+
+		def integrate_f(a, b, N):
+		    s = 0
+		    dx = (b - a) / N
+		    for i in range(N):
+		        s += f(a + i * dx)
+		    return s * dx
+
+		df.apply(lambda x: integrate_f(x["a"], x["b"], x["N"]), axis=1)
+
+      .. tab:: cython
+
+             .. code-block:: python
+
+		%%cython
+		def f_plain(x):
+		    return x * (x - 1)
+
+		def integrate_f_plain(a, b, N):
+		    s = 0
+		    dx = (b - a) / N
+		    for i in range(N):
+		        s += f_plain(a + i * dx)
+		    return s * dx	
+
+		df.apply(lambda x: integrate_f_plain(x["a"], x["b"], x["N"]), axis=1)
+
+
+
+
+
 
 Simply compiling this in Cython merely gives a 35% speedup.  This is
 better than nothing, but adding some static types can make a much larger
@@ -440,3 +499,8 @@ difference.
       .. tab:: numba
 
               .. literalinclude:: example/integrate.numba.py 
+
+
+
+pairwise distance
+.................
