@@ -211,13 +211,8 @@ However, in practice under certain conditions, it is possible to do operations o
 NumPy expands the arrays such that the operation becomes viable.
 
 .. note:: Broadcasting Rules  
-Dimensions match when they are equal, or when either is 1 or None.   
-In the latter case, the dimension of the output array is expanded to the larger of the two.
-
-
-
-
-
+  - Dimensions match when they are equal, or when either is 1 or None.   
+  - In the latter case, the dimension of the output array is expanded to the larger of the two.
 
 .. note:: the broadcasted arrays are never physically constructed
 
@@ -267,49 +262,12 @@ In the latter case, the dimension of the output array is expanded to the larger 
 
 
 
-Cash
-............
+Cache effects
+.............
 
-
-
-In place operations
-............
-
-
-  .. sourcecode:: ipython
-
-    In [1]: a = np.zeros(1e7)
-
-    In [2]: %timeit global a ; a = 0*a
-    10 loops, best of 3: 111 ms per loop
-
-    In [3]: %timeit global a ; a *= 0
-    10 loops, best of 3: 48.4 ms per loop
-
-  **note**: we need `global a` in the timeit so that it work, as it is
-  assigning to `a`, and thus considers it as a local variable.
-
-* **Be easy on the memory: use views, and not copies**
-
-  Copying big arrays is as costly as making simple numerical operations
-  on them:
-
-  .. sourcecode:: ipython
-
-    In [1]: a = np.zeros(1e7)
-
-    In [2]: %timeit a.copy()
-    10 loops, best of 3: 124 ms per loop
-
-    In [3]: %timeit a + 1
-    10 loops, best of 3: 112 ms per loop
-
-* **Beware of cache effects**
-
-  Memory access is cheaper when it is grouped: accessing a big array in a
-  continuous way is much faster than random access. This implies amongst
-  other things that **smaller strides are faster** (see
-  :ref:`cache_effects`):
+Memory access is cheaper when it is grouped: accessing a big array in a 
+continuous way is much faster than random access. This implies amongst 
+other things that **smaller strides are faster** (see :ref:`cache_effects`):
 
   .. sourcecode:: ipython
 
@@ -351,35 +309,95 @@ In place operations
   Using `numexpr <http://code.google.com/p/numexpr/>`_ can be useful to
   automatically optimize code for such effects.
 
-compiled code
-*************************
 
-For many use cases using NumPy or Pandas is sufficient. Howevewr, in some computationally heavy applications, 
-it is possible to improve the performance by using compiled code.
-Normally Cython and Numba are among the popular choices and both of them have good support for numpy arrays. 
+Temporary arrays
+................
+
+- In complex expressions, NumPy stores intermediate values in
+  temporary arrays
+- Memory consumption can be higher than expected
+
+.. code-block:: python
+
+   a = numpy.random.random((1024, 1024, 50))
+   b = numpy.random.random((1024, 1024, 50))
+   
+   # two temporary arrays will be created
+   c = 2.0 * a - 4.5 * b
+   
+   # three temporary arrays will be created due to unnecessary parenthesis
+   c = (2.0 * a - 4.5 * b) + 1.1 * (numpy.sin(a) + numpy.cos(b))
+
+- Broadcasting approaches can lead also to hidden temporary arrays  XXXX add one example
+- Example: pairwise distance of **M** points in 3 dimensions
+    - Input data is M x 3 array
+    - Output is M x M array containing the distance between points i
+      and j
+	- There is a temporary 1000 x 1000 x 3 array
+
+.. code-block:: python
+
+   X = numpy.random.random((1000, 3))
+   D = numpy.sqrt(((X[:, numpy.newaxis, :] - X) ** 2).sum(axis=-1))
 
 
-cython
+Numexpr
 .......
+
+- Evaluation of complex expressions with one operation at a time can lead
+  also into suboptimal performance
+    - Effectively, one carries out multiple *for* loops in the NumPy
+      C-code
+
+- Numexpr package provides fast evaluation of array expressions
+
+.. code-block:: python
+
+   import numexpr as ne
+   x = numpy.random.random((1000000, 1))
+   y = numpy.random.random((1000000, 1))
+   poly = ne.evaluate("((.25*x + .75)*x - 1.5)*x - 2")
+
+- By default, numexpr tries to use multiple threads
+- Number of threads can be queried and set with
+  `ne.set_num_threads(nthreads)`
+- Supported operators and functions:
+  +,-,\*,/,\*\*, sin, cos, tan, exp, log, sqrt
+- Speedups in comparison to NumPy are typically between 0.95 and 4
+- Works best on arrays that do not fit in CPU cache
+
+
+
+
+performance boosting
+********************
+
+For many user cases using NumPy or Pandas is sufficient. Howevewr, in some computationally heavy applications, 
+it is possible to improve the performance by using the compiled code.
+Cython and Numba are among the popular choices and both of them have good support for numpy arrays. 
+
+
+Cython
+......
 
 The source code gets translated into optimized C/C++ code and compiled as Python extension modules. 
 
 
-numba
-.......
+Numba
+.....
 
 
 An alternative to statically compiling Cython code is to use a dynamic just-in-time (JIT) compiler with `Numba <https://numba.pydata.org/>`__.
 
-Numba allows you to write a pure Python function which can be JIT compiled to native machine instructions, similar in performance to C, C++ and Fortran, by decorating your function with ``@jit``.
+Numba allows you to write a pure Python function which can be JIT compiled to native machine instructions, similar in performance to C, C++ and Fortran, by simply adding the decorator ``@jit`` in your function.
 
-Numba works by generating optimized machine code using the LLVM compiler infrastructure at import time, runtime, or statically (using the included pycc tool).
-Numba supports compilation of Python to run on either CPU or GPU hardware and is designed to integrate with the Python scientific software stack.
+Numba supports compilation of Python to run on either CPU or GPU hardware and is designed to integrate with the Python scientific software stack. The optimized machine code is generated by the LLVM compiler infrastructure.
 
 .. note::
 
-    The ``@jit`` compilation will add overhead to the runtime of the function, so performance benefits may not be realized especially when using small data sets.
-    Consider `caching <https://numba.readthedocs.io/en/stable/developer/caching.html>`__ your function to avoid compilation overhead each time your function is run.
+    The ``@jit`` compilation will add overhead to the runtime of the function, so performance benefits may not be realized especially when using small data sets. In general, the Numba engine is performant with a larger amount of data points (e.g. 1+ million).
+    Consider `caching <https://numba.readthedocs.io/en/stable/developer/caching.html>`__ your function to avoid compilation overhead each time your function is run, i.e. the first time a function is run using the Numba engine will be slow as Numba will have some function compilation overhead. However, once the JIT compiled functions are cached, subsequent calls will be fast. 
+
 
 Numba can be used in 2 ways with pandas:
 
@@ -391,10 +409,6 @@ Methods that support ``engine="numba"`` will also have an ``engine_kwargs`` keyw
 ``"nogil"``, ``"nopython"`` and ``"parallel"`` keys with boolean values to pass into the ``@jit`` decorator.
 If ``engine_kwargs`` is not specified, it defaults to ``{"nogil": False, "nopython": True, "parallel": False}`` unless otherwise specified.
 
-In terms of performance, **the first time a function is run using the Numba engine will be slow**
-as Numba will have some function compilation overhead. However, the JIT compiled functions are cached,
-and subsequent calls will be fast. In general, the Numba engine is performant with
-a larger amount of data points (e.g. 1+ million).
 
 
 
