@@ -420,9 +420,9 @@ If ``engine_kwargs`` is not specified, it defaults to ``{"nogil": False, "nopyth
 examples
 ********
 
-Consider the following pure Python code:
 
-.. literalinclude:: example/integrate.py
+
+Consider the following pure Python code:
 
 .. code-block:: python
 
@@ -436,6 +436,19 @@ Consider the following pure Python code:
 	)
 
 .. challenge:: integration
+
+	we first generate a dataframe and apply the integrate_f function on the dataframe.
+
+.. code-block:: python
+
+  df = pd.DataFrame(
+  	  {
+        	"a": np.random.randn(1000),
+	        "b": np.random.randn(1000),
+	        "N": np.random.randint(100, 1000, (1000)),
+	        "x": "x",
+	    }
+	)
 
    .. tabs:: 
 
