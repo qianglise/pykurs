@@ -211,6 +211,7 @@ However, in practice under certain conditions, it is possible to do operations o
 NumPy expands the arrays such that the operation becomes viable.
 
 .. note:: Broadcasting Rules  
+
   - Dimensions match when they are equal, or when either is 1 or None.   
   - In the latter case, the dimension of the output array is expanded to the larger of the two.
 
@@ -328,7 +329,7 @@ Temporary arrays
    c = (2.0 * a - 4.5 * b) + 1.1 * (numpy.sin(a) + numpy.cos(b))
 
 - Broadcasting approaches can lead also to hidden temporary arrays  XXXX add one example
-- Example: pairwise distance of **M** points in 3 dimensions
+- XXXX Not clear to me Example: pairwise distance of **M** points in 3 dimensions
     - Input data is M x 3 array
     - Output is M x M array containing the distance between points i
       and j
@@ -371,7 +372,7 @@ Numexpr
 Performance boosting
 ********************
 
-For many user cases using NumPy or Pandas is sufficient. Howevewr, in some computationally heavy applications, 
+For many user cases, using NumPy or Pandas is sufficient. Howevewr, in some computationally heavy applications, 
 it is possible to improve the performance by using the compiled code.
 Cython and Numba are among the popular choices and both of them have good support for numpy arrays. 
 
@@ -385,16 +386,13 @@ There are three ways of declaring functions:
 
 
 ``def`` - Python style:
-
 Declaring the types of arguments and local types (thus return values) can allow Cython to generate optimised code which speeds up the execution. If the types are declared then a ``TypeError`` will be raised if the function is passed the wrong types.
 
 ``cdef`` - C style:
-
 Cython treats the function as pure 'C' functions. All types *must* be declared. This will give you the best performance but there are a number of consequences. One should really take care of the ``cdef`` declared functions, since you are actually writing in C.
 
 ``cpdef`` - Python/C mixed
-
-``cpdef`` functions combine both ``def`` and ``cdef`` by creating two functions; a ``cdef`` for C types and a ``def`` for Python types. This exploits early binding so that ``cpdef`` functions may be as fast as possible when using C fundamental types (by using ``cdef``). ``cpdef`` functions use dynamic binding when passed Python objects and this might much slower, perhaps as slow as ``def`` declared functions.
+``cpdef`` functions combine both ``def`` and ``cdef`` by creating two functions; a ``cdef`` for C types and a ``def`` for Python types. This exploits early binding so that ``cpdef`` functions may be as fast as possible when using C fundamental types (by using ``cdef``). ``cpdef`` functions use dynamic binding when passed Python objects and this might much slower, perhaps as slow as ``def`` declared functions.   XXXX rewrite this part.
 
 
 Numba
@@ -424,14 +422,6 @@ Methods that support ``engine="numba"`` will also have an ``engine_kwargs`` keyw
 If ``engine_kwargs`` is not specified, it defaults to ``{"nogil": False, "nopython": True, "parallel": False}`` unless otherwise specified.
 
 
-.. code-block:: python
-
-  time_1 = time.time()
-  df.apply(lambda x: integrate_f(x["a"], x["b"], x["N"]), axis=1) 
-  time_2 = time.time()
-  print("""it took: %.2f""" %(time_2 - time_1))
-
-
 examples
 ********
 
@@ -441,16 +431,7 @@ integration
 
 Consider the following pure Python code:
 
-.. code-block:: python
 
-  df = pd.DataFrame(
-  	  {
-        	"a": np.random.randn(1000),
-	        "b": np.random.randn(1000),
-	        "N": np.random.randint(100, 1000, (1000)),
-	        "x": "x",
-	    }
-	)
 
 .. challenge:: integration
 
@@ -471,6 +452,20 @@ Consider the following pure Python code:
 
              .. literalinclude:: example/integrate_numba.py 
 
+
+
+   .. tabs:: benchmark
+
+	.. code-block:: python
+
+	  df = pd.DataFrame(
+  		  {
+        		"a": np.random.randn(1000),
+		        "b": np.random.randn(1000),
+		        "N": np.random.randint(100, 1000, (1000)),
+		        "x": "x",
+		    }
+		)
 
 
 
