@@ -368,7 +368,7 @@ Numexpr
 
 
 
-performance boosting
+Performance boosting
 ********************
 
 For many user cases using NumPy or Pandas is sufficient. Howevewr, in some computationally heavy applications, 
@@ -380,6 +380,21 @@ Cython
 ......
 
 The source code gets translated into optimized C/C++ code and compiled as Python extension modules. 
+
+There are three ways of declaring functions: 
+
+
+``def`` - Python style:
+
+Declaring the types of arguments and local types (thus return values) can allow Cython to generate optimised code which speeds up the execution. If the types are declared then a ``TypeError`` will be raised if the function is passed the wrong types.
+
+``cdef`` - C style:
+
+Cython treats the function as pure 'C' functions. All types *must* be declared. This will give you the best performance but there are a number of consequences. One should really take care of the ``cdef`` declared functions, since you are actually writing in C.
+
+``cpdef`` - Python/C mixed
+
+``cpdef`` functions combine both ``def`` and ``cdef`` by creating two functions; a ``cdef`` for C types and a ``def`` for Python types. This exploits early binding so that ``cpdef`` functions may be as fast as possible when using C fundamental types (by using ``cdef``). ``cpdef`` functions use dynamic binding when passed Python objects and this might much slower, perhaps as slow as ``def`` declared functions.
 
 
 Numba
@@ -420,6 +435,8 @@ If ``engine_kwargs`` is not specified, it defaults to ``{"nogil": False, "nopyth
 examples
 ********
 
+integration
+...........
 
 
 Consider the following pure Python code:
@@ -439,83 +456,82 @@ Consider the following pure Python code:
 
 	we first generate a dataframe and apply the integrate_f function on the dataframe.
 
-.. code-block:: python
-
-  df = pd.DataFrame(
-  	  {
-        	"a": np.random.randn(1000),
-	        "b": np.random.randn(1000),
-	        "N": np.random.randint(100, 1000, (1000)),
-	        "x": "x",
-	    }
-	)
-
-
 
    .. tabs:: 
 
       .. tab:: python
 
-             .. code-block:: py
-
-		def f(x):
-		    return x * (x - 1)
-
-		def integrate_f(a, b, N):
-		    s = 0
-		    dx = (b - a) / N
-		    for i in range(N):
-		        s += f(a + i * dx)
-		    return s * dx
-
-		df.apply(lambda x: integrate_f(x["a"], x["b"], x["N"]), axis=1)
+             .. literalinclude:: example/integrate_python.py 
 
       .. tab:: cython
 
-             .. code-block:: python
-
-		%%cython
-		def f_plain(x):
-		    return x * (x - 1)
-
-		def integrate_f_plain(a, b, N):
-		    s = 0
-		    dx = (b - a) / N
-		    for i in range(N):
-		        s += f_plain(a + i * dx)
-		    return s * dx	
-
-		df.apply(lambda x: integrate_f_plain(x["a"], x["b"], x["N"]), axis=1)
-
-
-
-
-
-
-Simply compiling this in Cython merely gives a 35% speedup.  This is
-better than nothing, but adding some static types can make a much larger
-difference.
-
-
-   .. tabs:: 
-
-      .. tab:: python
-
-             .. literalinclude:: example/integrate.py 
-
-      .. tab:: numpy
-
-              .. literalinclude:: example/integrate.numpy.py 
-
-      .. tab:: cython
-
-              .. literalinclude:: example/integrate.cython.py 
+             .. literalinclude:: example/integrate_cython.py 
 
       .. tab:: numba
 
-              .. literalinclude:: example/integrate.numba.py 
+             .. literalinclude:: example/integrate_numba.py 
+
 
 
 
 pairwise distance
 .................
+
+
+.. challenge:: pairwise distance
+
+	we first generate a dataframe and apply the integrate_f function on the dataframe.
+
+
+   .. tabs:: 
+
+      .. tab:: python
+
+             .. literalinclude:: example/pdis_python.py 
+
+      .. tab:: numpy
+
+             .. literalinclude:: example/pdis_numpy.py 
+
+      .. tab:: cython
+
+             .. literalinclude:: example/pdis_cython.py 
+
+      .. tab:: numba
+
+             .. literalinclude:: example/pdis_numba.py 
+
+
+Bubble sort
+...........
+
+Long stroy short, in the worse case, the time Bubblesort algorithm takes is roughly :math:`O(n^2)` where  :math:`n` is the number of items being sorted. 
+
+.. image:: img/Bubble-sort-example-300px.gif
+
+
+.. challenge:: Bubble sort
+
+   .. tabs:: 
+
+      .. tab:: python
+
+             .. literalinclude:: example/bs_python.py 
+
+      .. tab:: cython
+
+             .. literalinclude:: example/bs_cython.py 
+
+      .. tab:: numba
+
+             .. literalinclude:: example/bs_numba.py 
+
+
+
+
+
+.. note:
+
+Note that the relative results also depend on what version of Python, Cython, Numba, and NumPy you are using. Also, the compiler choice for installing NumPy can account for differences in the results.
+
+  NumPy is really good at what it does. For simple operations, Numba is not going to outperform it, but when things get more complex Numba will save the day. 
