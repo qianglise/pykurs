@@ -182,6 +182,8 @@ which describes how the array is split up into sub-arrays:
     ones = da.ones(shape, chunks=chunk_shape)
     ones
 
+.. note::Other ways to specify ``chunks`` size can be found here https://docs.dask.org/en/stable/array-chunks.html#specifying-chunk-shapes
+
 
 So far, it is only a symbolic representation of the array. 
 One way to trigger the computation is to call :meth:`compute`:
@@ -375,7 +377,7 @@ Let us run the example first, one after the other in sequence:
     z
 
 
-Note that the first two functions ``inc`` and ``dec``` don't depend on each other, 
+Note that the first two functions ``inc`` and ``dec`` don't depend on each other, 
 we could have called them in parallel. We can call ``dask.delayed`` on these funtions 
 to make them lazy and tasks into a graph which we will run later on parallel hardware.
 
