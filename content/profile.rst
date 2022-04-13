@@ -163,9 +163,14 @@ CPU usage optimization
 Vectorization
 .............
 
-Arithmetic is one place where numpy performance outperforms python list and the reason is that it uses vectorization.
-A lot of the data analysis involves a simple operation being applied to each element of a large dataset.
+Arithmetic is one place where numpy performance outperforms python list 
+and the reason is that it uses vectorization. A lot of the data analysis 
+involves a simple operation being applied to each element of a large dataset.
 In such cases, vectorization is key for better performance.
+
+In practice, a vectorised operation means reframing the code in a manner that
+completely avoids a loop and instead uses e.g. slicing to apply the operation
+on the whole array (slice) at one go.
 
 .. challenge::  vectorized operation vs for loop 
 

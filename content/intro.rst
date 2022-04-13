@@ -34,7 +34,7 @@ bit and byte
 The smallest building block of storage in the computer is a **bit**, 
 which stores either a 0 or 1.
 Normally a number of 8 bits are combined in a group to make a **byte**. 
-One byte (8 bits) can represent/hold at most 2**8 distint values.
+One byte (8 bits) can represent/hold at most :math:`2^8` distint values.
 Organising bytes in different ways could further represent different types of information, i.e. data.
 
 Numerical Data
@@ -43,8 +43,7 @@ Numerical Data
 Different numerial data types (integer and floating-point) can be encoded as bytes. The more bytes we use for each value, the more range or precision we get, however the more memory it takes. For example, integers stored with 1 byte (8 bits) have a range from [-128, 127], while with 2 bytes (16 bits), the ranges becomes  [-32768, 32767].
 Integers are whole numbers and can be represented precisely given enough bytes. However, for floating-point numbers the decimal fractions simply can not be represented exactly as binary (base 2) fractions in most cases which is known as the representation error. Arithmetic operations will further propagate this error. That is why in scienctific computing, numerical algorithms have to be carefully chosen and floating-point numbers are usally allocated with 8 bytes (XXXX add range here) to make sure the inaccuracy is under control and does not lead to unsteady solutions.
 
-Note:
-Many climate models or certain parts of the models have the option of using single precision, i.e. 4 bytes or 32 bits, for floating-point numbers in order to achieve better performance at a small cost to the accuracy.
+.. note: In some situations, single precision, i.e. 4 bytes, is used for floating-point numbers in order to achieve better performance at a small cost to the accuracy.
 
 
 
