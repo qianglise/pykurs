@@ -75,9 +75,9 @@ Grided Data
 Grided data is another very common type, and usually the numerical data is saved in a multi-dimentional rectangular grid.
 Most probably it is saved in one of the following formats:
 
-Hierarchical Data Format (HDF5) - Container for many arrays
-Network Common Data Form (NetCDF) - Container for many arrays which conform to the NetCDF data model
-Zarr - New cloud-optimized format for array storage
+- Hierarchical Data Format (HDF5) - Container for many arrays
+- Network Common Data Form (NetCDF) - Container for many arrays which conform to the NetCDF data model
+- Zarr - New cloud-optimized format for array storage
 
 Metadata
 ********
