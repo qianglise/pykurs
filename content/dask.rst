@@ -83,7 +83,7 @@ Or you can simply lauch a Client() call which is shorthand for what is described
     client
 
 
-We can also specify the resources to be allocated to a dask cluster by:
+We can also specify the resources to be allocated to a Dask cluster by:
 
 .. code-block:: python
     
@@ -112,19 +112,19 @@ http://localhost:8787/status and can be always queried from commond line by:
 
 .. code-block:: python
 
-cluster.dashboard_link 
-'http://127.0.0.1:8787/status'
-# or 
-client.dashboard_link
-'http://127.0.0.1:8787/status'
+   cluster.dashboard_link 
+   http://127.0.0.1:8787/status
+   # or 
+   client.dashboard_link
+
 
 
 When everything finishes, you can shut down the connected scheduler and workers 
-by calling the shutdown method:
+by calling the :meth:`shutdown` method:
 
 .. code-block:: python
 
-client.shutdown()
+   client.shutdown()
 
 
 
