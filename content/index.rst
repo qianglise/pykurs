@@ -33,6 +33,7 @@ Intro
    scale
    gpuintro
    miniapp
+   dask
 
 .. toctree::
    :maxdepth: 1

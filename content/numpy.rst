@@ -142,7 +142,6 @@ All the familiar arithemtic operators are applied on an element-by-element basis
 
 .. challenge:: Arithmetic
 
-
    .. tabs:: 
 
       .. tab:: 1D
@@ -152,7 +151,6 @@ All the familiar arithemtic operators are applied on an element-by-element basis
 			import numpy as np
                         a = np.array([1, 3, 5])
                         b = np.array([4, 5, 6])
-
 
              .. code-block:: py
 
