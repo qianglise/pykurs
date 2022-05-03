@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example “solution” for such an exploration below. &mdash; LESSON NAME  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/mystnb.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx_lesson.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx_rtd_theme_ext_color_contrast.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/overrides.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script src="../_static/minipres.js"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../_static/togglebutton.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../" class="icon icon-home"> LESSON NAME
+            <img src="../_static/ENCCS.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">The lesson</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/">Intro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../numpy/">NumPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pandas/">Pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scipy/">SciPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../profile/">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale/">Scaling to large datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gpuintro/">Introduction to GPU architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../miniapp/">Heat diffusion mini-app</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dask/">Dask for scalable analytics</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/">Instructor’s guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">LESSON NAME</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home"></a> &raquo;</li>
+      <li>Example “solution” for such an exploration below.</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ENCCS/content/blob/main/content/data-visualization.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <p># Data visualization with Matplotlib</p>
+<p><code class="docutils literal notranslate"><span class="pre">`{questions}</span>
+<span class="pre">-</span> <span class="pre">What</span> <span class="pre">happens</span> <span class="pre">if</span> <span class="pre">you</span> <span class="pre">can't</span> <span class="pre">automatically</span> <span class="pre">produce</span> <span class="pre">plots?</span>
+<span class="pre">-</span> <span class="pre">When</span> <span class="pre">to</span> <span class="pre">use</span> <span class="pre">Matplotlib</span> <span class="pre">for</span> <span class="pre">data</span> <span class="pre">visualization?</span>
+<span class="pre">-</span> <span class="pre">When</span> <span class="pre">to</span> <span class="pre">prefer</span> <span class="pre">other</span> <span class="pre">libraries?</span>
+<span class="pre">`</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">`{objectives}</span>
+<span class="pre">-</span> <span class="pre">Be</span> <span class="pre">able</span> <span class="pre">to</span> <span class="pre">create</span> <span class="pre">simple</span> <span class="pre">plots</span> <span class="pre">with</span> <span class="pre">Matplotlib</span> <span class="pre">and</span> <span class="pre">tweak</span> <span class="pre">them</span>
+<span class="pre">-</span> <span class="pre">Know</span> <span class="pre">about</span> <span class="pre">object-oriented</span> <span class="pre">vs</span> <span class="pre">pyplot</span> <span class="pre">interfaces</span> <span class="pre">of</span> <span class="pre">Matplotlib</span>
+<span class="pre">-</span> <span class="pre">Be</span> <span class="pre">able</span> <span class="pre">to</span> <span class="pre">adapt</span> <span class="pre">gallery</span> <span class="pre">examples</span>
+<span class="pre">-</span> <span class="pre">Know</span> <span class="pre">how</span> <span class="pre">to</span> <span class="pre">look</span> <span class="pre">for</span> <span class="pre">help</span>
+<span class="pre">-</span> <span class="pre">Know</span> <span class="pre">that</span> <span class="pre">other</span> <span class="pre">tools</span> <span class="pre">exist</span>
+<span class="pre">`</span></code></p>
+<p>## Repeatability/reproducibility</p>
+<p>From [Claus O. Wilke: “Fundamentals of Data Visualization”](<a class="reference external" href="https://clauswilke.com/dataviz/">https://clauswilke.com/dataviz/</a>):</p>
+<p>&gt; <em>One thing I have learned over the years is that automation is your friend. I
+&gt; think figures should be autogenerated as part of the data analysis pipeline
+&gt; (which should also be automated), and they should come out of the pipeline
+&gt; ready to be sent to the printer, no manual post-processing needed.</em></p>
+<ul>
+<li><p><strong>No manual post-processing</strong>. This will bite you when you need to regenerate 50
+figures one day before submission deadline or regenerate a set of figures
+after the person who created them left the group.</p></li>
+<li><p>There is not the one perfect language and <strong>not the one perfect library</strong> for everything.</p></li>
+<li><p>Within Python, many libraries exist:
+- [Matplotlib](<a class="reference external" href="https://matplotlib.org/gallery.html">https://matplotlib.org/gallery.html</a>):</p>
+<blockquote>
+<div><p>probably the most standard and most widely used</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>[Seaborn](<a class="reference external" href="https://seaborn.pydata.org/examples/index.html">https://seaborn.pydata.org/examples/index.html</a>):
+high-level interface to Matplotlib, statistical functions built in</p></li>
+<li><p>[Altair](<a class="reference external" href="https://altair-viz.github.io/gallery/index.html">https://altair-viz.github.io/gallery/index.html</a>):
+declarative visualization (R users will be more at home), statistics built in</p></li>
+<li><p>[Plotly](<a class="reference external" href="https://plotly.com/python/">https://plotly.com/python/</a>):
+interactive graphs</p></li>
+<li><p>[Bokeh](<a class="reference external" href="https://demo.bokeh.org/">https://demo.bokeh.org/</a>):
+also here good for interactivity</p></li>
+<li><p>[plotnine](<a class="reference external" href="https://plotnine.readthedocs.io/">https://plotnine.readthedocs.io/</a>):
+implementation of a grammar of graphics in Python, it is based on [ggplot2](<a class="reference external" href="https://ggplot2.tidyverse.org/">https://ggplot2.tidyverse.org/</a>)</p></li>
+<li><p>[ggplot](<a class="reference external" href="https://yhat.github.io/ggpy/">https://yhat.github.io/ggpy/</a>):
+R users will be more at home</p></li>
+<li><p>[PyNGL](<a class="reference external" href="https://www.pyngl.ucar.edu/Examples/gallery.shtml">https://www.pyngl.ucar.edu/Examples/gallery.shtml</a>):
+used in the weather forecast community</p></li>
+<li><p>[K3D](<a class="reference external" href="https://k3d-jupyter.org/showcase/">https://k3d-jupyter.org/showcase/</a>):
+Jupyter notebook extension for 3D visualization</p></li>
+<li><p>…</p></li>
+</ul>
+</li>
+<li><p>Two main families of libraries: procedural (e.g. Matplotlib) and declarative
+(using grammar of graphics).</p></li>
+</ul>
+<p>## Why are we starting with Matplotlib?</p>
+<ul class="simple">
+<li><p>Matplotlib is perhaps the most “standard” Python plotting library.</p></li>
+<li><p>Many libraries build on top of Matplotlib.</p></li>
+<li><p>MATLAB users will feel familiar.</p></li>
+<li><p>Even if you choose to use another library (see above list), chances are high
+that you need to adapt a Matplotlib plot of somebody else.</p></li>
+<li><p>Libraries that are built on top of Matplotlib may need knowledge of Matplotlib
+for custom adjustments.</p></li>
+</ul>
+<p>However it is a relatively low-level interface for
+drawing (in terms of abstractions, not in terms of quality) and does not
+provide statistical functions. Some figures require typing and tweaking many lines of code.</p>
+<p>Many other visualization libraries exist with their own strengths, it is also a
+matter of personal preferences. <strong>Later we will also try other libraries.</strong></p>
+<p>## Getting started with Matplotlib</p>
+<p>We can start in a Jupyter notebook since notebooks are typically a good fit
+for data visualizations. But if you prefer to run this as a script, this is
+also OK.</p>
+<p>Let us create our first plot:</p>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>{code-block} python
+# this line tells Jupyter to display matplotlib figures in the notebook
+%matplotlib inline</p>
+<p>import matplotlib.pyplot as plt</p>
+<p># this is dataset 1 from
+# <a class="reference external" href="https://en.wikipedia.org/wiki/Anscombe%27s_quartet">https://en.wikipedia.org/wiki/Anscombe%27s_quartet</a>
+data_x = [10.0, 8.0, 13.0, 9.0, 11.0, 14.0, 6.0, 4.0, 12.0, 7.0, 5.0]
+data_y = [8.04, 6.95, 7.58, 8.81, 8.33, 9.96, 7.24, 4.26, 10.84, 4.82, 5.68]</p>
+<p>fig, ax = plt.subplots()</p>
+<p>ax.scatter(x=data_x, y=data_y, c=”#E69F00”)</p>
+<p>ax.set_xlabel(“we should label the x axis”)
+ax.set_ylabel(“we should label the y axis”)
+ax.set_title(“some title”)</p>
+<p># uncomment the next line if you would like to save the figure to disk
+# fig.savefig(“my-first-plot.png”)
+<a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+<p><a href="#id9"><span class="problematic" id="id10">``</span></a><a href="#id11"><span class="problematic" id="id12">`</span></a>{figure} data-visualization/first-plot/getting-started.png
+:alt: Result of our first plot</p>
+<p>This is the result of our first plot.
+<a href="#id13"><span class="problematic" id="id14">``</span></a><a href="#id15"><span class="problematic" id="id16">`</span></a></p>
+<p>When running a Matplotlib script on a remote server without a
+“display” (e.g. compute cluster), you may need to add this line:</p>
+<p><a href="#id17"><span class="problematic" id="id18">``</span></a><a href="#id19"><span class="problematic" id="id20">`</span></a>python
+import matplotlib.pyplot as plt
+matplotlib.use(“Agg”)</p>
+<p># … rest of the script
+<a href="#id21"><span class="problematic" id="id22">``</span></a><a href="#id23"><span class="problematic" id="id24">`</span></a></p>
+<p>## Exercise: Matplotlib</p>
+<p><a href="#id25"><span class="problematic" id="id26">``</span></a><a href="#id27"><span class="problematic" id="id28">``</span></a>{challenge} Exercise Matplotlib-1: extend the previous example (15 min)
+- Extend the previous plot by also plotting this set of values but this time</p>
+<blockquote>
+<div><p>using a different color (<cite>#56B4E9</cite>):
+<code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">#</span> <span class="pre">this</span> <span class="pre">is</span> <span class="pre">dataset</span> <span class="pre">2</span>
+<span class="pre">data2_y</span> <span class="pre">=</span> <span class="pre">[9.14,</span> <span class="pre">8.14,</span> <span class="pre">8.74,</span> <span class="pre">8.77,</span> <span class="pre">9.26,</span> <span class="pre">8.10,</span> <span class="pre">6.13,</span> <span class="pre">3.10,</span> <span class="pre">9.13,</span> <span class="pre">7.26,</span> <span class="pre">4.74]</span>
+<span class="pre">`</span></code></p>
+</div></blockquote>
+<ul class="simple">
+<li><p>Then add another color (<cite>#009E73</cite>) which plots the second dataset, scaled
+by 2.0.
+<code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">#</span> <span class="pre">here</span> <span class="pre">we</span> <span class="pre">multiply</span> <span class="pre">all</span> <span class="pre">elements</span> <span class="pre">of</span> <span class="pre">data2_y</span> <span class="pre">by</span> <span class="pre">2.0</span>
+<span class="pre">data2_y_scaled</span> <span class="pre">=</span> <span class="pre">[y*2.0</span> <span class="pre">for</span> <span class="pre">y</span> <span class="pre">in</span> <span class="pre">data2_y]</span>
+<span class="pre">`</span></code></p></li>
+<li><p>Try to add a legend to the plot with <cite>ax.legend()</cite> and searching the web for clues on
+how to add labels to each dataset.</p></li>
+<li><dl class="simple">
+<dt>At the end it should look like this one:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">`{figure}</span> <span class="pre">data-visualization/first-plot/exercise.png</span>
+<span class="pre">:alt:</span> <span class="pre">Result</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">exercise</span>
+<span class="pre">`</span></code></p>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<p><a href="#id29"><span class="problematic" id="id30">``</span></a><a href="#id31"><span class="problematic" id="id32">``</span></a>{solution}
+<a href="#id33"><span class="problematic" id="id34">``</span></a><a href="#id35"><span class="problematic" id="id36">`</span></a>{code-block} python
+—
+emphasize-lines: 12, 15, 20-21, 26
+—
+# this line tells Jupyter to display matplotlib figures in the notebook
+%matplotlib inline</p>
+<p>import matplotlib.pyplot as plt</p>
+<p># this is dataset 1 from
+# <a class="reference external" href="https://en.wikipedia.org/wiki/Anscombe%27s_quartet">https://en.wikipedia.org/wiki/Anscombe%27s_quartet</a>
+data_x = [10.0, 8.0, 13.0, 9.0, 11.0, 14.0, 6.0, 4.0, 12.0, 7.0, 5.0]
+data_y = [8.04, 6.95, 7.58, 8.81, 8.33, 9.96, 7.24, 4.26, 10.84, 4.82, 5.68]</p>
+<p># this is dataset 2
+data2_y = [9.14, 8.14, 8.74, 8.77, 9.26, 8.10, 6.13, 3.10, 9.13, 7.26, 4.74]</p>
+<p># here we multiply all elements of data2_y by 2.0
+data2_y_scaled = [y*2.0 for y in data2_y]</p>
+<p>fig, ax = plt.subplots()</p>
+<p>ax.scatter(x=data_x, y=data_y, c=”#E69F00”, label=’set 1’)
+ax.scatter(x=data_x, y=data2_y, c=”#56B4E9”, label=’set 2’)
+ax.scatter(x=data_x, y=data2_y_scaled, c=”#009E73”, label=’set 2 (scaled)’)</p>
+<p>ax.set_xlabel(“we should label the x axis”)
+ax.set_ylabel(“we should label the y axis”)
+ax.set_title(“some title”)
+ax.legend()</p>
+<p># uncomment the next line if you would like to save the figure to disk
+# fig.savefig(“exercise-plot.png”)
+<code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">``</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">`{discussion}</span> <span class="pre">Why</span> <span class="pre">these</span> <span class="pre">colors?</span>
+<span class="pre">This</span> <span class="pre">qualitative</span> <span class="pre">color</span> <span class="pre">palette</span> <span class="pre">is</span> <span class="pre">opimized</span> <span class="pre">for</span> <span class="pre">all</span> <span class="pre">color-vision</span>
+<span class="pre">deficiencies,</span> <span class="pre">see</span> <span class="pre">&lt;https://clauswilke.com/dataviz/color-pitfalls.html&gt;</span> <span class="pre">and</span>
+<span class="pre">[Okabe,</span> <span class="pre">M.,</span> <span class="pre">and</span> <span class="pre">K.</span> <span class="pre">Ito.</span> <span class="pre">2008.</span> <span class="pre">&quot;Color</span> <span class="pre">Universal</span> <span class="pre">Design</span> <span class="pre">(CUD):</span>
+<span class="pre">How</span> <span class="pre">to</span> <span class="pre">Make</span> <span class="pre">Figures</span> <span class="pre">and</span> <span class="pre">Presentations</span> <span class="pre">That</span> <span class="pre">Are</span> <span class="pre">Friendly</span> <span class="pre">to</span> <span class="pre">Colorblind</span> <span class="pre">People.&quot;](http://jfly.iam.u-tokyo.ac.jp/color/).</span>
+<span class="pre">`</span></code></p>
+<p>—</p>
+<p>## Matplotlib has two different interfaces</p>
+<p>When plotting with Matplotlib, it is useful to know and understand that
+there are <strong>two approaches</strong> even though the reasons of this dual approach is
+outside the scope of this lesson.</p>
+<ul>
+<li><p>The more modern option is an <strong>object-oriented interface</strong> (the <code class="docutils literal notranslate"><span class="pre">fig</span></code> and <code class="docutils literal notranslate"><span class="pre">ax</span></code> objects
+can be configured separately and passed around to functions):</p>
+<blockquote>
+<div><p><a href="#id37"><span class="problematic" id="id38">``</span></a><a href="#id39"><span class="problematic" id="id40">`</span></a>{code-block} python
+—
+emphasize-lines: 8-14
+—
+import matplotlib.pyplot as plt</p>
+<p># this is dataset 1 from
+# <a class="reference external" href="https://en.wikipedia.org/wiki/Anscombe%27s_quartet">https://en.wikipedia.org/wiki/Anscombe%27s_quartet</a>
+data_x = [10.0, 8.0, 13.0, 9.0, 11.0, 14.0, 6.0, 4.0, 12.0, 7.0, 5.0]
+data_y = [8.04, 6.95, 7.58, 8.81, 8.33, 9.96, 7.24, 4.26, 10.84, 4.82, 5.68]</p>
+<p>fig, ax = plt.subplots()</p>
+<p>ax.scatter(x=data_x, y=data_y, c=”#E69F00”)</p>
+<p>ax.set_xlabel(“we should label the x axis”)
+ax.set_ylabel(“we should label the y axis”)
+ax.set_title(“some title”)
+<a href="#id41"><span class="problematic" id="id42">``</span></a><a href="#id43"><span class="problematic" id="id44">`</span></a></p>
+</div></blockquote>
+</li>
+<li><p>The more traditional option mimics MATLAB plotting and uses the <strong>pyplot interface</strong> (<code class="docutils literal notranslate"><span class="pre">plt</span></code> carries
+the global settings):</p>
+<blockquote>
+<div><p><a href="#id45"><span class="problematic" id="id46">``</span></a><a href="#id47"><span class="problematic" id="id48">`</span></a>{code-block} python
+—
+emphasize-lines: 8-12
+—
+import matplotlib.pyplot as plt</p>
+<p># this is dataset 1 from
+# <a class="reference external" href="https://en.wikipedia.org/wiki/Anscombe%27s_quartet">https://en.wikipedia.org/wiki/Anscombe%27s_quartet</a>
+data_x = [10.0, 8.0, 13.0, 9.0, 11.0, 14.0, 6.0, 4.0, 12.0, 7.0, 5.0]
+data_y = [8.04, 6.95, 7.58, 8.81, 8.33, 9.96, 7.24, 4.26, 10.84, 4.82, 5.68]</p>
+<p>plt.scatter(x=data_x, y=data_y, c=”#E69F00”)</p>
+<p>plt.xlabel(“we should label the x axis”)
+plt.ylabel(“we should label the y axis”)
+plt.title(“some title”)
+<a href="#id49"><span class="problematic" id="id50">``</span></a><a href="#id51"><span class="problematic" id="id52">`</span></a></p>
+</div></blockquote>
+</li>
+</ul>
+<p>When searching for help on the internet, you will find both approaches, they
+can also be mixed. Although the pyplot interface looks more compact, <strong>we
+recommend to learn and use the object oriented interface.</strong></p>
+<p><a href="#id53"><span class="problematic" id="id54">``</span></a><cite>{discussion} Why do we emphasize this?
+One day you may want to write functions which wrap
+around Matplotlib function calls and then you can send `fig</cite> and <cite>ax</cite>
+into these functions and there is less risk that adjusting figures changes
+settings also for unrelated figures created in other functions.</p>
+<p>When using the pyplot interface, settings are modified for the entire
+<cite>plt</cite> package. The latter is acceptable for linear scripts but may yield
+surprising results when introducing functions to enhance/abstract Matplotlib
+calls.
+<a href="#id55"><span class="problematic" id="id56">``</span></a><a href="#id57"><span class="problematic" id="id58">`</span></a></p>
+<p>—</p>
+<p>## Styling and customizing plots</p>
+<ul class="simple">
+<li><p><strong>Do not customize “manually”</strong> using a graphical program (not easily repeatable/reproducible).</p></li>
+<li><p><strong>No manual post-processing</strong>. This will bite you when you need to regenerate 50
+figures one day before submission deadline or regenerate a set of figures
+after the person who created them left the group.</p></li>
+<li><p>Matplotlib and also all the other libraries allow to customize almost every aspect of a plot.</p></li>
+<li><p>It is useful to study [Matplotlib parts of a figure](<a class="reference external" href="https://matplotlib.org/faq/usage_faq.html#parts-of-a-figure">https://matplotlib.org/faq/usage_faq.html#parts-of-a-figure</a>)
+so that we know what to search for to customize things.</p></li>
+<li><p>Matplotlib cheatsheets: &lt;<a class="reference external" href="https://github.com/matplotlib/cheatsheets">https://github.com/matplotlib/cheatsheets</a>&gt;</p></li>
+<li><p>You can also select among pre-defined themes/
+[style sheets](<a class="reference external" href="https://matplotlib.org/3.1.1/gallery/style_sheets/style_sheets_reference.html">https://matplotlib.org/3.1.1/gallery/style_sheets/style_sheets_reference.html</a>), for instance:
+<code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">plt.style.use('ggplot')</span>
+<span class="pre">`</span></code></p></li>
+</ul>
+<p>## Exercises: Styling and customization</p>
+<p>Here are 3 exercises where we try to adapt existing scripts to either <strong>tweak
+how the plot looks</strong> (exercises 1 and 2) or to <strong>modify the input data</strong> (example 3).</p>
+<p>This is very close to real life: there are so many options and possibilities and it is
+almost impossible to remember everything so this strategy is useful to practice:
+- select an example that is close to what you have in mind
+- being able to adapt it to your needs
+- being able to search for help
+- being able to understand help request answers (not easy)</p>
+<p><a href="#id59"><span class="problematic" id="id60">``</span></a><a href="#id61"><span class="problematic" id="id62">``</span></a>{challenge} Exercise Customization-1: log scale in Matplotlib (15 min)
+In this exercise we will learn how to use log scales.</p>
+<ul>
+<li><p>To demonstrate this we first fetch some data to plot:
+<a href="#id63"><span class="problematic" id="id64">``</span></a><a href="#id65"><span class="problematic" id="id66">`</span></a>python
+import pandas as pd</p>
+<p>url = “<a class="reference external" href="https://raw.githubusercontent.com/plotly/datasets/master/gapminder_with_codes.csv">https://raw.githubusercontent.com/plotly/datasets/master/gapminder_with_codes.csv</a>”
+data = pd.read_csv(url)</p>
+<p>data_2007 = data[data[“year”] == 2007]</p>
+<p>data_2007
+<a href="#id67"><span class="problematic" id="id68">``</span></a>`
+- Try the above snippet in a notebook and it will give you an overview over the data.</p>
+<ul class="simple">
+<li><p>Then we can plot the data, first using a linear scale:</p></li>
+</ul>
+<p><a href="#id69"><span class="problematic" id="id70">``</span></a><a href="#id71"><span class="problematic" id="id72">`</span></a>python
+import matplotlib.pyplot as plt</p>
+<p>fig, ax = plt.subplots()</p>
+<p>ax.scatter(x=data_2007[“gdpPercap”], y=data_2007[“lifeExp”], alpha=0.5)</p>
+<p>ax.set_xlabel(“GDP (USD) per capita”)
+ax.set_ylabel(“life expectancy (years)”)
+<a href="#id73"><span class="problematic" id="id74">``</span></a><a href="#id75"><span class="problematic" id="id76">`</span></a></p>
+<p>This is the result but we realize that a linear scale is not ideal here:
+<code class="docutils literal notranslate"><span class="pre">`{figure}</span> <span class="pre">data-visualization/customizing/gapminder-linear.png</span>
+<span class="pre">:alt:</span> <span class="pre">Gapminder</span> <span class="pre">data</span> <span class="pre">plotted</span> <span class="pre">using</span> <span class="pre">a</span> <span class="pre">linear</span> <span class="pre">scale</span>
+<span class="pre">`</span></code></p>
+<ul class="simple">
+<li><p>Your task is to switch to a log scale and arrive at this result:</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">`{figure}</span> <span class="pre">data-visualization/customizing/gapminder-log.png</span>
+<span class="pre">:alt:</span> <span class="pre">Gapminder</span> <span class="pre">data</span> <span class="pre">plotted</span> <span class="pre">using</span> <span class="pre">log</span> <span class="pre">scale</span>
+<span class="pre">`</span></code></p>
+<ul class="simple">
+<li><p>What does <code class="docutils literal notranslate"><span class="pre">alpha=0.5</span></code> do?</p></li>
+</ul>
+</li>
+</ul>
+<hr class="docutils" />
+<p><a href="#id77"><span class="problematic" id="id78">``</span></a><a href="#id79"><span class="problematic" id="id80">``</span></a>{solution}
+<a href="#id81"><span class="problematic" id="id82">``</span></a><a href="#id83"><span class="problematic" id="id84">`</span></a>{code-block} python
+—
+emphasize-lines: 5
+—
+fig, ax = plt.subplots()</p>
+<p>ax.scatter(x=data_2007[“gdpPercap”], y=data_2007[“lifeExp”], alpha=0.5)</p>
+<p>ax.set_xscale(“log”)</p>
+<p>ax.set_xlabel(“GDP (USD) per capita”)
+ax.set_ylabel(“life expectancy (years)”)
+<code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">``</span></code></p>
+<p><a href="#id85"><span class="problematic" id="id86">``</span></a><a href="#id87"><span class="problematic" id="id88">``</span></a>{challenge} Exercise Customization-2: preparing a plot for publication (15 min)
+Often we need to create figures for presentation slides and for publications
+but both have different requirements: for presentation slides you have the whole
+screen but for a figure in a publication you may only have few centimeters/inches.</p>
+<p>For figures that go to print it is good practice to look at them at the size
+they will be printed in and then often fonts and tickmarks are too small.</p>
+<p>Your task is to make the tickmarks and the axis label font larger, using
+[Matplotlib parts of a figure](<a class="reference external" href="https://matplotlib.org/faq/usage_faq.html#parts-of-a-figure">https://matplotlib.org/faq/usage_faq.html#parts-of-a-figure</a>)
+and web search, and to arrive at this:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`{figure}</span> <span class="pre">data-visualization/customizing/gapminder-larger-font.png</span>
+<span class="pre">:alt:</span> <span class="pre">Gapminder</span> <span class="pre">data</span> <span class="pre">plotted</span> <span class="pre">with</span> <span class="pre">larger</span> <span class="pre">font</span> <span class="pre">and</span> <span class="pre">larger</span> <span class="pre">ticks</span>
+<span class="pre">`</span></code>
+<a href="#id89"><span class="problematic" id="id90">``</span></a><a href="#id91"><span class="problematic" id="id92">``</span></a></p>
+<p><a href="#id93"><span class="problematic" id="id94">``</span></a><a href="#id95"><span class="problematic" id="id96">``</span></a>{solution}
+<a href="#id97"><span class="problematic" id="id98">``</span></a><a href="#id99"><span class="problematic" id="id100">`</span></a>{code-block} python
+—
+emphasize-lines: 7-11
+—
+fig, ax = plt.subplots()</p>
+<p>ax.scatter(x=data_2007[“gdpPercap”], y=data_2007[“lifeExp”], alpha=0.5)</p>
+<p>ax.set_xscale(“log”)</p>
+<p>ax.set_xlabel(“GDP (USD) per capita”, fontsize=15)
+ax.set_ylabel(“life expectancy (years)”, fontsize=15)
+ax.tick_params(which=”major”, length=10)
+ax.tick_params(which=”minor”, length=5)
+ax.tick_params(labelsize=15)
+<code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">``</span></code></p>
+<p><a href="#id101"><span class="problematic" id="id102">``</span></a><a href="#id103"><span class="problematic" id="id104">``</span></a>{challenge} Exercise Customization-3: adapting a gallery example
+<strong>This is a great exercise which is very close to real life.</strong></p>
+<ul>
+<li><p>Your task is to select one visualization library (some need to be installed first - in
+doubt choose Matplotlib or Seaborn since they are part of Anaconda installation):
+- [Matplotlib](<a class="reference external" href="https://matplotlib.org/stable/gallery/index.html">https://matplotlib.org/stable/gallery/index.html</a>):</p>
+<blockquote>
+<div><p>probably the most standard and most widely used</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>[Seaborn](<a class="reference external" href="https://seaborn.pydata.org/examples/index.html">https://seaborn.pydata.org/examples/index.html</a>):
+high-level interface to Matplotlib, statistical functions built in</p></li>
+<li><p>[Altair](<a class="reference external" href="https://altair-viz.github.io/gallery/index.html">https://altair-viz.github.io/gallery/index.html</a>):
+declarative visualization (R users will be more at home), statistics built in</p></li>
+<li><p>[Plotly](<a class="reference external" href="https://plotly.com/python/">https://plotly.com/python/</a>):
+interactive graphs</p></li>
+<li><p>[Bokeh](<a class="reference external" href="https://demo.bokeh.org/">https://demo.bokeh.org/</a>):
+also here good for interactivity</p></li>
+<li><p>[plotnine](<a class="reference external" href="https://plotnine.readthedocs.io/">https://plotnine.readthedocs.io/</a>):
+implementation of a grammar of graphics in Python, it is based on [ggplot2](<a class="reference external" href="https://ggplot2.tidyverse.org/">https://ggplot2.tidyverse.org/</a>)</p></li>
+<li><p>[ggplot](<a class="reference external" href="https://yhat.github.io/ggpy/">https://yhat.github.io/ggpy/</a>):
+R users will be more at home</p></li>
+<li><p>[PyNGL](<a class="reference external" href="https://www.pyngl.ucar.edu/Examples/gallery.shtml">https://www.pyngl.ucar.edu/Examples/gallery.shtml</a>):
+used in the weather forecast community</p></li>
+<li><p>[K3D](<a class="reference external" href="https://k3d-jupyter.org/showcase/">https://k3d-jupyter.org/showcase/</a>):
+Jupyter notebook extension for 3D visualization</p></li>
+</ul>
+</li>
+<li><p>Browse the various example galleries (links above).</p></li>
+<li><p>Select one example that is close to your recent visualization project or simply interests you.</p></li>
+<li><p>First try to reproduce this example in the Jupyter notebook.</p></li>
+<li><p>Then try to print out the data that is used in this example just before the call of the plotting function
+to learn about its structure. Is it a pandas dataframe? Is it a NumPy array? Is it a dictionary? A list?
+a list of lists?</p></li>
+<li><p>Then try to modify the data a bit.</p></li>
+<li><p>If you have time, try to feed it different, simplified data.
+This will be key for adapting the examples to your projects.</p></li>
+</ul>
+<section id="example-solution-for-such-an-exploration-below">
+<h1>Example “solution” for such an exploration below.<a class="headerlink" href="#example-solution-for-such-an-exploration-below" title="Permalink to this headline"></a></h1>
+<p><a href="#id105"><span class="problematic" id="id106">``</span></a><a href="#id107"><span class="problematic" id="id108">``</span></a>{solution} An example exploration
+- Let us imagine we were browsing &lt;<a class="reference external" href="https://seaborn.pydata.org/examples/index.html">https://seaborn.pydata.org/examples/index.html</a>&gt;
+- And this example plot caught our eye: &lt;<a class="reference external" href="https://seaborn.pydata.org/examples/simple_violinplots.html">https://seaborn.pydata.org/examples/simple_violinplots.html</a>&gt;
+- Try to run it in the notebook.
+- The <cite>d</cite> seems to be the data. Right before the call to <cite>sns.violinplot</cite>, add a <cite>print(d)</cite>:</p>
+<blockquote>
+<div><p><a href="#id109"><span class="problematic" id="id110">``</span></a><a href="#id111"><span class="problematic" id="id112">`</span></a>{code-block} python
+—
+emphasize-lines: 12
+—
+import numpy as np
+import seaborn as sns</p>
+<p>sns.set_theme()</p>
+<p># Create a random dataset across several variables
+rs = np.random.default_rng(0)
+n, p = 40, 8
+d = rs.normal(0, 2, (n, p))
+d += np.log(np.arange(1, p + 1)) * -5 + 10</p>
+<p>print(d)</p>
+<p># Show each distribution with both violins and points
+sns.violinplot(data=d, palette=”light:g”, inner=”points”, orient=”h”)
+<a href="#id113"><span class="problematic" id="id114">``</span></a><a href="#id115"><span class="problematic" id="id116">`</span></a></p>
+</div></blockquote>
+<ul>
+<li><p>The print reveals that <cite>d</cite> is a NumPy array and looks like a two-dimensional list:
+<a href="#id117"><span class="problematic" id="id118">``</span></a><a href="#id119"><span class="problematic" id="id120">`</span></a>text
+[[10.25146044  6.27005437  5.78778386  3.27832843  0.88147169  1.76439276  2.87844934  1.49695422]</p>
+<blockquote>
+<div><p>[ 8.59252953  4.00342116  3.26038963  3.15118015 -2.69725111  0.60361933 -2.22137264 -1.86174242]
+… many more lines …
+[12.45950762  4.32352988  6.56724895  3.42215312  0.34419915  0.46123886 -1.56953795  0.95292133]]</p>
+</div></blockquote>
+<p><a href="#id121"><span class="problematic" id="id122">``</span></a><a href="#id123"><span class="problematic" id="id124">`</span></a></p>
+</li>
+<li><p>Now let’s try with a much simplified two-dimensional list:
+<a href="#id125"><span class="problematic" id="id126">``</span></a><a href="#id127"><span class="problematic" id="id128">`</span></a>{code-block} python
+—
+emphasize-lines: 12, 13
+—
+# import numpy as np
+import seaborn as sns</p>
+<p>sns.set_theme()</p>
+<p># # Create a random dataset across several variables
+# rs = np.random.default_rng(0)
+# n, p = 40, 8
+# d = rs.normal(0, 2, (n, p))
+# d += np.log(np.arange(1, p + 1)) * -5 + 10</p>
+<dl class="simple">
+<dt>d = [[1.0, 2.0, 2.0, 3.0, 3.0, 3.0],</dt><dd><p>[1.0, 1.0, 1.0, 2.0, 2.0, 3.0]]</p>
+</dd>
+</dl>
+<p># Show each distribution with both violins and points
+sns.violinplot(data=d, palette=”light:g”, inner=”points”, orient=”h”)
+<a href="#id129"><span class="problematic" id="id130">``</span></a><a href="#id131"><span class="problematic" id="id132">`</span></a></p>
+</li>
+<li><p>Seems to work! And finally we arrive at a working example with our own data with all
+the “clutter” removed:
+<a href="#id133"><span class="problematic" id="id134">``</span></a><a href="#id135"><span class="problematic" id="id136">`</span></a>python
+import seaborn as sns</p>
+<p># l1 and l2 are note great names but they will do for a quick test
+l1 = [1.0, 2.0, 2.0, 3.0, 3.0, 3.0]
+l2 = [1.0, 1.0, 1.0, 2.0, 2.0, 3.0]</p>
+<p>sns.violinplot(data=[l1, l2], palette=”light:g”, inner=”points”, orient=”h”)
+<a href="#id137"><span class="problematic" id="id138">``</span></a><a href="#id139"><span class="problematic" id="id140">`</span></a></p>
+</li>
+<li><p>And now we can focus the rest of our work to read our real data.</p></li>
+<li><p>Finally we can customize the plot, e.g. web search for “seaborn violin plot axis labels”
+and add <cite>ax.set_yticklabels([‘dataset 1’, ‘dataset 2’])</cite>.</p></li>
+</ul>
+<hr class="docutils" />
+<p>—</p>
+<p><code class="docutils literal notranslate"><span class="pre">`{discussion}</span>
+<span class="pre">After</span> <span class="pre">the</span> <span class="pre">exercises,</span> <span class="pre">the</span> <span class="pre">group</span> <span class="pre">can</span> <span class="pre">discuss</span> <span class="pre">their</span> <span class="pre">findings</span> <span class="pre">and</span> <span class="pre">it</span> <span class="pre">is</span> <span class="pre">important</span> <span class="pre">to</span>
+<span class="pre">clarify</span> <span class="pre">questions</span> <span class="pre">at</span> <span class="pre">this</span> <span class="pre">point</span> <span class="pre">before</span> <span class="pre">moving</span> <span class="pre">on.</span>
+<span class="pre">`</span></code></p>
+<p>—</p>
+<p><a href="#id141"><span class="problematic" id="id142">``</span></a><a href="#id143"><span class="problematic" id="id144">`</span></a>{keypoints}
+- Avoid manual post-processing, script everything.
+- Browse a number of example galleries to help you choose the library</p>
+<blockquote>
+<div><p>that fits best your work/style.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>Figures for presentation slides and figures for manuscripts have
+different requirements.</p></li>
+<li><p>Think about color-vision deficiencies when choosing colors. Use
+existing solutions for this problem.</p></li>
+</ul>
+<p><a href="#id145"><span class="problematic" id="id146">``</span></a><a href="#id147"><span class="problematic" id="id148">`</span></a></p>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, The contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

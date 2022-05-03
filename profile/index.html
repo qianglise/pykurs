@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Optimization &mdash; LESSON NAME  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/mystnb.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx_lesson.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx_rtd_theme_ext_color_contrast.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/overrides.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script src="../_static/minipres.js"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../_static/togglebutton.js"></script>
+        <script src="../_static/tabs.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="Scaling to large datasets" href="../scale/" />
+    <link rel="prev" title="SciPy" href="../scipy/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../" class="icon icon-home"> LESSON NAME
+            <img src="../_static/ENCCS.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">The lesson</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/">Intro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../numpy/">NumPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pandas/">Pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scipy/">SciPy</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Optimization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#profilers">Profilers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#timeit">Timeit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cprofile">cProfile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#line-profiler">Line-profiler</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-optimization">performance optimization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#algorithm-optimization">Algorithm optimization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#singular-value-decomposition">Singular Value Decomposition</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#cpu-usage-optimization">CPU usage optimization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#vectorization">Vectorization</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#memory-usage-optimization">Memory usage optimization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#broadcasting">Broadcasting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cache-effects">Cache effects</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#temporary-arrays">Temporary arrays</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">Numexpr</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#performance-boosting">Performance boosting</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#cython">Cython</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#numba">Numba</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#examples">examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#integration">integration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pairwise-distance">pairwise distance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bubble-sort">Bubble sort</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../scale/">Scaling to large datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gpuintro/">Introduction to GPU architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../miniapp/">Heat diffusion mini-app</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dask/">Dask for scalable analytics</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/">Instructor’s guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">LESSON NAME</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home"></a> &raquo;</li>
+      <li>Optimization</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ENCCS/content/blob/main/content/profile.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="optimization">
+<h1>Optimization<a class="headerlink" href="#optimization" title="Permalink to this headline"></a></h1>
+<p>Once your code is working reliably, you can start thinking of optimizing it.</p>
+<p>Always measure the code before you start optimization. Don’t base your optimization
+on theoretical consideration, otherwise you’ll have surprises.</p>
+<section id="profilers">
+<h2>Profilers<a class="headerlink" href="#profilers" title="Permalink to this headline"></a></h2>
+<section id="timeit">
+<h3>Timeit<a class="headerlink" href="#timeit" title="Permalink to this headline"></a></h3>
+<p>If you use Jupyter-notebook, the best choice will be to use <code class="docutils literal notranslate"><span class="pre">timeit</span></code> (<a class="reference external" href="https://docs.python.org/library/timeit.html">https://docs.python.org/library/timeit.html</a>) to time a small piece of code:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="o">%</span><span class="k">timeit</span> a ** 2
+<span class="mi">100000</span> <span class="n">loops</span><span class="p">,</span> <span class="n">best</span> <span class="n">of</span> <span class="mi">3</span><span class="p">:</span> <span class="mf">5.73</span> <span class="n">us</span> <span class="n">per</span> <span class="n">loop</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For long running calls, using <code class="docutils literal notranslate"><span class="pre">%time</span></code> instead of <code class="docutils literal notranslate"><span class="pre">%timeit</span></code>; it is
+less precise but faster</p>
+</div>
+</section>
+<section id="cprofile">
+<h3>cProfile<a class="headerlink" href="#cprofile" title="Permalink to this headline"></a></h3>
+<p>For more complex code, one could use the built-in python profilers
+&lt;<a class="reference external" href="https://docs.python.org/3/library/profile.html">https://docs.python.org/3/library/profile.html</a>&gt;`_ <code class="docutils literal notranslate"><span class="pre">cProfile</span></code>.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$  </span>python -m cProfile -o demo.prof demo.py
+</pre></div>
+</div>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">-o</span></code> switch will output the profiler results to the file
+<code class="docutils literal notranslate"><span class="pre">demo.prof</span></code> to view with an external tool.</p>
+</div></blockquote>
+</section>
+<section id="line-profiler">
+<h3>Line-profiler<a class="headerlink" href="#line-profiler" title="Permalink to this headline"></a></h3>
+<p>The cprofile tells us which function takes most of the time, but not where it is called.</p>
+<p>For this information, we use the <a class="reference external" href="http://packages.python.org/line_profiler/">line_profiler</a>: in the
+source file  by adding a decorator <code class="docutils literal notranslate"><span class="pre">&#64;profile</span></code> in the functions of interests</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@profile</span>
+<span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">5000</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+    <span class="n">u</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">pca</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">u</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">10</span><span class="p">],</span> <span class="n">data</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">fastica</span><span class="p">(</span><span class="n">pca</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">whiten</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then we run the script using the <a class="reference external" href="http://packages.python.org/line_profiler">kernprof.py</a> program, with switches <code class="docutils literal notranslate"><span class="pre">-l,</span> <span class="pre">--line-by-line</span></code> and <code class="docutils literal notranslate"><span class="pre">-v,</span> <span class="pre">--view</span></code> to use the line-by-line profiler and view the results in addition to saving them:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kernprof.py -l -v demo.py
+
+<span class="go">Wrote profile results to demo.py.lprof</span>
+<span class="go">Timer unit: 1e-06 s</span>
+
+<span class="go">File: demo.py</span>
+<span class="go">Function: test at line 5</span>
+<span class="go">Total time: 14.2793 s</span>
+
+<span class="go">Line #      Hits         Time  Per Hit   % Time  Line Contents</span>
+<span class="go">=========== ============ ===== ========= ======= ==== ========</span>
+<span class="go">    5                                           @profile</span>
+<span class="go">    6                                           def test():</span>
+<span class="go">    7         1        19015  19015.0      0.1      data = np.random.random((5000, 100))</span>
+<span class="go">    8         1     14242163 14242163.0   99.7      u, s, v = linalg.svd(data)</span>
+<span class="go">    9         1        10282  10282.0      0.1      pca = np.dot(u[:10, :], data)</span>
+<span class="go">   10         1         7799   7799.0      0.1      results = fastica(pca.T, whiten=False)</span>
+</pre></div>
+</div>
+<p>It is clear from the profiling results:
+the SVD is taking all the time, we need to optimise it if possible.</p>
+</section>
+</section>
+<section id="performance-optimization">
+<h2>performance optimization<a class="headerlink" href="#performance-optimization" title="Permalink to this headline"></a></h2>
+<p>Once we have identified the bottlenecks, we need to make the corresponding code go faster.</p>
+<section id="algorithm-optimization">
+<h3>Algorithm optimization<a class="headerlink" href="#algorithm-optimization" title="Permalink to this headline"></a></h3>
+<p>The first thing to look into is the underlying algorithm you chose: is it optimal?
+To answer this question,  a good understanding of the maths behind the algorithm helps.
+For certain algorithms, many of the bottlenecks will be linear
+algebra computations. In these cases, using the right function to solve
+the right problem is key. For instance, an eigenvalue problem with a
+symmetric matrix is much easier to solve than with a general matrix. Moreover,
+most often, you can avoid inverting a matrix and use a less costly
+(and more numerically stable) operation. However, it can be as simple as
+moving computation or memory allocation outside a loop, and this happens very often as well.</p>
+<section id="singular-value-decomposition">
+<h4>Singular Value Decomposition<a class="headerlink" href="#singular-value-decomposition" title="Permalink to this headline"></a></h4>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Singular_value_decomposition">Singular Value Decomposition</a> (SVD)
+is quite often used in climate model data analysis.  The computational cost of this algorithm is
+roughly <span class="math notranslate nohighlight">\(n^3\)</span> where  <span class="math notranslate nohighlight">\(n\)</span> is the size of the input matrix.
+However, in most cases, we are not using all the output of the SVD,
+but only the first few rows of its first returned argument. If
+we use the <code class="docutils literal notranslate"><span class="pre">svd</span></code> implementation from scipy, we can ask for an incomplete
+version of the SVD. Note that implementations of linear algebra in
+scipy are richer then those in numpy and should be preferred.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="o">%</span><span class="k">timeit</span> np.linalg.svd(data)
+<span class="mi">1</span> <span class="n">loops</span><span class="p">,</span> <span class="n">best</span> <span class="n">of</span> <span class="mi">3</span><span class="p">:</span> <span class="mf">14.5</span> <span class="n">s</span> <span class="n">per</span> <span class="n">loop</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">linalg</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="o">%</span><span class="k">timeit</span> linalg.svd(data)
+<span class="mi">1</span> <span class="n">loops</span><span class="p">,</span> <span class="n">best</span> <span class="n">of</span> <span class="mi">3</span><span class="p">:</span> <span class="mf">14.2</span> <span class="n">s</span> <span class="n">per</span> <span class="n">loop</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="o">%</span><span class="k">timeit</span> linalg.svd(data, full_matrices=False)
+<span class="mi">1</span> <span class="n">loops</span><span class="p">,</span> <span class="n">best</span> <span class="n">of</span> <span class="mi">3</span><span class="p">:</span> <span class="mi">295</span> <span class="n">ms</span> <span class="n">per</span> <span class="n">loop</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="o">%</span><span class="k">timeit</span> np.linalg.svd(data, full_matrices=False)
+<span class="mi">1</span> <span class="n">loops</span><span class="p">,</span> <span class="n">best</span> <span class="n">of</span> <span class="mi">3</span><span class="p">:</span> <span class="mi">293</span> <span class="n">ms</span> <span class="n">per</span> <span class="n">loop</span>
+</pre></div>
+</div>
+<p>We can try this using the example above: (XXXX fixing the example)</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kernprof.py -l -v demo_opt.py
+
+<span class="go">Wrote profile results to demo_opt.py.lprof</span>
+<span class="go">Timer unit: 1e-06 s</span>
+
+<span class="go">File: demo_opt.py</span>
+<span class="go">Function: test at line 5</span>
+<span class="go">Total time: 14.2793 s</span>
+</pre></div>
+</div>
+<p>XXXX add sparse matrix example here</p>
+</section>
+</section>
+<section id="cpu-usage-optimization">
+<h3>CPU usage optimization<a class="headerlink" href="#cpu-usage-optimization" title="Permalink to this headline"></a></h3>
+<section id="vectorization">
+<h4>Vectorization<a class="headerlink" href="#vectorization" title="Permalink to this headline"></a></h4>
+<p>Arithmetic is one place where numpy performance outperforms python list
+and the reason is that it uses vectorization. A lot of the data analysis
+involves a simple operation being applied to each element of a large dataset.
+In such cases, vectorization is key for better performance.</p>
+<p>In practice, a vectorised operation means reframing the code in a manner that
+completely avoids a loop and instead uses e.g. slicing to apply the operation
+on the whole array (slice) at one go.</p>
+<div class="admonition-vectorized-operation-vs-for-loop exercise important admonition" id="exercise-0">
+<p class="admonition-title">vectorized operation vs for loop</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">python</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">numpy</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">a_dif</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">999</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)):</span>
+    <span class="n">a_dif</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">a_dif</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</div></div>
+</div>
+<p>So one should consider use “vectorized” operations whenever possible.</p>
+<p>For user-defined functions, one can use e.g. numba.
+XXXX add one example</p>
+</section>
+</section>
+<section id="memory-usage-optimization">
+<h3>Memory usage optimization<a class="headerlink" href="#memory-usage-optimization" title="Permalink to this headline"></a></h3>
+<section id="broadcasting">
+<h4>Broadcasting<a class="headerlink" href="#broadcasting" title="Permalink to this headline"></a></h4>
+<p>Basic operations of numpy are elementwise, and the shape of the arrays should be compatible.
+However, in practice under certain conditions, it is possible to do operations on arrays of different shapes.
+NumPy expands the arrays such that the operation becomes viable.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Broadcasting Rules</p>
+<ul class="simple">
+<li><p>Dimensions match when they are equal, or when either is 1 or None.</p></li>
+<li><p>In the latter case, the dimension of the output array is expanded to the larger of the two.</p></li>
+</ul>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>the broadcasted arrays are never physically constructed</p>
+</div>
+<div class="admonition-broadcasting exercise important admonition" id="exercise-1">
+<p class="admonition-title">broadcasting</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-1-1-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-1-1-0" name="1-0" role="tab" tabindex="0">1D</button><button aria-controls="panel-1-1-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-1" name="1-1" role="tab" tabindex="-1">2D</button></div><div aria-labelledby="tab-1-1-0" class="sphinx-tabs-panel" id="panel-1-1-0" name="1-0" role="tabpanel" tabindex="0"><div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">b</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+</pre></div>
+</div>
+<figure class="align-default">
+<img alt="../_images/bc_1d.svg" src="../_images/bc_1d.svg" /></figure>
+</div><div aria-labelledby="tab-1-1-1" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-1" name="1-1" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">],[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">],[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">]])</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+</pre></div>
+</div>
+<figure class="align-default">
+<img alt="../_images/bc_2d_1.svg" src="../_images/bc_2d_1.svg" /></figure>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span><span class="mi">30</span><span class="p">])</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">a</span> <span class="o">+</span> <span class="n">b</span>                       <span class="c1"># array([[11, 12, 13],</span>
+                            <span class="c1">#        [14, 15, 16]])</span>
+   <span class="n">XXXXX</span> <span class="n">fixing</span>
+</pre></div>
+</div>
+<figure class="align-default">
+<img alt="../_images/bc_2d_2.svg" src="../_images/bc_2d_2.svg" /></figure>
+</div></div>
+</div>
+</section>
+<section id="cache-effects">
+<h4>Cache effects<a class="headerlink" href="#cache-effects" title="Permalink to this headline"></a></h4>
+<p>Memory access is cheaper when it is grouped: accessing a big array in a
+continuous way is much faster than random access. This implies amongst
+other things that <strong>smaller strides are faster</strong> (see <span class="xref std std-ref">cache_effects</span>):</p>
+<blockquote>
+<div><div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mf">1e4</span><span class="p">,</span> <span class="mf">1e4</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="o">%</span><span class="k">timeit</span> c.sum(axis=0)
+<span class="mi">1</span> <span class="n">loops</span><span class="p">,</span> <span class="n">best</span> <span class="n">of</span> <span class="mi">3</span><span class="p">:</span> <span class="mf">3.89</span> <span class="n">s</span> <span class="n">per</span> <span class="n">loop</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="o">%</span><span class="k">timeit</span> c.sum(axis=1)
+<span class="mi">1</span> <span class="n">loops</span><span class="p">,</span> <span class="n">best</span> <span class="n">of</span> <span class="mi">3</span><span class="p">:</span> <span class="mi">188</span> <span class="n">ms</span> <span class="n">per</span> <span class="n">loop</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="n">c</span><span class="o">.</span><span class="n">strides</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="p">(</span><span class="mi">80000</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This is the reason why Fortran ordering or C ordering may make a big
+difference on operations:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="mi">18</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="mi">18</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="o">%</span><span class="k">timeit</span> np.dot(b, a.T)
+<span class="mi">1</span> <span class="n">loops</span><span class="p">,</span> <span class="n">best</span> <span class="n">of</span> <span class="mi">3</span><span class="p">:</span> <span class="mi">194</span> <span class="n">ms</span> <span class="n">per</span> <span class="n">loop</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">9</span><span class="p">]:</span> <span class="o">%</span><span class="k">timeit</span> np.dot(b, c)
+<span class="mi">10</span> <span class="n">loops</span><span class="p">,</span> <span class="n">best</span> <span class="n">of</span> <span class="mi">3</span><span class="p">:</span> <span class="mf">84.2</span> <span class="n">ms</span> <span class="n">per</span> <span class="n">loop</span>
+</pre></div>
+</div>
+<p>Note that copying the data to work around this effect may not be worth it:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="o">%</span><span class="k">timeit</span> c = np.ascontiguousarray(a.T)
+<span class="mi">10</span> <span class="n">loops</span><span class="p">,</span> <span class="n">best</span> <span class="n">of</span> <span class="mi">3</span><span class="p">:</span> <span class="mi">106</span> <span class="n">ms</span> <span class="n">per</span> <span class="n">loop</span>
+</pre></div>
+</div>
+<p>Using <a class="reference external" href="http://code.google.com/p/numexpr/">numexpr</a> can be useful to
+automatically optimize code for such effects.</p>
+</div></blockquote>
+</section>
+<section id="temporary-arrays">
+<h4>Temporary arrays<a class="headerlink" href="#temporary-arrays" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>In complex expressions, NumPy stores intermediate values in
+temporary arrays</p></li>
+<li><p>Memory consumption can be higher than expected</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">1024</span><span class="p">,</span> <span class="mi">50</span><span class="p">))</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">1024</span><span class="p">,</span> <span class="mi">50</span><span class="p">))</span>
+
+<span class="c1"># two temporary arrays will be created</span>
+<span class="n">c</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">a</span> <span class="o">-</span> <span class="mf">4.5</span> <span class="o">*</span> <span class="n">b</span>
+
+<span class="c1"># three temporary arrays will be created due to unnecessary parenthesis</span>
+<span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">a</span> <span class="o">-</span> <span class="mf">4.5</span> <span class="o">*</span> <span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.1</span> <span class="o">*</span> <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+</pre></div>
+</div>
+<ul>
+<li><p>Broadcasting approaches can lead also to hidden temporary arrays  XXXX add one example</p></li>
+<li><dl>
+<dt>XXXX Not clear to me Example: pairwise distance of <strong>M</strong> points in 3 dimensions</dt><dd><ul>
+<li><p>Input data is M x 3 array</p></li>
+<li><p>Output is M x M array containing the distance between points i
+and j</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>There is a temporary 1000 x 1000 x 3 array</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">D</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(((</span><span class="n">X</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">X</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h4>Numexpr<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h4>
+<ul>
+<li><p>Evaluation of complex expressions with one operation at a time can lead
+also into suboptimal performance</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Effectively, one carries out multiple <em>for</em> loops in the NumPy
+C-code</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Numexpr package provides fast evaluation of array expressions</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numexpr</span> <span class="k">as</span> <span class="nn">ne</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">1000000</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">1000000</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">poly</span> <span class="o">=</span> <span class="n">ne</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="s2">&quot;((.25*x + .75)*x - 1.5)*x - 2&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>By default, numexpr tries to use multiple threads</p></li>
+<li><p>Number of threads can be queried and set with
+<cite>ne.set_num_threads(nthreads)</cite></p></li>
+<li><p>Supported operators and functions:
++,-,*,/,**, sin, cos, tan, exp, log, sqrt</p></li>
+<li><p>Speedups in comparison to NumPy are typically between 0.95 and 4</p></li>
+<li><p>Works best on arrays that do not fit in CPU cache</p></li>
+</ul>
+</section>
+</section>
+<section id="performance-boosting">
+<h3>Performance boosting<a class="headerlink" href="#performance-boosting" title="Permalink to this headline"></a></h3>
+<p>For many user cases, using NumPy or Pandas is sufficient. Howevewr, in some computationally heavy applications,
+it is possible to improve the performance by using the compiled code.
+Cython and Numba are among the popular choices and both of them have good support for numpy arrays.</p>
+<section id="cython">
+<h4>Cython<a class="headerlink" href="#cython" title="Permalink to this headline"></a></h4>
+<p>The source code gets translated into optimized C/C++ code and compiled as Python extension modules.</p>
+<p>There are three ways of declaring functions:</p>
+<p><code class="docutils literal notranslate"><span class="pre">def</span></code> - Python style:
+Declaring the types of arguments and local types (thus return values) can allow Cython to generate optimised code which speeds up the execution. If the types are declared then a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> will be raised if the function is passed the wrong types.</p>
+<p><code class="docutils literal notranslate"><span class="pre">cdef</span></code> - C style:
+Cython treats the function as pure C functions. All types <em>must</em> be declared. This will give you the best performance but there are a number of consequences. One should really take care of the <code class="docutils literal notranslate"><span class="pre">cdef</span></code> declared functions, since you are actually writing in C.</p>
+<p><code class="docutils literal notranslate"><span class="pre">cpdef</span></code> - Python/C mixed
+<code class="docutils literal notranslate"><span class="pre">cpdef</span></code> functions combine both <code class="docutils literal notranslate"><span class="pre">def</span></code> and <code class="docutils literal notranslate"><span class="pre">cdef</span></code> by creating two functions; a <code class="docutils literal notranslate"><span class="pre">cdef</span></code> for C types and a <code class="docutils literal notranslate"><span class="pre">def</span></code> for Python types. This exploits early binding so that <code class="docutils literal notranslate"><span class="pre">cpdef</span></code> functions may be as fast as possible when using C fundamental types (by using <code class="docutils literal notranslate"><span class="pre">cdef</span></code>). <code class="docutils literal notranslate"><span class="pre">cpdef</span></code> functions use dynamic binding when passed Python objects and this might much slower, perhaps as slow as <code class="docutils literal notranslate"><span class="pre">def</span></code> declared functions.   XXXX rewrite this part.</p>
+</section>
+<section id="numba">
+<h4>Numba<a class="headerlink" href="#numba" title="Permalink to this headline"></a></h4>
+<p>An alternative to statically compiling Cython code is to use a dynamic just-in-time (JIT) compiler with <a class="reference external" href="https://numba.pydata.org/">Numba</a>.</p>
+<p>Numba allows you to write a pure Python function which can be JIT compiled to native machine instructions, similar in performance to C, C++ and Fortran, by simply adding the decorator <code class="docutils literal notranslate"><span class="pre">&#64;jit</span></code> in your function.</p>
+<p>Numba supports compilation of Python to run on either CPU or GPU hardware and is designed to integrate with the Python scientific software stack. The optimized machine code is generated by the LLVM compiler infrastructure.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">&#64;jit</span></code> compilation will add overhead to the runtime of the function, so performance benefits may not be realized especially when using small data sets. In general, the Numba engine is performant with a larger amount of data points (e.g. 1+ million).
+Consider <a class="reference external" href="https://numba.readthedocs.io/en/stable/developer/caching.html">caching</a> your function to avoid compilation overhead each time your function is run, i.e. the first time a function is run using the Numba engine will be slow as Numba will have some function compilation overhead. However, once the JIT compiled functions are cached, subsequent calls will be fast.</p>
+</div>
+<p>Numba can be used in 2 ways with pandas:</p>
+<ol class="arabic simple">
+<li><p>Specify the <code class="docutils literal notranslate"><span class="pre">engine=&quot;numba&quot;</span></code> keyword in select pandas methods</p></li>
+<li><p>Define your own Python function decorated with <code class="docutils literal notranslate"><span class="pre">&#64;jit</span></code> and pass the underlying NumPy array of <code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code> (using <code class="docutils literal notranslate"><span class="pre">to_numpy()</span></code>) into the function</p></li>
+</ol>
+<p>If Numba is installed, one can specify <code class="docutils literal notranslate"><span class="pre">engine=&quot;numba&quot;</span></code> in select pandas methods to execute the method using Numba.
+Methods that support <code class="docutils literal notranslate"><span class="pre">engine=&quot;numba&quot;</span></code> will also have an <code class="docutils literal notranslate"><span class="pre">engine_kwargs</span></code> keyword that accepts a dictionary that allows one to specify
+<code class="docutils literal notranslate"><span class="pre">&quot;nogil&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;nopython&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;parallel&quot;</span></code> keys with boolean values to pass into the <code class="docutils literal notranslate"><span class="pre">&#64;jit</span></code> decorator.
+If <code class="docutils literal notranslate"><span class="pre">engine_kwargs</span></code> is not specified, it defaults to <code class="docutils literal notranslate"><span class="pre">{&quot;nogil&quot;:</span> <span class="pre">False,</span> <span class="pre">&quot;nopython&quot;:</span> <span class="pre">True,</span> <span class="pre">&quot;parallel&quot;:</span> <span class="pre">False}</span></code> unless otherwise specified.</p>
+</section>
+</section>
+<section id="examples">
+<h3>examples<a class="headerlink" href="#examples" title="Permalink to this headline"></a></h3>
+<section id="integration">
+<h4>integration<a class="headerlink" href="#integration" title="Permalink to this headline"></a></h4>
+<p>Consider the following pure Python code:</p>
+<div class="admonition-integration exercise important admonition" id="exercise-2">
+<p class="admonition-title">integration</p>
+<blockquote>
+<div><p>we first generate a dataframe and apply the integrate_f function on the dataframe.</p>
+</div></blockquote>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-2-2-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-2-2-0" name="2-0" role="tab" tabindex="0">python</button><button aria-controls="panel-2-2-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-1" name="2-1" role="tab" tabindex="-1">cython</button><button aria-controls="panel-2-2-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-2" name="2-2" role="tab" tabindex="-1">numba</button></div><div aria-labelledby="tab-2-2-0" class="sphinx-tabs-panel" id="panel-2-2-0" name="2-0" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">x</span>
+
+
+<span class="k">def</span> <span class="nf">integrate_f</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="n">f</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="n">dx</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span> <span class="o">*</span> <span class="n">dx</span>
+
+
+<span class="k">def</span> <span class="nf">apply_integrate_f</span><span class="p">(</span><span class="n">col_a</span><span class="p">,</span> <span class="n">col_b</span><span class="p">,</span> <span class="n">col_N</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">col_N</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">integrate_f</span><span class="p">(</span><span class="n">col_a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">col_b</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">col_N</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">res</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-2-2-1" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-1" name="2-1" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">cython</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">def</span> <span class="nf">f_cython</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">integrate_f_cython</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+    	<span class="n">s</span> <span class="o">+=</span> <span class="n">f_cython</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="n">dx</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span> <span class="o">*</span> <span class="n">dx</span>
+
+<span class="k">def</span> <span class="nf">apply_integrate_f_cython</span><span class="p">(</span><span class="n">col_a</span><span class="p">,</span> <span class="n">col_b</span><span class="p">,</span> <span class="n">col_N</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">col_N</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">integrate_f_cython</span><span class="p">(</span><span class="n">col_a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">col_b</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">col_N</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">res</span>
+
+
+<span class="o">%</span><span class="n">timeit</span> <span class="n">apply_integrate_f_cython</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;N&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-2-2-2" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-2" name="2-2" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">jit</span>
+
+<span class="nd">@jit</span>
+<span class="k">def</span> <span class="nf">f_numba</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">x</span>
+
+<span class="nd">@jit</span>
+<span class="k">def</span> <span class="nf">integrate_f_numba</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="n">f_numba</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="n">dx</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span> <span class="o">*</span> <span class="n">dx</span>
+
+<span class="nd">@jit</span>
+<span class="k">def</span> <span class="nf">apply_integrate_f_numba</span><span class="p">(</span><span class="n">col_a</span><span class="p">,</span> <span class="n">col_b</span><span class="p">,</span> <span class="n">col_N</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">col_N</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">integrate_f_numba</span><span class="p">(</span><span class="n">col_a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">col_b</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">col_N</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">res</span>
+
+<span class="o">%</span><span class="n">timeit</span> <span class="n">apply_integrate_f_numba</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">],</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">],</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;N&#39;</span><span class="p">])</span>
+
+
+
+</pre></div>
+</div>
+</div></div>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"></div><p>benchmark</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="p">{</span>
+              <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span>
+              <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span>
+              <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="p">(</span><span class="mi">1000</span><span class="p">)),</span>
+              <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span>
+          <span class="p">}</span>
+      <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="pairwise-distance">
+<h4>pairwise distance<a class="headerlink" href="#pairwise-distance" title="Permalink to this headline"></a></h4>
+<div class="admonition-pairwise-distance exercise important admonition" id="exercise-3">
+<p class="admonition-title">pairwise distance</p>
+<blockquote>
+<div><p>we first generate a dataframe and apply the integrate_f function on the dataframe.</p>
+</div></blockquote>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-4-4-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-4-4-0" name="4-0" role="tab" tabindex="0">python</button><button aria-controls="panel-4-4-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-4-4-1" name="4-1" role="tab" tabindex="-1">numpy</button><button aria-controls="panel-4-4-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-4-4-2" name="4-2" role="tab" tabindex="-1">cython</button><button aria-controls="panel-4-4-3" aria-selected="false" class="sphinx-tabs-tab" id="tab-4-4-3" name="4-3" role="tab" tabindex="-1">numba</button></div><div aria-labelledby="tab-4-4-0" class="sphinx-tabs-panel" id="panel-4-4-0" name="4-0" role="tabpanel" tabindex="0"></div><div aria-labelledby="tab-4-4-1" class="sphinx-tabs-panel" hidden="true" id="panel-4-4-1" name="4-1" role="tabpanel" tabindex="0"></div><div aria-labelledby="tab-4-4-2" class="sphinx-tabs-panel" hidden="true" id="panel-4-4-2" name="4-2" role="tabpanel" tabindex="0"></div><div aria-labelledby="tab-4-4-3" class="sphinx-tabs-panel" hidden="true" id="panel-4-4-3" name="4-3" role="tabpanel" tabindex="0"></div></div>
+</div>
+</section>
+<section id="bubble-sort">
+<h4>Bubble sort<a class="headerlink" href="#bubble-sort" title="Permalink to this headline"></a></h4>
+<p>Long stroy short, in the worse case, the time Bubblesort algorithm takes is roughly <span class="math notranslate nohighlight">\(O(n^2)\)</span> where  <span class="math notranslate nohighlight">\(n\)</span> is the number of items being sorted.</p>
+<img alt="img/Bubble-sort-example-300px.gif" src="img/Bubble-sort-example-300px.gif" />
+<div class="admonition-bubble-sort exercise important admonition" id="exercise-4">
+<p class="admonition-title">Bubble sort</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-5-5-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-5-5-0" name="5-0" role="tab" tabindex="0">python</button><button aria-controls="panel-5-5-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-5-5-1" name="5-1" role="tab" tabindex="-1">cython</button><button aria-controls="panel-5-5-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-5-5-2" name="5-2" role="tab" tabindex="-1">numba</button></div><div aria-labelledby="tab-5-5-0" class="sphinx-tabs-panel" id="panel-5-5-0" name="5-0" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">bs_python</span><span class="p">(</span><span class="n">a_list</span><span class="p">):</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">a_list</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">a_list</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">a_list</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">a_list</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">a_list</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">a_list</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">a_list</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">a_list</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-5-5-1" class="sphinx-tabs-panel" hidden="true" id="panel-5-5-1" name="5-1" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">cython</span>
+<span class="k">def</span> <span class="nf">bs_cython</span><span class="p">(</span><span class="n">a_list</span><span class="p">):</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">a_list</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">a_list</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">a_list</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">a_list</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">a_list</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">a_list</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">a_list</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">a_list</span>
+
+
+<span class="o">%%</span><span class="n">cython</span>
+<span class="n">cpdef</span> <span class="n">bs_cython_dtype</span><span class="p">(</span><span class="n">a_list</span><span class="p">):</span>
+    <span class="n">cdef</span> <span class="nb">int</span> <span class="n">N</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="c1"># static type declarations</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">a_list</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">a_list</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">a_list</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">a_list</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">a_list</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">a_list</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">a_list</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">a_list</span>
+
+
+
+<span class="o">%%</span><span class="n">cython</span>
+<span class="n">cimport</span> <span class="n">cython</span>
+<span class="kn">from</span> <span class="nn">libc.stdlib</span> <span class="n">cimport</span> <span class="n">malloc</span><span class="p">,</span> <span class="n">free</span>
+
+<span class="n">cpdef</span> <span class="n">bs_clist</span><span class="p">(</span><span class="n">a_list</span><span class="p">):</span>
+
+    <span class="n">cdef</span> <span class="nb">int</span> <span class="o">*</span><span class="n">c_list</span>
+    <span class="n">c_list</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nb">int</span> <span class="o">*&gt;</span><span class="n">malloc</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a_list</span><span class="p">)</span><span class="o">*</span><span class="n">cython</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
+    <span class="n">cdef</span> <span class="nb">int</span> <span class="n">N</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="c1"># static type declarations</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">a_list</span><span class="p">)</span>
+    
+    <span class="c1"># convert Python list to C array</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">c_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">c_list</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">c_list</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">c_list</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">c_list</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">c_list</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">c_list</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># convert C array back to Python list</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">a_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">c_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        
+    <span class="n">free</span><span class="p">(</span><span class="n">c_list</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">a_list</span>
+
+
+
+<span class="o">%%</span><span class="n">cython</span>
+<span class="k">def</span> <span class="nf">bs_cython2</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">end</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">cur</span> <span class="o">&gt;</span> <span class="n">X</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]:</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="n">X</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-5-5-2" class="sphinx-tabs-panel" hidden="true" id="panel-5-5-2" name="5-2" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">jit</span>
+<span class="nd">@jit</span>
+<span class="k">def</span> <span class="nf">bs_numba</span><span class="p">(</span><span class="n">a_list</span><span class="p">):</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">a_list</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">a_list</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">a_list</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">a_list</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">a_list</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">a_list</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">a_list</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">a_list</span>
+</pre></div>
+</div>
+</div></div>
+</div>
+<p>Note that the relative results also depend on what version of Python, Cython, Numba, and NumPy you are using. Also, the compiler choice for installing NumPy can account for differences in the results.</p>
+<blockquote>
+<div><p>NumPy is really good at what it does. For simple operations, Numba is not going to outperform it, but when things get more complex Numba will save the day.</p>
+</div></blockquote>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../scipy/" class="btn btn-neutral float-left" title="SciPy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../scale/" class="btn btn-neutral float-right" title="Scaling to large datasets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, The contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

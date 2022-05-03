@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scaling to large datasets &mdash; LESSON NAME  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/mystnb.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx_lesson.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx_rtd_theme_ext_color_contrast.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/overrides.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script src="../_static/minipres.js"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../_static/togglebutton.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="Introduction to GPU architecture" href="../gpuintro/" />
+    <link rel="prev" title="Optimization" href="../profile/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../" class="icon icon-home"> LESSON NAME
+            <img src="../_static/ENCCS.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">The lesson</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/">Intro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../numpy/">NumPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pandas/">Pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scipy/">SciPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../profile/">Optimization</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Scaling to large datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#data-parallelism">Data parallelism</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#task-based-parallelism">Task-based parallelism</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-internal-parallelization-provided-by-libraries">Using internal parallelization provided by libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#multiprocessing">Multiprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#is-multiprocessing-worth-it">Is multiprocessing worth it?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#load-less-data">Load less data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#use-efficient-datatypes">Use efficient datatypes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#use-chunking">Use chunking</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Using internal parallelization provided by libraries</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../gpuintro/">Introduction to GPU architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../miniapp/">Heat diffusion mini-app</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dask/">Dask for scalable analytics</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/">Instructor’s guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">LESSON NAME</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home"></a> &raquo;</li>
+      <li>Scaling to large datasets</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ENCCS/content/blob/main/content/scale.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="scaling-to-large-datasets">
+<span id="scale"></span><h1>Scaling to large datasets<a class="headerlink" href="#scaling-to-large-datasets" title="Permalink to this headline"></a></h1>
+<p>Modern data analysis becomes more and more expensive computationally as the data volumn grows.
+So far, we consider situations where all the data used for the analysis fits in the memory.
+Sooner or later we will work with large datesets that do not fit in the memory, and we have to perform data analysis in parallel.</p>
+<p>Even datasets that are a sizable fraction of memory become unwieldy, as some pandas operations need to make intermediate copies.</p>
+<section id="data-parallelism">
+<h2>Data parallelism<a class="headerlink" href="#data-parallelism" title="Permalink to this headline"></a></h2>
+<p>Huge number of data analysis workflows can be parallelized with data
+parallelism (also known as embarassingly parallel). In embarassingly
+parallel pipelines the data and/or model hyperparameters are divided into
+separate identical pipelines. Each pipeline then does the analysis for its
+piece of the data.</p>
+<p>This is especially effective if you have access to HPC/cloud resources that can
+be used to run the pipelines. Lots of big data analysis works in
+split-apply-combine-type pipelines where computing tasks are spread across
+multiple nodes with their own part of the data and results are combined after
+the calculations are finished.</p>
+</section>
+<section id="task-based-parallelism">
+<h2>Task-based parallelism<a class="headerlink" href="#task-based-parallelism" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><strong>Shared memory parallelism:</strong> Parallel threads need to communicate and do so via
+the same memory (variables, state, etc). (OpenMP)</p></li>
+</ul>
+<p>OpenMP was designed to replace low-level and tedious solutions like POSIX threads, or pthreads.
+OpenMP was originally targeted towards controlling capable and completely independent processors, with
+shared memory. The most common such configurations today are the many multi-cored chips we all use. You
+might have dozens of threads, each of which takes some time to start or complete.
+In return for the flexibility to use those processors to their fullest extent, OpenMP assumes that you know
+what you are doing. You prescribe what how you want the threads to behave and the compiler faithfully
+carries it out.</p>
+<ul class="simple">
+<li><p><strong>Message passing:</strong> Different processes manage their own memory segments. They share data
+by communicating (passing messages) as needed. (Message Passing Interface (MPI)).</p></li>
+</ul>
+<p>Programming shared memory or message passing is beyond the scope of
+this course, but the simpler strategies are most often used anyway.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Parallel programming is not magic, but many things can go wrong and
+you can get unexpected results or difficult to debug problems.
+Parallel programming is a fascinating world to get involved in, but
+make sure you invest enough time to do it well.</p>
+</div>
+</section>
+<section id="using-internal-parallelization-provided-by-libraries">
+<h2>Using internal parallelization provided by libraries<a class="headerlink" href="#using-internal-parallelization-provided-by-libraries" title="Permalink to this headline"></a></h2>
+<p>R and numpy, scipy etc. are built against libraries such as BLAS, FFTW
+and LAPACK that provide optimized routines for linear algebra, Fourier
+transforms etc.. These libraries are usually in turn built to support
+multihreading during the execution of their subroutines.</p>
+<p>If your data code does a lot of matrix operations or frequency analysis it
+might be a good idea to check that your code uses multiple threads during
+its calculations.</p>
+<p>Below is an example that does a simple matrix inversion for a symmetrical
+matrix of size 4000 by 4000 with 1 and 4 threads.</p>
+<blockquote>
+<div><p>This example uses
+<a class="reference external" href="https://docs.anaconda.com/mkl-service/">mkl</a>-module provided by Anaconda
+to change the number of threads during runtime. In normal use it is better
+to set the <code class="docutils literal notranslate"><span class="pre">OMP_NUM_THREADS</span></code>-environment variable as that works with
+various different libraries.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">mkl</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">4000</span><span class="p">,</span><span class="mi">4000</span><span class="p">))</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">A</span><span class="o">*</span><span class="n">A</span><span class="o">.</span><span class="n">T</span>
+
+<span class="n">mkl</span><span class="o">.</span><span class="n">set_num_threads</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">time_1thread_1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="n">time_1thread_2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+<span class="n">time_1thread</span> <span class="o">=</span> <span class="n">time_1thread_2</span> <span class="o">-</span> <span class="n">time_1thread_1</span>
+
+<span class="n">mkl</span><span class="o">.</span><span class="n">set_num_threads</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="n">time_4thread_1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="n">time_4thread_2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+<span class="n">time_4thread</span> <span class="o">=</span> <span class="n">time_4thread_2</span> <span class="o">-</span> <span class="n">time_4thread_1</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Time taken:</span>
+
+<span class="s2">1 thread: </span><span class="si">%.2f</span><span class="s2"></span>
+<span class="s2">4 threads: </span><span class="si">%.2f</span><span class="s2"></span>
+
+<span class="s2">Speedup: </span><span class="si">%.2f</span><span class="s2"></span>
+<span class="s2">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">time_1thread</span><span class="p">,</span> <span class="n">time_4thread</span><span class="p">,</span> <span class="n">time_1thread</span><span class="o">/</span><span class="n">time_4thread</span><span class="p">))</span>
+
+
+<span class="n">Time</span> <span class="n">taken</span><span class="p">:</span>
+
+<span class="mi">1</span> <span class="n">thread</span><span class="p">:</span> <span class="mf">4.01</span>
+<span class="mi">4</span> <span class="n">threads</span><span class="p">:</span> <span class="mf">1.55</span>
+
+<span class="n">Speedup</span><span class="p">:</span> <span class="mf">2.59</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="multiprocessing">
+<h2>Multiprocessing<a class="headerlink" href="#multiprocessing" title="Permalink to this headline"></a></h2>
+<p>In multiprocessing one starts multiple processes (hence multiprocessing) and
+gives each process an individual task to work through.</p>
+<section id="is-multiprocessing-worth-it">
+<h3>Is multiprocessing worth it?<a class="headerlink" href="#is-multiprocessing-worth-it" title="Permalink to this headline"></a></h3>
+<p>Normal serial code can’t just be run in parallel without modifications. In
+order to get the code to run in parallel, one needs to understand what
+parallalization implementation your code has, if any. A program doesn’t
+magically get faster when you have access to more processors if it’s not
+designed to use them.</p>
+<p>When deciding whether using parallel programming is worth the effort, one
+should be mindful of
+<a class="reference external" href="https://en.wikipedia.org/wiki/Amdahl%27s_law">Amdahl’s law</a> and
+<a class="reference external" href="https://en.wikipedia.org/wiki/Gustafson%27s_law">Gustafson’s law</a>.
+All programs have some parts that can only be executed in serial and
+thus the theoretical speedup that one can get from using parallel
+programming depends on two factors:</p>
+<ol class="arabic simple">
+<li><p>How much of programs’ execution could be done in parallel?</p></li>
+<li><p>What would be the speedup for that parallel part?</p></li>
+</ol>
+<p>Thus if your program runs mainly in serial but has a small parallel
+part, running it in parallel might not be worth it. Sometimes, doing
+data parallelism is much more fruitful approach.</p>
+<p>Another important note regarding parallelism is that all the applications
+scale good up to some upper limit which depends on application implementation,
+size and type of problem you solve and some other factors. The best practice
+is to benchmark your code on different number of CPU cores before
+you start actual production runs.</p>
+<p>pandas provides data structures for in-memory analytics, which makes using pandas
+to analyze datasets that are larger than memory datasets somewhat tricky.</p>
+<p>But first, it’s worth considering <em>not using pandas</em>. pandas isn’t the right
+tool for all situations. If you’re working with very large datasets and a tool
+like PostgreSQL fits your needs, then you should probably be using that.
+Assuming you want or need the expressiveness and power of pandas, let’s carry on.</p>
+<section id="load-less-data">
+<h4>Load less data<a class="headerlink" href="#load-less-data" title="Permalink to this headline"></a></h4>
+<p>Suppose our raw dataset on disk has many columns:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                     <span class="n">id_0</span>    <span class="n">name_0</span>       <span class="n">x_0</span>       <span class="n">y_0</span>  <span class="n">id_1</span>   <span class="n">name_1</span>       <span class="n">x_1</span>  <span class="o">...</span>  <span class="n">name_8</span>       <span class="n">x_8</span>       <span class="n">y_8</span>  <span class="n">id_9</span>   <span class="n">name_9</span>       <span class="n">x_9</span>       <span class="n">y_9</span>
+<span class="n">timestamp</span>                                                                         <span class="o">...</span>
+<span class="mi">2000</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>  <span class="mi">1015</span>   <span class="n">Michael</span> <span class="o">-</span><span class="mf">0.399453</span>  <span class="mf">0.095427</span>   <span class="mi">994</span>    <span class="n">Frank</span> <span class="o">-</span><span class="mf">0.176842</span>  <span class="o">...</span>     <span class="n">Dan</span> <span class="o">-</span><span class="mf">0.315310</span>  <span class="mf">0.713892</span>  <span class="mi">1025</span>   <span class="n">Victor</span> <span class="o">-</span><span class="mf">0.135779</span>  <span class="mf">0.346801</span>
+<span class="mi">2000</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">01</span><span class="p">:</span><span class="mi">00</span>   <span class="mi">969</span>  <span class="n">Patricia</span>  <span class="mf">0.650773</span> <span class="o">-</span><span class="mf">0.874275</span>  <span class="mi">1003</span>    <span class="n">Laura</span>  <span class="mf">0.459153</span>  <span class="o">...</span>  <span class="n">Ursula</span>  <span class="mf">0.913244</span> <span class="o">-</span><span class="mf">0.630308</span>  <span class="mi">1047</span>    <span class="n">Wendy</span> <span class="o">-</span><span class="mf">0.886285</span>  <span class="mf">0.035852</span>
+<span class="mi">2000</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">02</span><span class="p">:</span><span class="mi">00</span>  <span class="mi">1016</span>    <span class="n">Victor</span> <span class="o">-</span><span class="mf">0.721465</span> <span class="o">-</span><span class="mf">0.584710</span>  <span class="mi">1046</span>  <span class="n">Michael</span>  <span class="mf">0.524994</span>  <span class="o">...</span>     <span class="n">Ray</span> <span class="o">-</span><span class="mf">0.656593</span>  <span class="mf">0.692568</span>  <span class="mi">1064</span>   <span class="n">Yvonne</span>  <span class="mf">0.070426</span>  <span class="mf">0.432047</span>
+<span class="mi">2000</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">03</span><span class="p">:</span><span class="mi">00</span>   <span class="mi">939</span>     <span class="n">Alice</span> <span class="o">-</span><span class="mf">0.746004</span> <span class="o">-</span><span class="mf">0.908008</span>   <span class="mi">996</span>   <span class="n">Ingrid</span> <span class="o">-</span><span class="mf">0.414523</span>  <span class="o">...</span>   <span class="n">Jerry</span> <span class="o">-</span><span class="mf">0.958994</span>  <span class="mf">0.608210</span>   <span class="mi">978</span>    <span class="n">Wendy</span>  <span class="mf">0.855949</span> <span class="o">-</span><span class="mf">0.648988</span>
+<span class="mi">2000</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">04</span><span class="p">:</span><span class="mi">00</span>  <span class="mi">1017</span>       <span class="n">Dan</span>  <span class="mf">0.919451</span> <span class="o">-</span><span class="mf">0.803504</span>  <span class="mi">1048</span>    <span class="n">Jerry</span> <span class="o">-</span><span class="mf">0.569235</span>  <span class="o">...</span>   <span class="n">Frank</span> <span class="o">-</span><span class="mf">0.577022</span> <span class="o">-</span><span class="mf">0.409088</span>   <span class="mi">994</span>      <span class="n">Bob</span> <span class="o">-</span><span class="mf">0.270132</span>  <span class="mf">0.335176</span>
+<span class="o">...</span>                   <span class="o">...</span>       <span class="o">...</span>       <span class="o">...</span>       <span class="o">...</span>   <span class="o">...</span>      <span class="o">...</span>       <span class="o">...</span>  <span class="o">...</span>     <span class="o">...</span>       <span class="o">...</span>       <span class="o">...</span>   <span class="o">...</span>      <span class="o">...</span>       <span class="o">...</span>       <span class="o">...</span>
+<span class="mi">2000</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">30</span> <span class="mi">23</span><span class="p">:</span><span class="mi">56</span><span class="p">:</span><span class="mi">00</span>   <span class="mi">999</span>       <span class="n">Tim</span>  <span class="mf">0.162578</span>  <span class="mf">0.512817</span>   <span class="mi">973</span>    <span class="n">Kevin</span> <span class="o">-</span><span class="mf">0.403352</span>  <span class="o">...</span>     <span class="n">Tim</span> <span class="o">-</span><span class="mf">0.380415</span>  <span class="mf">0.008097</span>  <span class="mi">1041</span>  <span class="n">Charlie</span>  <span class="mf">0.191477</span> <span class="o">-</span><span class="mf">0.599519</span>
+<span class="mi">2000</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">30</span> <span class="mi">23</span><span class="p">:</span><span class="mi">57</span><span class="p">:</span><span class="mi">00</span>   <span class="mi">970</span>     <span class="n">Laura</span> <span class="o">-</span><span class="mf">0.433586</span> <span class="o">-</span><span class="mf">0.600289</span>   <span class="mi">958</span>   <span class="n">Oliver</span> <span class="o">-</span><span class="mf">0.966577</span>  <span class="o">...</span>   <span class="n">Zelda</span>  <span class="mf">0.971274</span>  <span class="mf">0.402032</span>  <span class="mi">1038</span>   <span class="n">Ursula</span>  <span class="mf">0.574016</span> <span class="o">-</span><span class="mf">0.930992</span>
+<span class="mi">2000</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">30</span> <span class="mi">23</span><span class="p">:</span><span class="mi">58</span><span class="p">:</span><span class="mi">00</span>  <span class="mi">1065</span>     <span class="n">Edith</span>  <span class="mf">0.232211</span> <span class="o">-</span><span class="mf">0.454540</span>   <span class="mi">971</span>      <span class="n">Tim</span>  <span class="mf">0.158484</span>  <span class="o">...</span>   <span class="n">Alice</span> <span class="o">-</span><span class="mf">0.222079</span> <span class="o">-</span><span class="mf">0.919274</span>  <span class="mi">1022</span>      <span class="n">Dan</span>  <span class="mf">0.031345</span> <span class="o">-</span><span class="mf">0.657755</span>
+<span class="mi">2000</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">30</span> <span class="mi">23</span><span class="p">:</span><span class="mi">59</span><span class="p">:</span><span class="mi">00</span>  <span class="mi">1019</span>    <span class="n">Ingrid</span>  <span class="mf">0.322208</span> <span class="o">-</span><span class="mf">0.615974</span>   <span class="mi">981</span>   <span class="n">Hannah</span>  <span class="mf">0.607517</span>  <span class="o">...</span>   <span class="n">Sarah</span> <span class="o">-</span><span class="mf">0.424440</span> <span class="o">-</span><span class="mf">0.117274</span>   <span class="mi">990</span>   <span class="n">George</span> <span class="o">-</span><span class="mf">0.375530</span>  <span class="mf">0.563312</span>
+<span class="mi">2000</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">31</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>   <span class="mi">937</span>    <span class="n">Ursula</span> <span class="o">-</span><span class="mf">0.906523</span>  <span class="mf">0.943178</span>  <span class="mi">1018</span>    <span class="n">Alice</span> <span class="o">-</span><span class="mf">0.564513</span>  <span class="o">...</span>   <span class="n">Jerry</span>  <span class="mf">0.236837</span>  <span class="mf">0.807650</span>   <span class="mi">985</span>   <span class="n">Oliver</span>  <span class="mf">0.777642</span>  <span class="mf">0.783392</span>
+
+<span class="p">[</span><span class="mi">525601</span> <span class="n">rows</span> <span class="n">x</span> <span class="mi">40</span> <span class="n">columns</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>That can be generated by the following code snippet:</p>
+<p>To load the columns we want, we have two options.
+Option 1 loads in all the data and then filters to what we need.</p>
+<p>Option 2 only loads the columns we request.</p>
+<p>If we were to measure the memory usage of the two calls, we’d see that specifying
+<code class="docutils literal notranslate"><span class="pre">columns</span></code> uses about 1/10th the memory in this case.</p>
+<p>With <code class="xref py py-func docutils literal notranslate"><span class="pre">pandas.read_csv()</span></code>, you can specify <code class="docutils literal notranslate"><span class="pre">usecols</span></code> to limit the columns
+read into memory. Not all file formats that can be read by pandas provide an option
+to read a subset of columns.</p>
+</section>
+<section id="use-efficient-datatypes">
+<h4>Use efficient datatypes<a class="headerlink" href="#use-efficient-datatypes" title="Permalink to this headline"></a></h4>
+<p>The default pandas data types are not the most memory efficient. This is
+especially true for text data columns with relatively few unique values (commonly
+referred to as “low-cardinality” data). By using more efficient data types, you
+can store larger datasets in memory.</p>
+<p>Now, let’s inspect the data types and memory usage to see where we should focus our
+attention.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">name</span></code> column is taking up much more memory than any other. It has just a
+few unique values, so it’s a good candidate for converting to a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.Categorical</span></code>. With a <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.Categorical</span></code>, we store each unique name once and use
+space-efficient integers to know which specific name is used in each row.</p>
+<p>We can go a bit further and downcast the numeric columns to their smallest types
+using <code class="xref py py-func docutils literal notranslate"><span class="pre">pandas.to_numeric()</span></code>.</p>
+<p>In all, we’ve reduced the in-memory footprint of this dataset to 1/5 of its
+original size.</p>
+<p>See <span class="xref std std-ref">categorical</span> for more on <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.Categorical</span></code> and <span class="xref std std-ref">basics.dtypes</span>
+for an overview of all of pandas’ dtypes.</p>
+</section>
+<section id="use-chunking">
+<h4>Use chunking<a class="headerlink" href="#use-chunking" title="Permalink to this headline"></a></h4>
+<p>Some workloads can be achieved with chunking: splitting a large problem like “convert this
+directory of CSVs to parquet” into a bunch of small problems (“convert this individual CSV
+file into a Parquet file. Now repeat that for each file in this directory.”). As long as each chunk
+fits in memory, you can work with datasets that are much larger than memory.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Chunking works well when the operation you’re performing requires zero or minimal
+coordination between chunks. For more complicated workflows, you’re better off
+<a class="reference internal" href="#scale-other-libraries"><span class="std std-ref">using another library</span></a>.</p>
+</div>
+<p>Suppose we have an even larger “logical dataset” on disk that’s a directory of parquet
+files. Each file in the directory represents a different year of the entire dataset.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>data
+└── timeseries
+    ├── ts-00.parquet
+    ├── ts-01.parquet
+    ├── ts-02.parquet
+    ├── ts-03.parquet
+    ├── ts-04.parquet
+    ├── ts-05.parquet
+    ├── ts-06.parquet
+    ├── ts-07.parquet
+    ├── ts-08.parquet
+    ├── ts-09.parquet
+    ├── ts-10.parquet
+    └── ts-11.parquet
+</pre></div>
+</div>
+<p>Now we’ll implement an out-of-core <code class="xref py py-meth docutils literal notranslate"><span class="pre">pandas.Series.value_counts()</span></code>. The peak memory usage of this
+workflow is the single largest chunk, plus a small series storing the unique value
+counts up to this point. As long as each individual file fits in memory, this will
+work for arbitrary-sized datasets.</p>
+<p>Some readers, like <code class="xref py py-meth docutils literal notranslate"><span class="pre">pandas.read_csv()</span></code>, offer parameters to control the
+<code class="docutils literal notranslate"><span class="pre">chunksize</span></code> when reading a single file.</p>
+<p>Manually chunking is an OK option for workflows that don’t
+require too sophisticated of operations. Some operations, like <code class="xref py py-meth docutils literal notranslate"><span class="pre">pandas.DataFrame.groupby()</span></code>, are
+much harder to do chunkwise. In these cases, you may be better switching to a
+different library that implements these out-of-core algorithms for you.</p>
+</section>
+</section>
+</section>
+<section id="id1">
+<h2>Using internal parallelization provided by libraries<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
+<p>R and numpy, scipy etc. are built against libraries such as BLAS, FFTW
+and LAPACK that provide optimized routines for linear algebra, Fourier
+transforms etc.. These libraries are usually in turn built to support
+multihreading during the execution of their subroutines.</p>
+<p>If your data code does a lot of matrix operations or frequency analysis it
+might be a good idea to check that your code uses multiple threads during
+its calculations.</p>
+<p>Below is an example that does a simple matrix inversion for a symmetrical
+matrix of size 4000 by 4000 with 1 and 4 threads.</p>
+<blockquote>
+<div><p>This example uses
+<a class="reference external" href="https://docs.anaconda.com/mkl-service/">mkl</a>-module provided by Anaconda
+to change the number of threads during runtime. In normal use it is better
+to set the <code class="docutils literal notranslate"><span class="pre">OMP_NUM_THREADS</span></code>-environment variable as that works with
+various different libraries.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">mkl</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">4000</span><span class="p">,</span><span class="mi">4000</span><span class="p">))</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">A</span><span class="o">*</span><span class="n">A</span><span class="o">.</span><span class="n">T</span>
+
+<span class="n">mkl</span><span class="o">.</span><span class="n">set_num_threads</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">time_1thread_1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="n">time_1thread_2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+<span class="n">time_1thread</span> <span class="o">=</span> <span class="n">time_1thread_2</span> <span class="o">-</span> <span class="n">time_1thread_1</span>
+
+<span class="n">mkl</span><span class="o">.</span><span class="n">set_num_threads</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="n">time_4thread_1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="n">time_4thread_2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+<span class="n">time_4thread</span> <span class="o">=</span> <span class="n">time_4thread_2</span> <span class="o">-</span> <span class="n">time_4thread_1</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Time taken:</span>
+
+<span class="s2">1 thread: </span><span class="si">%.2f</span><span class="s2"></span>
+<span class="s2">4 threads: </span><span class="si">%.2f</span><span class="s2"></span>
+
+<span class="s2">Speedup: </span><span class="si">%.2f</span><span class="s2"></span>
+<span class="s2">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">time_1thread</span><span class="p">,</span> <span class="n">time_4thread</span><span class="p">,</span> <span class="n">time_1thread</span><span class="o">/</span><span class="n">time_4thread</span><span class="p">))</span>
+
+
+<span class="n">Time</span> <span class="n">taken</span><span class="p">:</span>
+
+<span class="mi">1</span> <span class="n">thread</span><span class="p">:</span> <span class="mf">4.01</span>
+<span class="mi">4</span> <span class="n">threads</span><span class="p">:</span> <span class="mf">1.55</span>
+
+<span class="n">Speedup</span><span class="p">:</span> <span class="mf">2.59</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Dask is a tool that helps us easily extend our familiar python data analysis tools to medium and big data, i.e. dataset that can’t fit in our computer’s RAM. In many cases, dask also allows us to speed up our analysis by using mutiple CPU cores. Dask can help us work more efficiently on our laptop, and it can also help us scale up our analysis on HPC and cloud platforms. Most importantly, dask is almost invisible to the user, meaning that you can focus on your science, rather than the details of parallel computing.</p>
+<p>pandas is just one library offering a DataFrame API. Because of its popularity,
+pandas’ API has become something of a standard that other libraries implement.
+The pandas documentation maintains a list of libraries implementing a DataFrame API
+in <span class="xref std std-ref">our ecosystem page</span>.</p>
+<p>For example, <a class="reference external" href="https://dask.org">Dask</a>, a parallel computing library, has <a class="reference external" href="https://docs.dask.org/en/latest/dataframe.html">dask.dataframe</a>, a
+pandas-like API for working with larger than memory datasets in parallel. Dask
+can use multiple threads or processes on a single machine, or a cluster of
+machines to process data in parallel.</p>
+<p>We’ll import <code class="docutils literal notranslate"><span class="pre">dask.dataframe</span></code> and notice that the API feels similar to pandas.
+We can use Dask’s <code class="docutils literal notranslate"><span class="pre">read_parquet</span></code> function, but provide a globstring of files to read in.</p>
+<p>Inspecting the <code class="docutils literal notranslate"><span class="pre">ddf</span></code> object, we see a few things</p>
+<ul class="simple">
+<li><p>There are familiar attributes like <code class="docutils literal notranslate"><span class="pre">.columns</span></code> and <code class="docutils literal notranslate"><span class="pre">.dtypes</span></code></p></li>
+<li><p>There are familiar methods like <code class="docutils literal notranslate"><span class="pre">.groupby</span></code>, <code class="docutils literal notranslate"><span class="pre">.sum</span></code>, etc.</p></li>
+<li><p>There are new attributes like <code class="docutils literal notranslate"><span class="pre">.npartitions</span></code> and <code class="docutils literal notranslate"><span class="pre">.divisions</span></code></p></li>
+</ul>
+<p>The partitions and divisions are how Dask parallelizes computation. A <strong>Dask</strong>
+DataFrame is made up of many pandas <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>. A single method call on a
+Dask DataFrame ends up making many pandas method calls, and Dask knows how to
+coordinate everything to get the result.</p>
+<p>One major difference: the <code class="docutils literal notranslate"><span class="pre">dask.dataframe</span></code> API is <em>lazy</em>. If you look at the
+repr above, you’ll notice that the values aren’t actually printed out; just the
+column names and dtypes. That’s because Dask hasn’t actually read the data yet.
+Rather than executing immediately, doing operations build up a <strong>task graph</strong>.</p>
+<p>Each of these calls is instant because the result isn’t being computed yet.
+We’re just building up a list of computation to do when someone needs the
+result. Dask knows that the return type of a <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.Series.value_counts</span></code>
+is a pandas <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.Series</span></code> with a certain dtype and a certain name. So the Dask version
+returns a Dask Series with the same dtype and the same name.</p>
+<p>To get the actual result you can call <code class="docutils literal notranslate"><span class="pre">.compute()</span></code>.</p>
+<p>At that point, you get back the same thing you’d get with pandas, in this case
+a concrete pandas <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.Series</span></code> with the count of each <code class="docutils literal notranslate"><span class="pre">name</span></code>.</p>
+<p>Calling <code class="docutils literal notranslate"><span class="pre">.compute</span></code> causes the full task graph to be executed. This includes
+reading the data, selecting the columns, and doing the <code class="docutils literal notranslate"><span class="pre">value_counts</span></code>. The
+execution is done <em>in parallel</em> where possible, and Dask tries to keep the
+overall memory footprint small. You can work with datasets that are much larger
+than memory, as long as each partition (a regular pandas <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>) fits in memory.</p>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">dask.dataframe</span></code> operations use a threadpool to do operations in
+parallel. We can also connect to a cluster to distribute the work on many
+machines. In this case we’ll connect to a local “cluster” made up of several
+processes on this single machine.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">LocalCluster</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCluster</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">client</span>
+<span class="go">&lt;Client: &#39;tcp://127.0.0.1:53349&#39; processes=4 threads=8, memory=17.18 GB&gt;</span>
+</pre></div>
+</div>
+<p>Once this <code class="docutils literal notranslate"><span class="pre">client</span></code> is created, all of Dask’s computation will take place on
+the cluster (which is just processes in this case).</p>
+<p>Dask implements the most used parts of the pandas API. For example, we can do
+a familiar groupby aggregation.</p>
+<p>The grouping and aggregation is done out-of-core and in parallel.</p>
+<p>When Dask knows the <code class="docutils literal notranslate"><span class="pre">divisions</span></code> of a dataset, certain optimizations are
+possible. When reading parquet datasets written by dask, the divisions will be
+known automatically. In this case, since we created the parquet files manually,
+we need to supply the divisions manually.</p>
+<p>Now we can do things like fast random access with <code class="docutils literal notranslate"><span class="pre">.loc</span></code>.</p>
+<p>Dask knows to just look in the 3rd partition for selecting values in 2002. It
+doesn’t need to look at any other data.</p>
+<p>Many workflows involve a large amount of data and processing it in a way that
+reduces the size to something that fits in memory. In this case, we’ll resample
+to daily frequency and take the mean. Once we’ve taken the mean, we know the
+results will fit in memory, so we can safely call <code class="docutils literal notranslate"><span class="pre">compute</span></code> without running
+out of memory. At that point it’s just a regular pandas object.</p>
+<p>These Dask examples have all be done using multiple processes on a single
+machine. Dask can be <a class="reference external" href="https://docs.dask.org/en/latest/setup.html">deployed on a cluster</a> to scale up to even larger
+datasets.</p>
+<p>You see more dask examples at <a class="reference external" href="https://examples.dask.org">https://examples.dask.org</a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../profile/" class="btn btn-neutral float-left" title="Optimization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../gpuintro/" class="btn btn-neutral float-right" title="Introduction to GPU architecture" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, The contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

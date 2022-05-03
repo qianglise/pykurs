@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dask for scalable analytics &mdash; LESSON NAME  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/mystnb.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx_lesson.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx_rtd_theme_ext_color_contrast.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/overrides.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script src="../_static/minipres.js"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../_static/togglebutton.js"></script>
+        <script src="../_static/tabs.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="Quick Reference" href="../quick-reference/" />
+    <link rel="prev" title="Heat diffusion mini-app" href="../miniapp/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../" class="icon icon-home"> LESSON NAME
+            <img src="../_static/ENCCS.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">The lesson</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/">Intro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../numpy/">NumPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pandas/">Pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scipy/">SciPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../profile/">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale/">Scaling to large datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gpuintro/">Introduction to GPU architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../miniapp/">Heat diffusion mini-app</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Dask for scalable analytics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-dask">What is Dask?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dask-clusters">Dask Clusters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dask-collections">Dask Collections</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#dask-arrays">Dask Arrays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dask-dataframe">Dask Dataframe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dask-bag">Dask Bag</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dask-delayed">Dask Delayed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#svd">SVD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-does-dask-work">How does Dask work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common-use-cases">Common use cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#comparison-to-spark">Comparison to Spark</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exercises">Exercises</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/">Instructor’s guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">LESSON NAME</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home"></a> &raquo;</li>
+      <li>Dask for scalable analytics</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ENCCS/content/blob/main/content/dask.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="dask-for-scalable-analytics">
+<span id="dask"></span><h1>Dask for scalable analytics<a class="headerlink" href="#dask-for-scalable-analytics" title="Permalink to this headline"></a></h1>
+<div class="admonition-objectives objectives admonition" id="objectives-0">
+<p class="admonition-title">Objectives</p>
+<ul class="simple">
+<li><p>Understand how Dask achieves parallelism</p></li>
+<li><p>Learn a few common workflows with Dask</p></li>
+</ul>
+</div>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline"></a></h2>
+<p>An increasingly common problem faced by researchers and data scientists
+today is that datasets are becoming larger and larger and modern data analysis
+is thus becoming more and more computationally demanding. The first
+difficulty to deal with is when the volume of data exceeds one’s computer’s RAM.
+Modern laptops/desktops have about 10 GB of RAM. Beyond this threshold,
+some special care is required to carry out data analysis.
+The next threshold of difficulty is when the data can not even
+fit on the hard drive, which is about a couple of TB on a modern laptop.
+In this situation, it is better to use an HPC system or a cloud-based solution,
+and Dask is a tool that helps us easily extend our familiar data analysis
+tools to work with big data. In addition, Dask can also speeds up
+our analysis by using multiple CPU cores which makes our work run
+faster on laptop, HPC and cloud platforms.</p>
+</section>
+<section id="what-is-dask">
+<h2>What is Dask?<a class="headerlink" href="#what-is-dask" title="Permalink to this headline"></a></h2>
+<p>Dask is composed of two parts:</p>
+<ul class="simple">
+<li><p>Dynamic task scheduling optimized for computation. Similar to other workflow
+management systems, but optimized for interactive computational workloads.</p></li>
+<li><p>“Big Data” collections like parallel arrays, dataframes, and lists that extend
+common interfaces like NumPy, Pandas, or Python iterators to larger-than-memory
+or distributed environments. These parallel collections run on top of dynamic
+task schedulers.</p></li>
+</ul>
+<figure class="align-default" id="id1">
+<img alt="img/dask-overview.svg" src="img/dask-overview.svg" /><figcaption>
+<p><span class="caption-text">High level collections are used to generate task graphs which can be executed
+by schedulers on a single machine or a cluster. From the
+<a class="reference external" href="https://docs.dask.org/en/stable/">Dask documentation</a>.</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="dask-clusters">
+<h2>Dask Clusters<a class="headerlink" href="#dask-clusters" title="Permalink to this headline"></a></h2>
+<p>Dask needs computing resources in order to perform parallel computations.
+“Dask Clusters” have different names corresponding to different computing environments,
+for example:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><cite>LocalCluster</cite> on laptop/desktop</p></li>
+<li><p><cite>PBSCluster</cite> or SLURMCluster on HPC</p></li>
+<li><p><cite>Kubernetes</cite> cluster in the cloud</p></li>
+</ul>
+</div></blockquote>
+<p>Each cluster will be allocated with a given number of “workers” associated with
+CPU and RAM and the Dask scheduling system automatically maps jobs to each worker.</p>
+<p>Here we will focus on using a LocalCluster, and it is recommended to use
+a distributed sceduler <code class="docutils literal notranslate"><span class="pre">dask.distributed</span></code>. It is more sophisticated, offers more features,
+but requires minimum effort to set up. It can run locally on a laptop and scale up to a cluster.
+We can start a LocalCluster scheduler which makes use of all the cores and RAM
+we have on the machine by:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">LocalCluster</span>
+<span class="c1"># create a local cluster</span>
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCluster</span><span class="p">()</span>
+<span class="c1"># connect to the cluster we just created</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+<span class="n">client</span>
+</pre></div>
+</div>
+<p>Or you can simply lauch a Client() call which is shorthand for what is described above.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
+<span class="n">client</span>
+</pre></div>
+</div>
+<p>We can also specify the resources to be allocated to a Dask cluster by:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">LocalCluster</span>
+<span class="c1"># create a local cluster with</span>
+<span class="c1"># 4 workers</span>
+<span class="c1"># 1 thread per worker</span>
+<span class="c1"># 4 GiB memory limit for a worker</span>
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCluster</span><span class="p">(</span><span class="n">n_workers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">threads_per_worker</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">memory_limit</span><span class="o">=</span><span class="s1">&#39;4GiB&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Cluster managers also provide useful utilities: for example if a cluster manager supports scaling,
+you can modify the number of workers manually or automatically based on workload:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cluster</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>  <span class="c1"># Sets the number of workers to 10</span>
+<span class="n">cluster</span><span class="o">.</span><span class="n">adapt</span><span class="p">(</span><span class="n">minimum</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">maximum</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>  <span class="c1"># Allows the cluster to auto scale to 10 when tasks are computed</span>
+</pre></div>
+</div>
+<p>Dask distributed scheduler also provides live feedback via its interactive dashboard.
+A link that redirects to the dashboard will prompt in the terminal
+where the scheduler is created, and it is also shown when you create a Client and connect the scheduler.
+By default, when starting a scheduler on your local machine the dashboard will be served at
+<a class="reference external" href="http://localhost:8787/status">http://localhost:8787/status</a> and can be always queried from commond line by:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cluster</span><span class="o">.</span><span class="n">dashboard_link</span>
+<span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">8787</span><span class="o">/</span><span class="n">status</span>
+<span class="c1"># or</span>
+<span class="n">client</span><span class="o">.</span><span class="n">dashboard_link</span>
+</pre></div>
+</div>
+<p>When everything finishes, you can shut down the connected scheduler and workers
+by calling the <code class="xref py py-meth docutils literal notranslate"><span class="pre">shutdown()</span></code> method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="dask-collections">
+<h2>Dask Collections<a class="headerlink" href="#dask-collections" title="Permalink to this headline"></a></h2>
+<p>Dask provides dynamic parallel task scheduling and
+three main high-level collections:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">dask.array</span></code>: Parallel NumPy arrays</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dask.dataframe</span></code>: Parallel Pandas DataFrames</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dask.bag</span></code>: Parallel Python Lists</p></li>
+</ul>
+</div></blockquote>
+<section id="dask-arrays">
+<h3>Dask Arrays<a class="headerlink" href="#dask-arrays" title="Permalink to this headline"></a></h3>
+<p>A Dask array looks and feels a lot like a NumPy array.
+However, a Dask array uses the so-called “lazy” execution mode,
+which allows one to build up complex, large calculations symbolically
+before turning them over the scheduler for execution.</p>
+<div class="admonition-lazy-evaluation callout admonition" id="callout-0">
+<p class="admonition-title">Lazy evaluation</p>
+<p>Contrary to normal computation, lazy execution mode is when all the computations
+needed to generate results are symbolically represented, forming a queue of
+tasks mapped over data blocks. Nothing is actually computed until the actual
+numerical values are needed, e.g., to print results to your screen or write to disk.
+At that point, data is loaded into memory and computation proceeds in a streaming
+fashion, block-by-block. The actual computation is controlled by a multi-processing
+or thread pool, which allows Dask to take full advantage of multiple processors
+available on the computers.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">4000</span><span class="p">)</span>
+<span class="n">ones_np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">ones_np</span>
+<span class="n">ones_np</span><span class="o">.</span><span class="n">nbytes</span> <span class="o">/</span> <span class="mf">1e6</span>
+</pre></div>
+</div>
+<p>Now let’s create the same array using Dask’s array interface. In addition to
+providing the shape of the array, we also specify the <code class="docutils literal notranslate"><span class="pre">chunks</span></code> argument,
+which describes how the array is split up into sub-arrays:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dask.array</span> <span class="k">as</span> <span class="nn">da</span>
+<span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">4000</span><span class="p">,</span> <span class="mi">4000</span><span class="p">)</span>
+<span class="n">chunk_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="n">ones</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="n">chunk_shape</span><span class="p">)</span>
+<span class="n">ones</span>
+</pre></div>
+</div>
+<p>So far, it is only a symbolic representation of the array.
+One way to trigger the computation is to call <code class="xref py py-meth docutils literal notranslate"><span class="pre">compute()</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ones</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Plotting also triggers computation, since the actual values are needed to produce the plot.</p>
+</div>
+<p>We can visualize the symbolic operations by calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">visualize()</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ones</span><span class="o">.</span><span class="n">visualize</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Let us calculate the sum of the dask array and visualize again:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sum_da</span> <span class="o">=</span> <span class="n">ones</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">sum_da</span><span class="o">.</span><span class="n">visualize</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>You can find additional details and examples here
+<a class="reference external" href="https://examples.dask.org/array.html">https://examples.dask.org/array.html</a>.</p>
+</section>
+<section id="dask-dataframe">
+<h3>Dask Dataframe<a class="headerlink" href="#dask-dataframe" title="Permalink to this headline"></a></h3>
+<p>Dask dataframes split a dataframe into partitions along an index and can be used
+in situations where one would normally use Pandas, but this fails due to data size or
+insufficient computational efficiency. Specifically, you can use Dask dataframes to:</p>
+<ul class="simple">
+<li><p>manipulate large datasets, even when these don’t fit in memory</p></li>
+<li><p>accelerate long computations by using many cores</p></li>
+<li><p>perform distributed computing on large datasets with standard Pandas operations
+like groupby, join, and time series computations.</p></li>
+</ul>
+<p>Let us revisit the dataset containing the Titanic passenger list, and now transform it to
+a Dask dataframe:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">dask.dataframe</span> <span class="k">as</span> <span class="nn">dd</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/pandas-dev/pandas/master/doc/data/titanic.csv&quot;</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s2">&quot;Name&quot;</span><span class="p">)</span>
+
+<span class="n">ddf</span> <span class="o">=</span> <span class="n">dd</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">npartitions</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Dask dataframes do not support the entire interface of Pandas dataframes, but
+the most <a class="reference external" href="https://docs.dask.org/en/stable/dataframe.html#scope">commonly used methods are available</a>.
+For a full listing refer to the
+<a class="reference external" href="https://docs.dask.org/en/stable/dataframe-api.html">dask dataframe API</a>.</p>
+<p>We can for example perform the group-by operation we did earlier, but this time in parallel:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ddf</span><span class="p">[</span><span class="n">ddf</span><span class="p">[</span><span class="s2">&quot;Age&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;Sex&quot;</span><span class="p">,</span> <span class="s2">&quot;Child&quot;</span><span class="p">])[</span><span class="s2">&quot;Survived&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>However, for a small dataframe like this the overhead of parallelisation will far
+outweigh the benefit.</p>
+<p>As an additional use case, recall the word-count project that we encountered earlier.
+The <code class="xref download docutils literal notranslate"><span class="pre">results.txt</span></code> file contains word counts of the 10
+most frequent words in different texts, and we want to fit a power law to the
+individual distributions in each row.</p>
+<p>Here is our fitting function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">linear_fit_loglog</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">ones</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">X</span><span class="p">,</span> <span class="n">ones</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Earlier we saw that iterating over a pandas dataframe was slower than using the
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">apply()</span></code> function. With dask dataframes, we should not iterate over dataframes at all!
+We load the <cite>results.txt</cite> file directly into a dask dataframe and fit the power law
+to each row:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ddf</span> <span class="o">=</span> <span class="n">dd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;/some/path/to/results.txt&quot;</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">ddf</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">linear_fit_loglog</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;float64&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Note the additional argument <code class="docutils literal notranslate"><span class="pre">meta</span></code> which is required for dask dataframes.
+It should contain an empty <code class="docutils literal notranslate"><span class="pre">pd.DataFrame</span></code> or <code class="docutils literal notranslate"><span class="pre">pd.Series</span></code> that matches the
+dtypes and column names of the output, or a dict of <code class="docutils literal notranslate"><span class="pre">{name:</span> <span class="pre">dtype}</span></code> or iterable of <code class="docutils literal notranslate"><span class="pre">(name,</span> <span class="pre">dtype)</span></code>.</p>
+<p>You can find additional details and examples here
+<a class="reference external" href="https://examples.dask.org/dataframe.html">https://examples.dask.org/dataframe.html</a>.</p>
+</section>
+<section id="dask-bag">
+<h3>Dask Bag<a class="headerlink" href="#dask-bag" title="Permalink to this headline"></a></h3>
+<p>A Dask bag enables processing data that can be represented as a sequence of arbitrary
+inputs (“messy data”), like in a Python list. Dask Bags are often used to for
+preprocessing log files, JSON records, or other user defined Python objects.</p>
+<p>We will content ourselves with implementing a dask version of the word-count problem,
+specifically the step where we count words in a text.</p>
+<div class="admonition-dask-version-of-word-count type-along important admonition" id="type-along-0">
+<p class="admonition-title">Dask version of word-count</p>
+<p>First navigate to the <code class="docutils literal notranslate"><span class="pre">word-count-hpda</span></code> directory. The serial version (wrapped in
+multiple functions in the <code class="docutils literal notranslate"><span class="pre">source/wordcount.py</span></code> code) looks like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;./data/pg10.txt&#39;</span>
+<span class="n">DELIMITERS</span> <span class="o">=</span> <span class="s2">&quot;. , ; : ? $ @ ^ &lt; &gt; # % ` ! * - = ( ) [ ] { } / </span><span class="se">\&quot;</span><span class="s2"> &#39;&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">input_fd</span><span class="p">:</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="n">input_fd</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+
+<span class="n">counts</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">purge</span> <span class="ow">in</span> <span class="n">DELIMITERS</span><span class="p">:</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">purge</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">counts</span><span class="p">:</span>
+            <span class="n">counts</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">counts</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">sorted_counts</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">key_value</span><span class="p">:</span> <span class="n">key_value</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">sorted_counts</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>A very compact <code class="docutils literal notranslate"><span class="pre">dask.bag</span></code> version of this code is as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dask.bag</span> <span class="k">as</span> <span class="nn">db</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;./data/pg10.txt&#39;</span>
+<span class="n">DELIMITERS</span> <span class="o">=</span> <span class="s2">&quot;. , ; : ? $ @ ^ &lt; &gt; # % ` ! * - = ( ) [ ] { } / </span><span class="se">\&quot;</span><span class="s2"> &#39;&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+<span class="n">text</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">blocksize</span><span class="o">=</span><span class="s1">&#39;1MiB&#39;</span><span class="p">)</span>
+<span class="n">sorted_counts</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">word</span><span class="p">:</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">DELIMITERS</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">split</span><span class="p">()</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="o">.</span><span class="n">frequencies</span><span class="p">()</span><span class="o">.</span><span class="n">topk</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+
+<span class="n">sorted_counts</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition-when-to-use-a-dask-bag callout admonition" id="callout-1">
+<p class="admonition-title">When to use a Dask bag</p>
+<p>There is no benefit from using a Dask bag on small datasets. But imagine we were
+analysing a very large text file (all tweets in a year? a genome?). Dask provides
+both parallelisation and the ability to utilize RAM on multiple machines.</p>
+</div>
+</section>
+<section id="dask-delayed">
+<h3>Dask Delayed<a class="headerlink" href="#dask-delayed" title="Permalink to this headline"></a></h3>
+<p>Sometimes problems don’t fit into one of the collections like
+<code class="docutils literal notranslate"><span class="pre">dask.array</span></code> or <code class="docutils literal notranslate"><span class="pre">dask.dataframe</span></code>. In these cases, we can parallelise custom algorithms
+using <code class="docutils literal notranslate"><span class="pre">dask.delayed</span></code> interface. <code class="docutils literal notranslate"><span class="pre">dask.delayed</span></code> allows users to delay function calls
+into a task graph with dependencies. If you have a problem that is paralellisable,
+but isn’t as simple as just a big array or a big dataframe, then <code class="docutils literal notranslate"><span class="pre">dask.delayed</span></code>
+may be the right choice.</p>
+<p>Consider the following example. The functions are very simple, and they sleep
+for a prescribed time to simulate real work.</p>
+<p>Let us run the example first, one after the other in sequence:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">inc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">dec</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">z</span>
+</pre></div>
+</div>
+<p>Note that the first two functions <code class="docutils literal notranslate"><span class="pre">inc</span></code> and <code class="docutils literal notranslate"><span class="pre">dec</span></code> don’t depend on each other,
+we could have called them in parallel. We can call <code class="docutils literal notranslate"><span class="pre">dask.delayed</span></code> on these funtions
+to make them lazy and tasks into a graph which we will run later on parallel hardware.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dask</span>
+<span class="n">inc</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="n">inc</span><span class="p">)</span>
+<span class="n">dec</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="n">dec</span><span class="p">)</span>
+<span class="n">add</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="n">add</span><span class="p">)</span>
+
+<span class="o">%%time</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">inc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">dec</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">z</span>
+
+<span class="n">z</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">rankdir</span><span class="o">=</span><span class="s1">&#39;LR&#39;</span><span class="p">)</span>
+
+<span class="o">%%</span><span class="n">time</span>
+<span class="n">z</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Let us extend the example a little bit more by
+applying the function on a data array using for loop:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">inc</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="k">def</span> <span class="nf">dec</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">1</span>
+
+<span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+
+<span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">inc</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">dec</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+<span class="n">total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition-chunk-size exercise important admonition" id="exercise-0">
+<p class="admonition-title">chunk size</p>
+<blockquote>
+<div><p>The following example calculate the mean value of a ramdom generated array.
+Run the example and see the performance improvement by using dask.
+But what happens if we use different chunk sizes?</p>
+<ul class="simple">
+<li><p>Try out with different chunk sizes:
+What happens if the dask chunks=(20000,20000)
+What happens if the dask chunks=(200,200)</p></li>
+</ul>
+</div></blockquote>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">numpy</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">dask</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"></div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"></div></div>
+</div>
+<div class="admonition-data-from-climate-simulation exercise important admonition" id="exercise-1">
+<p class="admonition-title">Data from climate simulation</p>
+<p>There are a couple of data in NetCDF files containing monthly global 2m air temperature.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span><span class="o">=</span><span class="n">xr</span><span class="o">.</span><span class="n">open_mfdataset</span><span class="p">(</span><span class="s1">&#39;/home/x_qiali/qiang/hpda/airdata/tas*.nc&#39;</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ds</span>
+<span class="n">ds</span><span class="o">.</span><span class="n">tas</span>
+<span class="n">dask</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">tas</span><span class="p">)</span>
+
+<span class="n">tas_mean</span><span class="o">=</span><span class="n">ds</span><span class="o">.</span><span class="n">tas</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">tas_mean</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdBu_r&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="svd">
+<h2>SVD<a class="headerlink" href="#svd" title="Permalink to this headline"></a></h2>
+<p>We can use dask to compute SVD of certain matrix.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dask</span>
+<span class="kn">import</span> <span class="nn">dask.array</span> <span class="k">as</span> <span class="nn">da</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">200000</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">chunks</span><span class="o">=</span><span class="p">(</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+<span class="n">u</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">dask</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We could also use approximate algorithm</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dask</span>
+<span class="kn">import</span> <span class="nn">dask.array</span> <span class="k">as</span> <span class="nn">da</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">10000</span><span class="p">),</span> <span class="n">chunks</span><span class="o">=</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">))</span><span class="o">.</span><span class="n">persist</span><span class="p">()</span>
+<span class="n">u</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd_compressed</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">dask</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="how-does-dask-work">
+<h2>How does Dask work?<a class="headerlink" href="#how-does-dask-work" title="Permalink to this headline"></a></h2>
+</section>
+<section id="common-use-cases">
+<h2>Common use cases<a class="headerlink" href="#common-use-cases" title="Permalink to this headline"></a></h2>
+</section>
+<section id="comparison-to-spark">
+<h2>Comparison to Spark<a class="headerlink" href="#comparison-to-spark" title="Permalink to this headline"></a></h2>
+<p>Dask has much in common with the
+[Apache Spark](<a class="reference external" href="https://spark.apache.org/">https://spark.apache.org/</a>).</p>
+<ul class="simple">
+<li><p>ref: <a class="reference external" href="https://docs.dask.org/en/stable/spark.html">https://docs.dask.org/en/stable/spark.html</a></p></li>
+</ul>
+</section>
+<section id="exercises">
+<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline"></a></h2>
+<div class="admonition-benchmarking-dask-dataframes-apply exercise important admonition" id="exercise-2">
+<p class="admonition-title">Benchmarking dask.dataframes.apply()</p>
+<p>Compare the performance of <code class="xref py py-meth docutils literal notranslate"><span class="pre">dask.dataframes.apply()</span></code> with <code class="xref py py-meth docutils literal notranslate"><span class="pre">pandas.dataframes.apply()</span></code>
+for the word-count example. You will probably see a slowdown due to the parallelisation
+overhead.
+But what if you add a <code class="docutils literal notranslate"><span class="pre">time.sleep(0.01)</span></code> inside <code class="docutils literal notranslate"><span class="pre">linear_fit_loglog</span></code> to
+emulate a time-consuming calculation?</p>
+</div>
+<div class="admonition-break-down-the-dask-bag-computational-pipeline exercise important admonition" id="exercise-3">
+<p class="admonition-title">Break down the dask.bag computational pipeline</p>
+<p>Revisit the word-count problem and the implementation with a <code class="docutils literal notranslate"><span class="pre">dask.bag</span></code> that we
+saw above.</p>
+<ul class="simple">
+<li><p>To get a feeling for the computational pipeline, break down the computation into
+separate steps and investigate intermediate results using <code class="xref py py-meth docutils literal notranslate"><span class="pre">compute()</span></code>.</p></li>
+<li><p>Benchmark the serial and <code class="docutils literal notranslate"><span class="pre">dask.bag</span></code> versions. Do you see any speedup?
+What if you have a larger textfile? You can for example concatenate all texts into
+a single file: <code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">data/*.txt</span> <span class="pre">&gt;</span> <span class="pre">data/all.txt</span></code>.</p></li>
+</ul>
+</div>
+<div class="admonition-keypoints keypoints admonition" id="keypoints-0">
+<p class="admonition-title">Keypoints</p>
+<ul class="simple">
+<li><p>1</p></li>
+<li><p>2</p></li>
+<li><p>3</p></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../miniapp/" class="btn btn-neutral float-left" title="Heat diffusion mini-app" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../quick-reference/" class="btn btn-neutral float-right" title="Quick Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, The contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

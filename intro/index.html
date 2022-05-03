@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Intro &mdash; LESSON NAME  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/mystnb.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx_lesson.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx_rtd_theme_ext_color_contrast.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/overrides.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script src="../_static/minipres.js"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../_static/togglebutton.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="NumPy" href="../numpy/" />
+    <link rel="prev" title="LESSON NAME" href="../" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../" class="icon icon-home"> LESSON NAME
+            <img src="../_static/ENCCS.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">The lesson</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Intro</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#motivation-and-scope">Motivation and Scope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-a-data">What is a data?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#bit-and-byte">bit and byte</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#numerical-data">Numerical Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#text-data">Text Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tabular-data">Tabular Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#grided-data">Grided Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#metadata">Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#csv-comma-separated-values">CSV (comma-separated values)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parquet">Parquet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hdf5-hierarchical-data-format-version-5">HDF5 (Hierarchical Data Format version 5)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#netcdf4-network-common-data-form-version-4">NetCDF4 (Network Common Data Form version 4)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#using-some-of-the-most-popular-file-formats">Using some of the most popular file formats</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">CSV (comma-separated values)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Parquet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">HDF5 (Hierarchical Data Format version 5)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">NetCDF4 (Network Common Data Form version 4)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#npy-numpy-array-format">npy (numpy array format)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#benefits-of-binary-file-formats">Benefits of binary file formats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#things-to-remember">Things to remember</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#see-also">See also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../numpy/">NumPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pandas/">Pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scipy/">SciPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../profile/">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale/">Scaling to large datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gpuintro/">Introduction to GPU architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../miniapp/">Heat diffusion mini-app</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dask/">Dask for scalable analytics</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/">Instructor’s guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">LESSON NAME</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home"></a> &raquo;</li>
+      <li>Intro</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ENCCS/content/blob/main/content/intro.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="intro">
+<h1>Intro<a class="headerlink" href="#intro" title="Permalink to this headline"></a></h1>
+<div class="admonition-questions questions admonition" id="questions-0">
+<p class="admonition-title">Questions</p>
+<ul class="simple">
+<li><p>How do you store your data right now?</p></li>
+<li><p>Are you doing data cleaning / preprocessing every time you load the data?</p></li>
+</ul>
+</div>
+<div class="admonition-objectives objectives admonition" id="objectives-0">
+<p class="admonition-title">Objectives</p>
+<ul class="simple">
+<li><p>Learn the distinguishing characteristics of different data formats.</p></li>
+<li><p>Learn how Pandas to read and write data in a variety of formats.</p></li>
+</ul>
+</div>
+<section id="motivation-and-scope">
+<h2>Motivation and Scope<a class="headerlink" href="#motivation-and-scope" title="Permalink to this headline"></a></h2>
+<p>HPC has become an indispensable tool for  climate science community, with the advance of mordern computing sytems (especially with accerlarators like GPUs), more and more data is produced even faster rate and legacy software tools for data analysis can not handle them efficiently. This even becomes a obstacle to scientific progress in some cases. This course focuses on high performace data analysis, a subset of computing in which the raw data from either climate model simulation or observation is to be transformed into understanding following the steps below:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>read the raw data</p></li>
+<li><p>perform some operations on the data, from very simple (e.g. take the mean) to very complex (e.g. train a deep neural network)</p></li>
+<li><p>visualize the results or write the output into a file</p></li>
+</ol>
+</div></blockquote>
+<p>The bulk of the content is devoted to the very basics of earth science data analysis using the modern scientific Python ecosystem, including Numpy, Scipy, Pandas, Xarray and  performace enhancement using numba, dask, cuPy.</p>
+</section>
+<section id="what-is-a-data">
+<h2>What is a data?<a class="headerlink" href="#what-is-a-data" title="Permalink to this headline"></a></h2>
+<section id="bit-and-byte">
+<h3>bit and byte<a class="headerlink" href="#bit-and-byte" title="Permalink to this headline"></a></h3>
+<p>The smallest building block of storage in the computer is a <strong>bit</strong>,
+which stores either a 0 or 1.
+Normally a number of 8 bits are combined in a group to make a <strong>byte</strong>.
+One byte (8 bits) can represent/hold at most <span class="math notranslate nohighlight">\(2^8\)</span> distint values.
+Organising bytes in different ways could further represent different types of information, i.e. data.</p>
+</section>
+<section id="numerical-data">
+<h3>Numerical Data<a class="headerlink" href="#numerical-data" title="Permalink to this headline"></a></h3>
+<p>Different numerial data types (integer and floating-point) can be encoded as bytes. The more bytes we use for each value, the more range or precision we get, however the more memory it takes. For example, integers stored with 1 byte (8 bits) have a range from [-128, 127], while with 2 bytes (16 bits), the ranges becomes  [-32768, 32767].
+Integers are whole numbers and can be represented precisely given enough bytes. However, for floating-point numbers the decimal fractions simply can not be represented exactly as binary (base 2) fractions in most cases which is known as the representation error. Arithmetic operations will further propagate this error. That is why in scienctific computing, numerical algorithms have to be carefully chosen and floating-point numbers are usally allocated with 8 bytes (XXXX add range here) to make sure the inaccuracy is under control and does not lead to unsteady solutions.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In some situations, single precision, i.e. 4 bytes, is used for floating-point numbers in order to achieve better performance at a small cost to the accuracy.</p>
+</div>
+</section>
+<section id="text-data">
+<h3>Text Data<a class="headerlink" href="#text-data" title="Permalink to this headline"></a></h3>
+<p>When it comes to text data, the simplest character encoding
+is ASCII (American Standard Code for Information Interchange) and was the most
+common character encodings until 2008 when UTF-8 took over.
+The orignal ASCII uses only 7 bits for representing each character/letter and therefore encodes only 128 specified characters. Later  it became common to use an 8-bit byte to store each character in memory, providing an extended ASCII.
+As computer becomes more powerful and  there is need for including more characters from other languages like Chinese, Greek, Arabic, etc. UTF-8  becomes the most common encoding nowadays and it uses minimum one byte up to four bytes per character.</p>
+<p>In real applications, the scientific data is more complex and usually contains both numerical and text data.
+There is no single file format that is good for every case to store the dataset.
+Here we list a few of the data and file formats commonly used in climate modelling community:</p>
+</section>
+<section id="tabular-data">
+<h3>Tabular Data<a class="headerlink" href="#tabular-data" title="Permalink to this headline"></a></h3>
+<p>A very common type of data is the so-called “tabular data”. The data is structured typically into rows and columns. Each column usually have a name and a specific data type while each row is a distinct sample which provides data according to each column including missing value.
+The simplest and most common way to save tablular data is via the so-called CSV (comma-separated values) file.</p>
+</section>
+<section id="grided-data">
+<h3>Grided Data<a class="headerlink" href="#grided-data" title="Permalink to this headline"></a></h3>
+<p>Grided data is another very common type, and usually the numerical data is saved in a multi-dimentional rectangular grid.
+Most probably it is saved in one of the following formats:</p>
+<ul class="simple">
+<li><p>Hierarchical Data Format (HDF5) - Container for many arrays</p></li>
+<li><p>Network Common Data Form (NetCDF) - Container for many arrays which conform to the NetCDF data model</p></li>
+<li><p>Zarr - New cloud-optimized format for array storage</p></li>
+</ul>
+</section>
+<section id="metadata">
+<h3>Metadata<a class="headerlink" href="#metadata" title="Permalink to this headline"></a></h3>
+<p>Metadata consists of the information about the data.
+Different types of data may have different metadata conventions.</p>
+<p>In Earth and Environmental science, we are fortunate to have widespread robust practices around metdata. For NetCDF files, metadata can be embedded directly into the data files. The most common metadata convention is Climate and Forecast (CF) Conventions, commonly used with NetCDF data</p>
+<table class="colwidths-auto docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>data format</p></td>
+<td><p><span class="xref std std-doc">pro</span></p></td>
+<td><p><span class="xref std std-doc">con</span></p></td>
+</tr>
+<tr class="row-even"><td><p>CSV</p></td>
+<td><p><span class="xref std std-doc">map clause</span></p></td>
+<td><p><span class="xref std std-doc">map clause</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>Parquet</p></td>
+<td><p><span class="xref std std-doc">the effect of both a map-to and a map-from</span></p></td>
+<td><p><span class="xref std std-doc">the effect of both a map-to and a map-from</span></p></td>
+</tr>
+<tr class="row-even"><td><p>HDF5</p></td>
+<td><p><span class="xref std std-doc">On entering the region, variables in the list</span></p></td>
+<td><p><span class="xref std std-doc">On entering the region, variables in the list</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>NetCDF4</p></td>
+<td><p><span class="xref std std-doc">from variables in the list are copied into</span></p></td>
+<td><p><span class="xref std std-doc">from variables in the list are copied into</span></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="csv-comma-separated-values">
+<h3>CSV (comma-separated values)<a class="headerlink" href="#csv-comma-separated-values" title="Permalink to this headline"></a></h3>
+<div class="admonition-key-features admonition">
+<p class="admonition-title">Key features</p>
+<ul class="simple">
+<li><p><strong>Type:</strong> Text format</p></li>
+<li><p><strong>Packages needed:</strong> numpy, pandas</p></li>
+<li><p><strong>Space efficiency:</strong> Bad</p></li>
+<li><p><strong>Good for sharing/archival:</strong> Yes</p></li>
+<li><dl class="simple">
+<dt>Tidy data:</dt><dd><ul>
+<li><p>Speed: Bad</p></li>
+<li><p>Ease of use: Great</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Array data:</dt><dd><ul>
+<li><p>Speed: Bad</p></li>
+<li><p>Ease of use: Ok for one or two dimensional data. Bad for anything higher.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p><strong>Best use cases:</strong> Sharing data. Small data. Data that needs to be human-readable.</p></li>
+</ul>
+</div>
+<p>CSV is by far the most popular file format, as it is human-readable and easily shareable.
+However, it is not the best format to use when you’re working with big data.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>When working with floating point numbers, you should be careful to save the data with enough decimal places so that you won’t lose precision.</p>
+</div>
+<p>1. you may lose data precision simply because you do not save the data with enough decimals(check english)
+2.</p>
+<blockquote>
+<div><blockquote>
+<div><p>CSV writing routines in Pandas and numpy try to avoid problems such as these by writing the floating point numbers with enough precision, but even they are not infallible.</p>
+</div></blockquote>
+<p>Storage of these high-precision CSV files is usually very inefficient storage-wise.</p>
+<p>Binary files, where floating point numbers are represented in their native binary format, do not suffer from such problems.</p>
+</div></blockquote>
+</section>
+<section id="parquet">
+<h3>Parquet<a class="headerlink" href="#parquet" title="Permalink to this headline"></a></h3>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Using Parquet requires <a class="reference external" href="https://arrow.apache.org/docs/python">pyarrow-package</a> to be installed.</p>
+<p>You can try installing PyArrow with</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>!pip install pyarrow
+</pre></div>
+</div>
+<p>or you can take this as a demo.</p>
+</div>
+<div class="admonition-key-features admonition">
+<p class="admonition-title">Key features</p>
+<ul class="simple">
+<li><p><strong>Type:</strong> Binary format</p></li>
+<li><p><strong>Packages needed:</strong> pandas, pyarrow</p></li>
+<li><p><strong>Space efficiency:</strong> Great</p></li>
+<li><p><strong>Good for sharing/archival:</strong> Yes</p></li>
+<li><dl class="simple">
+<dt>Tidy data:</dt><dd><ul>
+<li><p>Speed: Good</p></li>
+<li><p>Ease of use: Great</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Array data:</dt><dd><ul>
+<li><p>Speed: Good</p></li>
+<li><p>Ease of use: It’s complicated</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p><strong>Best use cases:</strong> Working with big datasets in tidy data format. Archival of said data.</p></li>
+</ul>
+</div>
+<p><a class="reference external" href="https://arrow.apache.org/docs/python/parquet.html">Parquet</a> is a standardized open-source columnar storage format that is commonly used for storing big data in machine learning.
+Parquet is usable from many different languages (C, Java, Python, MATLAB, Julia, etc.).</p>
+<p>We can work with Parquet files with <a class="reference external" href="https://pandas.pydata.org/docs/user_guide/io.html#io-parquet">to_parquet- and read_parquet-functions</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s1">&#39;dataset.parquet&#39;</span><span class="p">)</span>
+<span class="n">dataset_parquet</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">&#39;dataset.parquet&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Parquet can be used to store arbitrary data as well, but doing that is a bit more complicated so we won’t do that here.</p>
+</section>
+<section id="hdf5-hierarchical-data-format-version-5">
+<h3>HDF5 (Hierarchical Data Format version 5)<a class="headerlink" href="#hdf5-hierarchical-data-format-version-5" title="Permalink to this headline"></a></h3>
+<div class="admonition-key-features admonition">
+<p class="admonition-title">Key features</p>
+<ul class="simple">
+<li><p><strong>Type:</strong> Binary format</p></li>
+<li><p><strong>Packages needed:</strong> pandas, PyTables, h5py</p></li>
+<li><p><strong>Space efficiency:</strong> Good for numeric data.</p></li>
+<li><p><strong>Good for sharing/archival:</strong> Yes, if datasets are named well.</p></li>
+<li><dl class="simple">
+<dt>Tidy data:</dt><dd><ul>
+<li><p>Speed: Ok</p></li>
+<li><p>Ease of use: Good</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Array data:</dt><dd><ul>
+<li><p>Speed: Great</p></li>
+<li><p>Ease of use: Good</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p><strong>Best use cases:</strong> Working with big datasets in array data format.</p></li>
+</ul>
+</div>
+<p>HDF5 is a high performance storage format for storing large amounts of data in multiple datasets in a single file.
+It is especially popular in fields where you need to store big multidimensional arrays such as physical sciences.</p>
+</section>
+<section id="netcdf4-network-common-data-form-version-4">
+<h3>NetCDF4 (Network Common Data Form version 4)<a class="headerlink" href="#netcdf4-network-common-data-form-version-4" title="Permalink to this headline"></a></h3>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>A great NetCDF4 interface is provided by a <a class="reference external" href="https://xarray.pydata.org/en/stable/getting-started-guide/quick-overview.html#read-write-netcdf-files">xarray-package</a>.</p>
+</div>
+<div class="admonition-key-features admonition">
+<p class="admonition-title">Key features</p>
+<ul class="simple">
+<li><p><strong>Type</strong>: Binary format</p></li>
+<li><p><strong>Packages needed:</strong> pandas, netCDF4/h5netcdf, xarray</p></li>
+<li><p><strong>Space efficiency:</strong> Good for numeric data.</p></li>
+<li><p><strong>Good for sharing/archival:</strong> Yes.</p></li>
+<li><dl class="simple">
+<dt>Tidy data:</dt><dd><ul>
+<li><p>Speed: Ok</p></li>
+<li><p>Ease of use: Good</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Array data:</dt><dd><ul>
+<li><p>Speed: Good</p></li>
+<li><p>Ease of use: Great</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p><strong>Best use cases:</strong> Working with big datasets in array data format. Especially useful if the dataset contains spatial or temporal dimensions. Archiving or sharing those datasets.</p></li>
+</ul>
+</div>
+<p>NetCDF4 is a data format that uses HDF5 as its file format, but it has standardized structure of datasets and metadata related to these datasets.
+This makes it possible to be read from various different programs.</p>
+<p>NetCDF4 is by far the most common format for storing large data from big simulations in physical sciences.</p>
+<p>The advantage of NetCDF4 compared to HDF5 is that one can easily add other metadata e.g. spatial dimensions (<code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">z</span></code>) or timestamps (<code class="docutils literal notranslate"><span class="pre">t</span></code>) that tell where the grid-points are situated.
+As the format is standardized, many programs can use this metadata for visualization and further analysis.</p>
+</section>
+</section>
+<section id="using-some-of-the-most-popular-file-formats">
+<h2>Using some of the most popular file formats<a class="headerlink" href="#using-some-of-the-most-popular-file-formats" title="Permalink to this headline"></a></h2>
+<section id="id1">
+<h3>CSV (comma-separated values)<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
+<div class="admonition-key-features admonition">
+<p class="admonition-title">Key features</p>
+<ul class="simple">
+<li><p><strong>Type:</strong> Text format</p></li>
+<li><p><strong>Packages needed:</strong> numpy, pandas</p></li>
+<li><p><strong>Space efficiency:</strong> Bad</p></li>
+<li><p><strong>Good for sharing/archival:</strong> Yes</p></li>
+<li><dl class="simple">
+<dt>Tidy data:</dt><dd><ul>
+<li><p>Speed: Bad</p></li>
+<li><p>Ease of use: Great</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Array data:</dt><dd><ul>
+<li><p>Speed: Bad</p></li>
+<li><p>Ease of use: Ok for one or two dimensional data. Bad for anything higher.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p><strong>Best use cases:</strong> Sharing data. Small data. Data that needs to be human-readable.</p></li>
+</ul>
+</div>
+<p>CSV is by far the most popular file format, as it is human-readable and easily shareable.
+However, it is not the best format to use when you’re working with big data.</p>
+<p>Pandas has a very nice interface for writing and reading CSV files with <a class="reference external" href="https://pandas.pydata.org/docs/user_guide/io.html#io-store-in-csv">to_csv</a>- and <a class="reference external" href="https://pandas.pydata.org/docs/user_guide/io.html#io-read-csv-table">read_csv</a>-functions:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;dataset.csv&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">dataset_csv</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;dataset.csv&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Numpy has <a class="reference external" href="https://numpy.org/doc/stable/reference/routines.io.html#text-files">routines</a> for saving and loading CSV files as arrays as well</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s1">&#39;data_array.csv&#39;</span><span class="p">,</span> <span class="n">data_array</span><span class="p">)</span>
+
+<span class="n">data_array_csv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s1">&#39;data_array.csv&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>When working with floating point numbers you should be careful to save the data with enough decimal places so that you won’t lose precision.</p>
+<p>CSV writing routines in Pandas and numpy try to avoid problems such as these by writing the floating point numbers with enough precision, but even they are not infallible.</p>
+<p>Storage of these high-precision CSV files is usually very inefficient storage-wise.</p>
+<p>Binary files, where floating point numbers are represented in their native binary format, do not suffer from such problems.</p>
+</div>
+</section>
+<section id="id2">
+<h3>Parquet<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Using Parquet requires <a class="reference external" href="https://arrow.apache.org/docs/python">pyarrow-package</a> to be installed.</p>
+<p>You can try installing PyArrow with</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>!pip install pyarrow
+</pre></div>
+</div>
+<p>or you can take this as a demo.</p>
+</div>
+<div class="admonition-key-features admonition">
+<p class="admonition-title">Key features</p>
+<ul class="simple">
+<li><p><strong>Type:</strong> Binary format</p></li>
+<li><p><strong>Packages needed:</strong> pandas, pyarrow</p></li>
+<li><p><strong>Space efficiency:</strong> Great</p></li>
+<li><p><strong>Good for sharing/archival:</strong> Yes</p></li>
+<li><dl class="simple">
+<dt>Tidy data:</dt><dd><ul>
+<li><p>Speed: Good</p></li>
+<li><p>Ease of use: Great</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Array data:</dt><dd><ul>
+<li><p>Speed: Good</p></li>
+<li><p>Ease of use: It’s complicated</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p><strong>Best use cases:</strong> Working with big datasets in tidy data format. Archival of said data.</p></li>
+</ul>
+</div>
+<p><a class="reference external" href="https://arrow.apache.org/docs/python/parquet.html">Parquet</a> is a standardized open-source columnar storage format that is commonly used for storing big data in machine learning.
+Parquet is usable from many different languages (C, Java, Python, MATLAB, Julia, etc.).</p>
+<p>We can work with Parquet files with <a class="reference external" href="https://pandas.pydata.org/docs/user_guide/io.html#io-parquet">to_parquet- and read_parquet-functions</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s1">&#39;dataset.parquet&#39;</span><span class="p">)</span>
+<span class="n">dataset_parquet</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">&#39;dataset.parquet&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Parquet can be used to store arbitrary data as well, but doing that is a bit more complicated so we won’t do that here.</p>
+</section>
+<section id="id3">
+<h3>HDF5 (Hierarchical Data Format version 5)<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
+<div class="admonition-key-features admonition">
+<p class="admonition-title">Key features</p>
+<ul class="simple">
+<li><p><strong>Type:</strong> Binary format</p></li>
+<li><p><strong>Packages needed:</strong> pandas, PyTables, h5py</p></li>
+<li><p><strong>Space efficiency:</strong> Good for numeric data.</p></li>
+<li><p><strong>Good for sharing/archival:</strong> Yes, if datasets are named well.</p></li>
+<li><dl class="simple">
+<dt>Tidy data:</dt><dd><ul>
+<li><p>Speed: Ok</p></li>
+<li><p>Ease of use: Good</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Array data:</dt><dd><ul>
+<li><p>Speed: Great</p></li>
+<li><p>Ease of use: Good</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p><strong>Best use cases:</strong> Working with big datasets in array data format.</p></li>
+</ul>
+</div>
+<p>HDF5 is a high performance storage format for storing large amounts of data in multiple datasets in a single file.
+It is especially popular in fields where you need to store big multidimensional arrays such as physical sciences.</p>
+</section>
+<section id="id4">
+<h3>NetCDF4 (Network Common Data Form version 4)<a class="headerlink" href="#id4" title="Permalink to this headline"></a></h3>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Using NetCDF4 requires <a class="reference external" href="https://unidata.github.io/netcdf4-python">netCDF4</a>- or <a class="reference external" href="https://github.com/h5netcdf/h5netcdf">h5netcdf</a>-package to be installed.
+h5netcdf is often mentioned as being faster to the official netCDF4-package, so we’ll be using it in the example.</p>
+<p>A great NetCDF4 interface is provided by a <a class="reference external" href="https://xarray.pydata.org/en/stable/getting-started-guide/quick-overview.html#read-write-netcdf-files">xarray-package</a>.</p>
+<p>You can try installing these packages with</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>!pip install h5netcdf xarray
+</pre></div>
+</div>
+<p>or you can take this as a demo.</p>
+</div>
+<div class="admonition-key-features admonition">
+<p class="admonition-title">Key features</p>
+<ul class="simple">
+<li><p><strong>Type</strong>: Binary format</p></li>
+<li><p><strong>Packages needed:</strong> pandas, netCDF4/h5netcdf, xarray</p></li>
+<li><p><strong>Space efficiency:</strong> Good for numeric data.</p></li>
+<li><p><strong>Good for sharing/archival:</strong> Yes.</p></li>
+<li><dl class="simple">
+<dt>Tidy data:</dt><dd><ul>
+<li><p>Speed: Ok</p></li>
+<li><p>Ease of use: Good</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Array data:</dt><dd><ul>
+<li><p>Speed: Good</p></li>
+<li><p>Ease of use: Great</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p><strong>Best use cases:</strong> Working with big datasets in array data format. Especially useful if the dataset contains spatial or temporal dimensions. Archiving or sharing those datasets.</p></li>
+</ul>
+</div>
+<p>NetCDF4 is a data format that uses HDF5 as its file format, but it has standardized structure of datasets and metadata related to these datasets.
+This makes it possible to be read from various different programs.</p>
+<p>NetCDF4 is by far the most common format for storing large data from big simulations in physical sciences.</p>
+<p>The advantage of NetCDF4 compared to HDF5 is that one can easily add other metadata e.g. spatial dimensions (<code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">z</span></code>) or timestamps (<code class="docutils literal notranslate"><span class="pre">t</span></code>) that tell where the grid-points are situated.
+As the format is standardized, many programs can use this metadata for visualization and further analysis.</p>
+</section>
+<section id="npy-numpy-array-format">
+<h3>npy (numpy array format)<a class="headerlink" href="#npy-numpy-array-format" title="Permalink to this headline"></a></h3>
+<div class="admonition-key-features admonition">
+<p class="admonition-title">Key features</p>
+<ul class="simple">
+<li><p><strong>Type</strong>: Binary format</p></li>
+<li><p><strong>Packages needed:</strong> numpy</p></li>
+<li><p><strong>Space efficiency:</strong> Good.</p></li>
+<li><p><strong>Good for sharing/archival:</strong> No.</p></li>
+<li><dl class="simple">
+<dt>Tidy data:</dt><dd><ul>
+<li><p>Speed: -</p></li>
+<li><p>Ease of use: -</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Array data:</dt><dd><ul>
+<li><p>Speed: Great</p></li>
+<li><p>Ease of use: Good</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p><strong>Best use cases:</strong> Saving numpy arrays temporarily.</p></li>
+</ul>
+</div>
+<p>If you want to temporarily store numpy arrays, you can use the <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.save.html">numpy.save</a>- and <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.load.html">numpy.load</a>-functions:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;data_array.npy&#39;</span><span class="p">,</span> <span class="n">data_array</span><span class="p">)</span>
+<span class="n">data_array_npy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;data_array.npy&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>There also exists <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.savez.html">numpy.savez</a>-function for storing multiple datasets in a single file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">savez</span><span class="p">(</span><span class="s1">&#39;data_arrays.npz&#39;</span><span class="p">,</span> <span class="n">data_array0</span><span class="o">=</span><span class="n">data_array</span><span class="p">,</span> <span class="n">data_array1</span><span class="o">=</span><span class="n">data_array</span><span class="p">)</span>
+<span class="n">data_arrays</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;data_arrays.npz&#39;</span><span class="p">)</span>
+<span class="n">data_arrays</span><span class="p">[</span><span class="s1">&#39;data_array0&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>For big arrays it’s good idea to check other binary formats such as HDF5 or NetCDF4.</p>
+</section>
+</section>
+<section id="benefits-of-binary-file-formats">
+<h2>Benefits of binary file formats<a class="headerlink" href="#benefits-of-binary-file-formats" title="Permalink to this headline"></a></h2>
+<p>Binary files come with various benefits compared to text files.</p>
+<ol class="arabic simple">
+<li><p>They can represent floating point numbers with full precision.</p></li>
+<li><p>Storing data in binary format can potentially save lots of space.
+This is because you do not need to write numbers as characters.
+Additionally some file formats support compression of the data.</p></li>
+<li><p>Data loading from binary files is usually much faster than loading from text files.
+This is because memory can be allocated for the data before data is loaded as the type of data in columns is known.</p></li>
+<li><p>You can often store multiple datasets and metadata to the same file.</p></li>
+<li><p>Many binary formats allow for partial loading of the data.
+This makes it possible to work with datasets that are larger than your computer’s memory.</p></li>
+</ol>
+<p><strong>Performance when writing tidy dataset:</strong></p>
+<p>For the tidy <code class="docutils literal notranslate"><span class="pre">dataset</span></code> we had, we can test the performance of the different file formats:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 26%" />
+<col style="width: 27%" />
+<col style="width: 26%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>File format</p></th>
+<th class="head"><p>File size [MB]</p></th>
+<th class="head"><p>Write time [ms]</p></th>
+<th class="head"><p>Read time [ms]</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CSV</p></td>
+<td><p>4.571760</p></td>
+<td><p>0.296015</p></td>
+<td><p>0.072096</p></td>
+</tr>
+<tr class="row-odd"><td><p>Feather</p></td>
+<td><p>2.202471</p></td>
+<td><p>0.013013</p></td>
+<td><p>0.007742</p></td>
+</tr>
+<tr class="row-even"><td><p>Parquet</p></td>
+<td><p>1.820971</p></td>
+<td><p>0.009052</p></td>
+<td><p>0.009052</p></td>
+</tr>
+<tr class="row-odd"><td><p>HDF5</p></td>
+<td><p>4.892181</p></td>
+<td><p>0.037609</p></td>
+<td><p>0.033721</p></td>
+</tr>
+<tr class="row-even"><td><p>NetCDF4</p></td>
+<td><p>6.894043</p></td>
+<td><p>0.073829</p></td>
+<td><p>0.010776</p></td>
+</tr>
+</tbody>
+</table>
+<p>The relatively poor performance of HDF5-based formats in this case is due to the data being mostly one dimensional columns full of character strings.</p>
+<p><strong>Performance when writing data array:</strong></p>
+<p>For the array-shaped <code class="docutils literal notranslate"><span class="pre">data_array</span></code> we had, we can test the performance of the different file formats:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 26%" />
+<col style="width: 27%" />
+<col style="width: 26%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>File format</p></th>
+<th class="head"><p>File size [MB]</p></th>
+<th class="head"><p>Write time [ms]</p></th>
+<th class="head"><p>Read time [ms]</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CSV</p></td>
+<td><p>23.841858</p></td>
+<td><p>0.647893</p></td>
+<td><p>0.639863</p></td>
+</tr>
+<tr class="row-odd"><td><p>npy</p></td>
+<td><p>7.629517</p></td>
+<td><p>0.009885</p></td>
+<td><p>0.002539</p></td>
+</tr>
+<tr class="row-even"><td><p>HDF5</p></td>
+<td><p>7.631348</p></td>
+<td><p>0.012877</p></td>
+<td><p>0.002737</p></td>
+</tr>
+<tr class="row-odd"><td><p>NetCDF4</p></td>
+<td><p>7.637207</p></td>
+<td><p>0.018905</p></td>
+<td><p>0.009876</p></td>
+</tr>
+</tbody>
+</table>
+<p>For this kind of a data, HDF5-based formats perform much better.</p>
+</section>
+<section id="things-to-remember">
+<h2>Things to remember<a class="headerlink" href="#things-to-remember" title="Permalink to this headline"></a></h2>
+<ol class="arabic simple">
+<li><p><strong>There is no file format that is good for every use case.</strong></p></li>
+<li><p>Usually, your research question determines which libraries you want to use to solve it.
+Similarly, the data format you have determines file format you want to use.</p></li>
+<li><p>However, if you’re using a previously existing framework or tools or you work in a specific field, you should prioritize using the formats that are used in said framework/tools/field.</p></li>
+<li><p>When you’re starting your project, it’s a good idea to take your initial data, clean it, and store the results in a good binary format that works as a starting point for your future analysis.
+If you’ve written the cleaning procedure as a script, you can always reproduce it.</p></li>
+<li><p>Throughout your work, you should use code to turn important data to human-readable format (e.g. plots, averages, <code class="docutils literal notranslate"><span class="pre">DataFrame.head()</span></code>), not to keep your full data in a human-readable format.</p></li>
+<li><p>Once you’ve finished, you should store the data in a format that can be easily shared to other people.</p></li>
+</ol>
+</section>
+<section id="see-also">
+<h2>See also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://pandas.pydata.org/docs/user_guide/io.html">Pandas’ IO tools</a> .</p></li>
+<li><p><a class="reference external" href="https://github.com/AaltoSciComp/python-for-scicomp/tree/master/extras/data-formats-comparison-tidy.ipynb">Tidy data comparison notebook</a></p></li>
+<li><p><a class="reference external" href="https://github.com/AaltoSciComp/python-for-scicomp/tree/master/extras/data-formats-comparison-array.ipynb">Array data comparison notebook</a></p></li>
+</ul>
+<div class="admonition-keypoints keypoints admonition" id="keypoints-0">
+<p class="admonition-title">Keypoints</p>
+<ul class="simple">
+<li><p>Pandas can read and write a variety of data formats.</p></li>
+<li><p>There are many good, standard formats, and you don’t need to create your own.</p></li>
+<li><p>There are plenty of other libraries dedicated to various formats.</p></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../" class="btn btn-neutral float-left" title="LESSON NAME" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../numpy/" class="btn btn-neutral float-right" title="NumPy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, The contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
