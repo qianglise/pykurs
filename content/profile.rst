@@ -394,7 +394,7 @@ There are three ways of declaring functions:
 Declaring the types of arguments and local types (thus return values) can allow Cython to generate optimised code which speeds up the execution. If the types are declared then a ``TypeError`` will be raised if the function is passed the wrong types.
 
 ``cdef`` - C style:
-Cython treats the function as pure 'C' functions. All types *must* be declared. This will give you the best performance but there are a number of consequences. One should really take care of the ``cdef`` declared functions, since you are actually writing in C.
+Cython treats the function as pure C functions. All types *must* be declared. This will give you the best performance but there are a number of consequences. One should really take care of the ``cdef`` declared functions, since you are actually writing in C.
 
 ``cpdef`` - Python/C mixed
 ``cpdef`` functions combine both ``def`` and ``cdef`` by creating two functions; a ``cdef`` for C types and a ``def`` for Python types. This exploits early binding so that ``cpdef`` functions may be as fast as possible when using C fundamental types (by using ``cdef``). ``cpdef`` functions use dynamic binding when passed Python objects and this might much slower, perhaps as slow as ``def`` declared functions.   XXXX rewrite this part.
